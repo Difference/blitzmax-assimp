@@ -15,7 +15,7 @@ You structure should then look like this:
 
 \\YOUR Blitzmax PATH\mod\scheutz.mod\assimp.mod
 
-assimp itself and boost are also downloaded as external svn's when you checkout this module, so you should *include externs* when you it check out
+*assimp* itself and *boost* are also downloaded as external svn's when you checkout this module, so you should *include externs* when you it check out
 
 When it's checked out, you need to "build modules" and then try out the sample from the examples folder.
 
