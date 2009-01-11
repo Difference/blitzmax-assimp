@@ -2,11 +2,11 @@
 Strict
 
 Rem
-bbdoc: ASSIMP!
+bbdoc: blitzmax-assimp
 End Rem
 Module scheutz.assimp
 
-ModuleInfo "Version: 0.01"
+ModuleInfo "Version: 0.11"
 ModuleInfo "Author: Copyright (c) 2006-2008, ASSIMP Development Team"
 ModuleInfo "License: BSD License"
 
@@ -79,6 +79,7 @@ Import "assimp/code/SpatialSort.cpp"
 Import "assimp/code/SplitLargeMeshes.cpp"
 Import "assimp/code/StandardShapes.cpp"
 Import "assimp/code/STLLoader.cpp"
+Import "assimp/code/TerragenLoader.cpp"
 Import "assimp/code/TextureTransform.cpp"
 Import "assimp/code/TriangulateProcess.cpp"
 Import "assimp/code/ValidateDataStructure.cpp"
