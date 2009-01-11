@@ -1,17 +1,6 @@
 
 Strict
 
-Rem
-bbdoc: blitzmax-assimp
-End Rem
-Module scheutz.assimp
-
-ModuleInfo "Version: 0.11"
-ModuleInfo "Author: Copyright (c) 2006-2008, ASSIMP Development Team"
-ModuleInfo "License: BSD License"
-
-ModuleInfo "CC_OPTS:-fexceptions"
-
 Import "assimp/code/irrXML/*.h"
 Import "assimp/code/*.h"
 Import "assimp/code/irrXML/irrXML.cpp"
