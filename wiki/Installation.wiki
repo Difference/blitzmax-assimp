@@ -19,4 +19,4 @@ assimp itself and boost are also downloaded as external svn's when you checkout 
 
 When it's checked out, you need to "build modules" and then try out the sample from the examples folder.
 
-To run the test program, you need minib3D from http://blitzmax.com/Community/posts.php?topic=65370 , but yuo can use the module without minib3d
+To run the test program, you need minib3D from http://blitzmax.com/Community/posts.php?topic=65370 , but you can use the module without minib3d
