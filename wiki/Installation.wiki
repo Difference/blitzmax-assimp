@@ -1,0 +1,22 @@
+#summary How to download and compile
+
+= Introduction =
+
+In order to use this module, you need to download and compile it
+
+
+= Details =
+
+Create a folder called  scheutz.mod in  the \\YOUR Blitzmax PATH\mod\ directory
+
+SVN checkout to a subfolder called assimp.mod
+
+You structure should then look like this:
+
+\\YOUR Blitzmax PATH\mod\scheutz.mod\assimp.mod
+
+assimp itself and boost are also downloaded as external svn's when you checkout this module, so you should *include externs* when you it check out
+
+When it's checked out, you need to "build modules" and then try out the sample from the examples folder.
+
+To test it, you currently need minib3D from http://blitzmax.com/Community/posts.php?topic=65370
