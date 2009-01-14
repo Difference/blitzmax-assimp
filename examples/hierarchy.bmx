@@ -4,15 +4,17 @@ SuperStrict
 Import scheutz.assimp
 Import sidesign.minib3d
 
-Local width:Int=800,height:Int=600,depth:Int=16,mode:Int=0
+
+Local width:Int=640,height:Int=480,depth:Int=16,mode:Int=0
+
 
 Graphics3D width,height ,depth,mode
 
 Local cam:TCamera=CreateCamera()
-PositionEntity cam,0,15,-45
+PositionEntity cam,0,150,-145
 
 CameraClsColor cam,200,200,255
-CameraRange cam,0.1,100
+CameraRange cam,0.1,10000
 
 Local light:TLight=CreateLight()
 RotateEntity light,45,0,0
@@ -30,19 +32,33 @@ If filearray.length = 0 Then
 EndIf
 
 
-Local mesh:tMesh = CreateCube()
+Local sp:tentity = CreateSphere()
 
-PointEntity cam,mesh
 
-' slideshow
+ScaleEntity sp, 10,10,10
+
+
+Local mainEnt:tentity = CreateCube()
+
+PointEntity cam,mainEnt
+
+' used by fps code
+Local old_ms:Int=MilliSecs()
+Local renders:Int
+Local fps:Int
+
+
+'Notify "here"
+
 Local go:Int =1
 Local lastslideTime:Int = MilliSecs()
-Local slideDuration:Int = 1000
-Local slideshow:Int = True
+Local slideDuration:Int = 10000
+Local slideshow:Int '= True
+
+Local currentModel:String  ="Press space to load the next model"
 
 
 
-Local currentFile:String
 
 While Not KeyDown(KEY_ESCAPE)		
 
@@ -65,18 +81,13 @@ While Not KeyDown(KEY_ESCAPE)
 
 		If aiIsExtensionSupported(String filearray[fileNUmber])
 
-			currentFile = String filearray[fileNUmber]
+			currentModel = String filearray[fileNUmber]
 
-			If mesh Then FreeEntity mesh
+			If mainEnt Then FreeEntity mainEnt
 
 
-			mesh = aiLoadMiniB3D(String filearray[fileNUmber])
+			mainEnt = aiLoadMiniB3D(String filearray[fileNUmber])
 			
-			
-			If mesh
-			'	EntityPickMode mesh,2
-				FitMesh mesh,-10,-10,-10,20,20,20,True
-			EndIf
 		EndIf
 
 			lastslideTime = MilliSecs()
@@ -86,8 +97,8 @@ While Not KeyDown(KEY_ESCAPE)
 
 	EndIf
 	
-	If mesh 
-		TurnEntity mesh,0,1,0
+	If mainEnt
+		TurnEntity mainEnt,0,1,0
 	EndIf
 	
 
@@ -96,14 +107,9 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
 	
-'	Try 
 	RenderWorld
-'	Catch a:String
-'		DebugLog "RenderWorld bombs out with " + a
-'	End Try
-
 	
-	Text 0,0,fileNUmber + "/" + filearray.length + " " + currentFile
+	Text 0,0,fileNUmber + "/" + filearray.length + " " + currentModel 
 
 	Flip
 	
@@ -113,32 +119,33 @@ Wend
 End
 
 
-Function aiLoadMiniB3D:tMesh(filename:String)
+Function aiLoadMiniB3D:tEntity(filename:String)
 
 	Local scene:aiScene = New aiScene
 
 	aiSetImportPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT )
 
+	
 	Local flags:Int
 	
+		
 '	aiProcess_SplitLargeMeshes | ..
 '	aiProcess_ValidateDataStructure | ..
 '	aiProcess_ImproveCacheLocality | ..
 '	aiProcess_RemoveRedundantMaterials | ..	
 '	aiProcess_JoinIdenticalVertices | ..	
+'	aiProcess_PreTransformVertices
+'	aiProcess_ConvertToLeftHanded | ..
 		
 	flags:Int = ..
 	aiProcess_CalcTangentSpace | ..
 	aiProcess_Triangulate | ..
 	aiProcess_GenNormals | ..
-	aiProcess_ConvertToLeftHanded | ..
 	aiProcess_SortByPType | ..
 	aiProcess_FindDegenerates | ..
 	aiProcess_FindInvalidData | ..
 	aiProcess_GenUVCoords | ..
-	aiProcess_TransformUVCoords | ..
-	aiProcess_PreTransformVertices
-		
+	aiProcess_TransformUVCoords
 
 
 	If scene.ImportFile(filename, flags)
@@ -152,43 +159,18 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 	
 	For Local mat:aimaterial = EachIn scene.Materials
 	
-Rem
-		DebugLog " "
-		DebugLog " -     --------   Material Name " + mat.GetMaterialName()
-		DebugLog " -     --------   mat.IsTwoSided() " + mat.IsTwoSided()
-		DebugLog " -     --------   mat.GetShininess() " + mat.GetShininess()
-		DebugLog " -     --------   mat.GetAlpha() " + mat.GetAlpha()
-	
-	
-	
-		Local names:String[] = mat.GetPropertyNames()
-	
-		For Local s:String = EachIn names
-			DebugLog s
-		Next
-End Rem	
-	
 	
 		Local DiffuseColors:Float[] = mat.GetMaterialColor(AI_MATKEY_COLOR_DIFFUSE)	
 		
 		brushes[i] = CreateBrush(mat.GetDiffuseRed()*255,mat.GetDiffuseGreen()*255,mat.GetDiffuseBlue()*255)
 	
-		' seems alpha comes in different places denpending om model format.
-		' seems wavefront obj alpha doen't load
-	'	BrushAlpha brushes[i],mat.GetAlpha()' * mat.GetDiffuseAlpha() (might be 0 so not good)
-		
-		BrushShininess brushes[i],mat.GetShininess()
-		
-		
+		BrushShininess brushes[i],mat.GetShininess()		
 		
 		If mat.IsTwoSided()
 			BrushFX brushes[i] ,16
 		EndIf
 
 		Local texFilename:String = mat.GetMaterialTexture()
-	
-	
-	'	DebugLog texFilename
 	
 		If Len(texFilename)
 		
@@ -204,9 +186,7 @@ End Rem
 			If Not FileType(texFilename  )
 				texFilename   = ExtractDir(filename) + "/" + StripDir(texFilename)
 			EndIf
-
-	'		DebugLog texFilename
-			
+		
 			
 			If FileType(texFilename  )
 				Local tex:TTexture=LoadTexture(texFilename)	
@@ -225,15 +205,93 @@ End Rem
 	
 	'--- Make mesh ---------------------------------------------------------	
 	
-	Local mesh:tMesh = CreateMesh()
+'	Local mesh:tMesh = CreateMesh()
 	
 	
 		DebugLog "scene.numMeshes:  "  + scene.numMeshes
+		
+'	Local surf:tSurface	
+		
+'	If brushes.length
+'		surf:tSurface = CreateSurface(mesh,brushes[0])
+'	EndIf
+'	
+	
+	Local ent:tEntity = ProccesIaNodeAndChildren(scene,brushes,scene.RootNode)
 	
 	
-	For Local m:aimesh = EachIn scene.meshes
+'	For Local m:aimesh = EachIn scene.meshes
+		
 
-		Local surf:tSurface = CreateSurface(mesh,brushes[m.MaterialIndex])
+'		MakeAiMesh(m,surf)
+	
+'	Next
+	
+		Return ent	
+
+	Else
+		DebugLog "nothing imported"
+	EndIf
+
+	Scene.ReleaseImport()
+
+End Function
+
+Function ProccesIaNodeAndChildren:tEntity(scene:aiScene,brushes:tBrush[],n:aiNode,parent:tEntity=Null)
+
+
+	DebugLog "NODENAME: " + n.name
+
+	Local e:tentity
+
+	If n.NumMeshes = 0 Then
+		e = CreatePivot(parent)
+		
+	Else
+		e = CreateMesh(parent)
+		
+		
+		' add this nodes Meshes
+		For Local i:Int = 0 To n.NumMeshes - 1
+		
+		
+			Local aim:aimesh = scene.meshes[n.MeshIndexes[i]]
+		
+			Local surf:tSurface = CreateSurface(tMesh(e),brushes[aim.MaterialIndex])
+		
+		
+			MakeAiMesh scene.meshes[n.MeshIndexes[i]],surf
+		
+		Next
+	EndIf
+
+
+
+	RotateEntity e ,   n.transformation.Rx , n.transformation.Ry , n.transformation.Rz,False
+	PositionEntity e , n.transformation.Tx , n.transformation.Ty , n.transformation.Tz,False
+	ScaleEntity e ,    n.transformation.Sx , n.transformation.Sz , n.transformation.Sy,False
+
+
+
+	DebugLog "x y z: " + n.transformation.Tx  + " , " + n.transformation.Ty + " , " + n.transformation.Tz
+	DebugLog "rotate : " + n.transformation.Rx  + " , " + n.transformation.Ry + " , " + n.transformation.Rz
+	DebugLog "Scale : " + n.transformation.Sx  + " , " + n.transformation.Sy  + " , " + n.transformation.Sz
+
+	
+	For Local i:Int = 0 To n.NumChildren - 1
+		DebugLog "adding Child node..." 
+		ProccesIaNodeAndChildren(scene,brushes,n.Children[i],e)
+	Next
+
+	Return e
+
+End Function
+
+
+Function MakeAiMesh(m:aimesh , surf:tSurface)
+
+		Local vertexOffset:Int = CountVertices(surf)
+
 		
 		' vertices, normals and texturecoords
 		For Local i:Int = 0 To m.NumVertices - 1
@@ -241,22 +299,19 @@ End Rem
 		
 			'DebugLog  m.VertexX(i) + " , "  + m.VertexY(i) + " , "  + m.VertexZ(i)
 
-			Local index:Int
-
-
-			index = AddVertex(surf,m.VertexX(i) ,m.VertexY(i),m.VertexZ(i))			
+			Local vid:Int = AddVertex(surf,m.VertexX(i) ,m.VertexY(i),m.VertexZ(i))			
 			
 
 			If m.HasNormals()
-				VertexNormal(surf,index,m.VertexNX(i) ,m.VertexNY(i),m.VertexNZ(i))
+				VertexNormal(surf,vid,m.VertexNX(i) ,m.VertexNY(i),m.VertexNZ(i))
 			EndIf
 			
 			If m.HasTextureCoords(0)
-				VertexTexCoords(surf,index,m.VertexU(i) ,m.VertexV(i),m.VertexW(i))
+				VertexTexCoords(surf,vid,m.VertexU(i) ,m.VertexV(i),m.VertexW(i))
 			EndIf
 
 			If m.HasTextureCoords(1)
-				VertexTexCoords(surf,index,m.VertexU(i,1) ,m.VertexV(i,1),m.VertexW(i,1))
+				VertexTexCoords(surf,vid,m.VertexU(i,1) ,m.VertexV(i,1),m.VertexW(i,1))
 			EndIf
 
 		Next
@@ -271,13 +326,14 @@ End Rem
 			' this check is only in because assimp seems to be returning out of range indexes on rare occtions
 			' with aiProcess_PreTransformVertices on.
 			Local validIndex:Int = True
+			
 		
 			If m.TriangleVertex(i,0) >=m.NumVertices Then validIndex = False
 			If m.TriangleVertex(i,1) >=m.NumVertices Then validIndex = False
 			If m.TriangleVertex(i,2) >=m.NumVertices Then validIndex = False				
 		
 			If validIndex
-				AddTriangle(surf, m.TriangleVertex(i,0) ,  m.TriangleVertex(i,1) , m.TriangleVertex(i,2))
+				AddTriangle(surf, m.TriangleVertex(i,0) + vertexOffset ,  m.TriangleVertex(i,1) + vertexOffset , m.TriangleVertex(i,2)+ vertexOffset)
 			Else
 				DebugLog "TriangleVertex index was out of range for triangle nr. : " + i
 				DebugLog "indexes: " + m.TriangleVertex(i,0) + " , "  + m.TriangleVertex(i,1) + " , "  + m.TriangleVertex(i,2)
@@ -285,21 +341,10 @@ End Rem
 			EndIf
 		Next
 
-	Next
-	
-	
-	
-	
-	
-		Return mesh	
 
-	Else
-		DebugLog "nothing imported"
-	EndIf
-
-	Scene.ReleaseImport()
 
 End Function
+
 
 
 Function enumFiles(list:TList,dir:String)

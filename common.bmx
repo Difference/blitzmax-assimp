@@ -8,11 +8,12 @@ Extern
 
 	Function aiIsExtensionSupported:Int(pFile$z)
 
-	Function aiImportFile:Int    Ptr( pFile$z,pFlags:Int)
+	Function aiImportFile:Int Ptr(pFile$z,pFlags:Int)
 	Function aiReleaseImport(pScene:Byte Ptr)
 	
 	
-	
+	Function aiSetImportPropertyInteger(szName$z,value:Int)
+
 	
 	Function aiGetMaterialColor:Int(pMat:Byte Ptr,pKey$z,T_ype:Int,index:Int,pOut:Byte Ptr) 
 	Function aiGetMaterialString:Int(pMat:Byte Ptr,pKey$z,T_ype:Int,index:Int,pOut:Byte Ptr) 	
@@ -32,21 +33,14 @@ Extern
 	
 End Extern
 
+
+	Const AI_CONFIG_PP_SBP_REMOVE	:String = "pp.sbp.remove"
+
+
 	Const AI_SUCCESS:Int  = $0
-
-'	//! Indicates that a Function failed
 	Const AI_FAILURE:Int  = -$1
-
-'	//! Indicates that a file was invalid
 	Const AI_INVALIDFILE:Int  = -$2
-
-'	//! Indicates that Not enough memory was available
-'	//! To perform the requested operation
 	Const AI_OUTOFMEMORY:Int  = -$3
-
-'	//! Indicates that an illegal argument has been
-'	//! passed To a Function. This is rarely used,
-'	//! most functions Assert in this Case.
 	Const AI_INVALIDARG:Int = -$4
 
 
@@ -78,10 +72,10 @@ End Extern
 	Const AI_MAX_NUMBER_OF_COLOR_SETS:Int = 4
 	Const AI_MAX_NUMBER_OF_TEXTURECOORDS:Int = 4
 
-'	Const aiPrimitiveType_POINT:Int       = $1
-'	Const aiPrimitiveType_LINE:Int        = $2
-'	Const aiPrimitiveType_TRIANGLE:Int    = $4
-'	Const aiPrimitiveType_POLYGON:Int     = $8
+	Const aiPrimitiveType_POINT:Int       = $1
+	Const aiPrimitiveType_LINE:Int        = $2
+	Const aiPrimitiveType_TRIANGLE:Int    = $4
+	Const aiPrimitiveType_POLYGON:Int     = $8
 
 
 	' material property buffer content type
