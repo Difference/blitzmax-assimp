@@ -22,7 +22,8 @@ RotateEntity light,45,0,0
 
 ' get some files to show
 Local filelist:TList  = New TList
-enumFiles(filelist,"../assimp/test/models")
+'enumFiles(filelist,"../assimp/test/models")
+enumFiles(filelist,"../assimp/test/models/collada")
 Local filearray:Object[] = filelist.toarray()
 Local fileNUmber:Int = 0
 
@@ -53,7 +54,7 @@ Local fps:Int
 Local go:Int =1
 Local lastslideTime:Int = MilliSecs()
 Local slideDuration:Int = 2000
-Local slideshow:Int = True
+Local slideshow:Int '= True
 
 Local currentModel:String  ="Press space to load the next model"
 
@@ -222,7 +223,7 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 	Local ent:tEntity = ProccesIaNodeAndChildren(scene,brushes,scene.RootNode)
 	
 	' make y up
-	TurnEntity ent , -90,0,0
+	TurnEntity ent , 90,0,0
 	
 	'fitAnimmesh ent,-100,-100,-100,200,200,200,True
 	
@@ -274,18 +275,23 @@ Function ProccesIaNodeAndChildren:tEntity(scene:aiScene,brushes:tBrush[],n:aiNod
 
 
 		
-	' still some sign and coord swapping until it gets correct...
-	' there is still some problems (teapots.dae mirrored etc.)
-	' wonder if some of this should be moved to vertex,normals reading?
-	
-	RotateEntity e ,   n.transformation.Rz, n.transformation.Rx , n.transformation.Ry,False
-	PositionEntity e , -n.transformation.Tx , n.transformation.Ty , n.transformation.Tz,False
+	' still some sign and coord swapping but result look s correct
+	' will try to move the Y_UP transformation to vertex reading code, so that only z has to be negated
+
+
+	PositionEntity e , n.transformation.Tx , n.transformation.Ty , -n.transformation.Tz,False
+	RotateEntity e ,   -n.transformation.Rz, n.transformation.Rx , n.transformation.Ry,False
 	ScaleEntity e ,    n.transformation.Sz , n.transformation.Sx , n.transformation.Sy,False
+
+
+
+
+
 
 
 	DebugLog "x y z: " + n.transformation.Tx  + " , " + n.transformation.Ty + " , " + n.transformation.Tz
 	DebugLog "rotate : " + n.transformation.Rx  + " , " + n.transformation.Ry + " , " + n.transformation.Rz
-	DebugLog "Scale : " + n.transformation.Sx  + " , " + n.transformation.Sy  + " , " + n.transformation.Sz
+	DebugLog "Scale : " + n.transformation.Sz  + " , " + n.transformation.Sy  + " , " + n.transformation.Sz
 
 	
 	For Local i:Int = 0 To n.NumChildren - 1
@@ -309,15 +315,15 @@ Function MakeAiMesh(m:aimesh , surf:tSurface)
 		
 			'DebugLog  m.VertexX(i) + " , "  + m.VertexY(i) + " , "  + m.VertexZ(i)
 
-			Local vid:Int = AddVertex(surf,m.VertexX(i) ,m.VertexY(i),m.VertexZ(i))			
+			Local vid:Int = AddVertex(surf,m.VertexX(i) ,m.VertexY(i),-m.VertexZ(i))			
 			
 
 			If m.HasNormals()
-				VertexNormal(surf,vid,m.VertexNX(i) ,m.VertexNY(i),m.VertexNZ(i))
+				VertexNormal(surf,vid,-m.VertexNX(i) ,-m.VertexNY(i),-m.VertexNZ(i))
 			EndIf
 			
 			If m.HasTextureCoords(0)
-				VertexTexCoords(surf,vid,m.VertexU(i) ,m.VertexV(i),m.VertexW(i))
+				VertexTexCoords(surf,vid,-m.VertexU(i) ,m.VertexV(i),m.VertexW(i))
 			EndIf
 
 			If m.HasTextureCoords(1)
@@ -343,7 +349,7 @@ Function MakeAiMesh(m:aimesh , surf:tSurface)
 			If m.TriangleVertex(i,2) >=m.NumVertices Then validIndex = False				
 		
 			If validIndex
-				AddTriangle(surf, m.TriangleVertex(i,0) + vertexOffset ,  m.TriangleVertex(i,1) + vertexOffset , m.TriangleVertex(i,2)+ vertexOffset)
+				AddTriangle(surf, m.TriangleVertex(i,2) + vertexOffset ,  m.TriangleVertex(i,1) + vertexOffset , m.TriangleVertex(i,0)+ vertexOffset)
 			Else
 				DebugLog "TriangleVertex index was out of range for triangle nr. : " + i
 				DebugLog "indexes: " + m.TriangleVertex(i,0) + " , "  + m.TriangleVertex(i,1) + " , "  + m.TriangleVertex(i,2)
