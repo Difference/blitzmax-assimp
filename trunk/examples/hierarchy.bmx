@@ -3,7 +3,7 @@ SuperStrict
 
 Import scheutz.assimp
 Import sidesign.minib3d
-
+'Import "fitanimmesh.bmx"
 
 Local width:Int=640,height:Int=480,depth:Int=16,mode:Int=0
 
@@ -11,10 +11,10 @@ Local width:Int=640,height:Int=480,depth:Int=16,mode:Int=0
 Graphics3D width,height ,depth,mode
 
 Local cam:TCamera=CreateCamera()
-PositionEntity cam,0,150,-145
+PositionEntity cam,0,150,-245
 
 CameraClsColor cam,200,200,255
-CameraRange cam,0.1,10000
+CameraRange cam,0.1,1000
 
 Local light:TLight=CreateLight()
 RotateEntity light,45,0,0
@@ -32,10 +32,10 @@ If filearray.length = 0 Then
 EndIf
 
 
-Local sp:tentity = CreateSphere()
+'Local sp:tentity = CreateSphere()
+'EntityAlpha sp, 0.4
 
-
-ScaleEntity sp, 10,10,10
+'ScaleEntity sp, 24,24,24
 
 
 Local mainEnt:tentity = CreateCube()
@@ -52,8 +52,8 @@ Local fps:Int
 
 Local go:Int =1
 Local lastslideTime:Int = MilliSecs()
-Local slideDuration:Int = 10000
-Local slideshow:Int '= True
+Local slideDuration:Int = 2000
+Local slideshow:Int = True
 
 Local currentModel:String  ="Press space to load the next model"
 
@@ -135,7 +135,9 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 '	aiProcess_RemoveRedundantMaterials | ..	
 '	aiProcess_JoinIdenticalVertices | ..	
 '	aiProcess_PreTransformVertices
-'	aiProcess_ConvertToLeftHanded | ..
+'	
+'	aiProcess_ConvertToLeftHanded | ..	
+
 		
 	flags:Int = ..
 	aiProcess_CalcTangentSpace | ..
@@ -144,7 +146,7 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 	aiProcess_SortByPType | ..
 	aiProcess_FindDegenerates | ..
 	aiProcess_FindInvalidData | ..
-	aiProcess_GenUVCoords | ..
+	aiProcess_GenUVCoords | ..	
 	aiProcess_TransformUVCoords
 
 
@@ -166,7 +168,7 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 	
 		BrushShininess brushes[i],mat.GetShininess()		
 		
-		If mat.IsTwoSided()
+		If mat.IsTwoSided() 'Or 2=2
 			BrushFX brushes[i] ,16
 		EndIf
 
@@ -219,6 +221,11 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 	
 	Local ent:tEntity = ProccesIaNodeAndChildren(scene,brushes,scene.RootNode)
 	
+	' make y up
+	TurnEntity ent , -90,0,0
+	
+	'fitAnimmesh ent,-100,-100,-100,200,200,200,True
+	
 	
 '	For Local m:aimesh = EachIn scene.meshes
 		
@@ -266,11 +273,14 @@ Function ProccesIaNodeAndChildren:tEntity(scene:aiScene,brushes:tBrush[],n:aiNod
 	EndIf
 
 
-
-	RotateEntity e ,   n.transformation.Rx , n.transformation.Ry , n.transformation.Rz,False
-	PositionEntity e , n.transformation.Tx , n.transformation.Ty , n.transformation.Tz,False
-	ScaleEntity e ,    n.transformation.Sx , n.transformation.Sz , n.transformation.Sy,False
-
+		
+	' still some sign and coord swapping until it gets correct...
+	' there is still some problems (teapots.dae mirrored etc.)
+	' wonder if some of this should be moved to vertex,normals reading?
+	
+	RotateEntity e ,   n.transformation.Rz, n.transformation.Rx , n.transformation.Ry,False
+	PositionEntity e , -n.transformation.Tx , n.transformation.Ty , n.transformation.Tz,False
+	ScaleEntity e ,    n.transformation.Sz , n.transformation.Sx , n.transformation.Sy,False
 
 
 	DebugLog "x y z: " + n.transformation.Tx  + " , " + n.transformation.Ty + " , " + n.transformation.Tz

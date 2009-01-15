@@ -204,6 +204,12 @@ Type aiMaterial
 	
 End Type
 
+Type aiMatrix3x3
+	Field a1:Float , a2:Float , a3:Float
+	Field b1:Float , b2:Float , b3:Float
+	Field c1:Float , c2:Float , c3:Float
+End Type
+
 
 Type aiMatrix4x4
 	Field a1:Float , a2:Float , a3:Float , a4:Float
@@ -229,7 +235,7 @@ Type aiMatrix4x4
 	Field Rz:Float
 
 
-
+	
 
 
 	
@@ -269,174 +275,70 @@ Type aiMatrix4x4
 		
 		
 		m.Decompose()
-		
+		m.rx = m.heading
+		m.ry = m.attitude
+		m.rz = m.bank
+			
 		Return m									
 	
 	End Function
 
-
-
-
-	Method multiply(m:aiMatrix4x4)	
-		
-		Local p:Float[16]
-		
-		p[0]  = m.a1 * a1 + m.b1 * a2 + m.c1 * a3 + m.d1 * a4
-		p[1]  = m.a2 * a1 + m.b2 * a2 + m.c2 * a3 + m.d2 * a4
-		p[2]  = m.a3 * a1 + m.b3 * a2 + m.c3 * a3 + m.d3 * a4
-		p[3]  = m.a4 * a1 + m.b4 * a2 + m.c4 * a3 + m.d4 * a4
-		p[4]  = m.a1 * b1 + m.b1 * b2 + m.c1 * b3 + m.d1 * b4
-		p[5]  = m.a2 * b1 + m.b2 * b2 + m.c2 * b3 + m.d2 * b4
-		p[6]  = m.a3 * b1 + m.b3 * b2 + m.c3 * b3 + m.d3 * b4
-		p[7]  = m.a4 * b1 + m.b4 * b2 + m.c4 * b3 + m.d4 * b4
-		p[8]  = m.a1 * c1 + m.b1 * c2 + m.c1 * c3 + m.d1 * c4
-		p[9]  = m.a2 * c1 + m.b2 * c2 + m.c2 * c3 + m.d2 * c4
-		p[10] = m.a3 * c1 + m.b3 * c2 + m.c3 * c3 + m.d3 * c4
-		p[11] = m.a4 * c1 + m.b4 * c2 + m.c4 * c3 + m.d4 * c4
-		p[12] = m.a1 * d1 + m.b1 * d2 + m.c1 * d3 + m.d1 * d4
-		p[13] = m.a2 * d1 + m.b2 * d2 + m.c2 * d3 + m.d2 * d4
-		p[14] = m.a3 * d1 + m.b3 * d2 + m.c3 * d3 + m.d3 * d4
-		p[15] = m.a4 * d1 + m.b4 * d2 + m.c4 * d3 + m.d4 * d4
-		
-		m.a1 = p[0]
-		m.a2 = p[1]
-		m.a3 = p[2]
-		m.a4 = p[3]
-		
-		m.b1 = p[4]
-		m.b2 = p[5]
-		m.b3 = p[6]
-		m.b4 = p[7]
-
-		m.c1 = p[8]
-		m.c2 = p[9]
-		m.c3 = p[10]
-		m.c4 = p[11]
-
-		m.d1 = p[12]
-		m.d2 = p[13]
-		m.d3 = p[14]
-		m.d4 = p[15]			
-		
-		
-		Decompose()
-		
-	End Method
 	
 	
 	Method Decompose()
-	
-	
-	' All of these are pretty mush shots in the dark it seems.
-	' Somebody will have to help out.
-	
-	
-'method 1	
-	
+		
 		Tx = a4
 		Ty = b4 
 		Tz = c4
-	
 	
 		Sx = Sqr( a1*a1 + a2*a2 + a3*a3 )
 		Sy = Sqr( b1*b1 + b2*b2 + b3*b3 ) 
 		Sz = Sqr( c1*c1 + c2*c2 + c3*c3 )
 		
-		Local D:Float = a1 * (b2 * c3 - c2 * b3) - b1 * (a2 * c3 - c2 * a3) + c1 * (a2 * b3 - b2 * a3);
-	
-	
-		Sx:* Sgn( D )
-		Sy:* Sgn( D )
-		Sz:* Sgn( D )
-	
-		Rx = ATan2( b3 / Sy, c3 / Sx ) 
-		Ry = ASin( -a3 / Sx )
-		Rz = ATan2( a2 / Sx, a1 / Sx )
-		
-		If( Cos(Ry) < 0.0001 ) 'To allow For precision/rounding errors 
-			Rx = 0
-			Rz = ATan2( -b1 / Sy, b2 / Sy )
+		Local rm:aiMatrix3x3 = New aiMatrix3x3	
+			
+		rm.a1 = a1 ; rm.a2 = a2 ; rm.a3 = a3
+		rm.b1 = b1 ; rm.b2 = b2 ; rm.b3 = b3
+		rm.c1 = c1 ; rm.c2 = c2 ; rm.c3 = c3		
+				
+		If sx Then
+			rm.a1:/sx	
+			rm.a2:/sx	
+			rm.a3:/sx	
 		EndIf
-
-
-' method 2 for rotation
-
-Rem
-		Local ang:Float=ATan2( b3,Sqr( a3*a3+c3*c3 ) )
-		If ang <= 0.0001 And ang >=-0.0001 Then ang = 0.0
-		Rx = ang
-
-
-		Local a:Float= a3
-		Local b:Float= c3
-		If a<=0.0001 And a>=-0.0001 Then a =0.0
-		If b<=0.0001 And b>=-0.0001 Then b =0.0
-		Ry = ATan2(a3 ,c3 )
-
-
-		a:Float=b1
-		b:Float=b2
-		If a <=0.0001 And a>=-0.0001 Then a=0.0
-		If b <=0.0001 And b>=-0.0001 Then b=0.0
-		Rz = ATan2(b1,b2)
-EndRem
-Rem
-
-'method 3  for rotation
-
-		Local heading:Float
-		Local bank :Float
-		Local attitude :Float		
-
+		If sy Then
+			rm.b1:/sy
+			rm.b2:/sy	
+			rm.b3:/sy	
+		EndIf
+		If sz Then
+			rm.c1:/sz
+			rm.c2:/sz	
+			rm.c3:/sz	
+		EndIf
+		
 
 		If (b1 > 0.998) ' singularity at north pole
-			heading = ATan2(a3,c3)
+			heading = ATan2(rm.a3,rm.c3)
 			attitude = 90 'Pi/2
 			bank = 0
 			Return
 		EndIf
 		
 		If (b1 < -0.998)' singularity at south pole
-			heading = ATan2(a3,c3)
+			heading = ATan2(rm.a3,rm.c3)
 			attitude = - 90 '-Pi/2
 			bank = 0
 			Return
 		EndIf
 	
-		heading = ATan2(-c1,a1)
-		bank = ATan2(-b3,b2)
-		attitude = ASin(b1)
-
-
-		rx = heading
-		ry = attitude
-		rz = bank
-
-EndRem
-Rem
-
-' method 4
-
-
-		rx = -ATan2( c2,Sqr( c1*c1+c3*c3 ) ) 
-		ry = -ATan2( c1,c3 )
-		rz = ATan2( a2,b2 )
-End Rem
-
+		heading = ATan2(-rm.c1,rm.a1)
+		bank = ATan2(-rm.b3,rm.b2)
+		attitude = ASin(rm.b1)
 
 	End Method 
 	
-		
-		
-'	Field a1:Float , a2:Float , a3:Float , a4:Float
-'	Field b1:Float , b2:Float , b3:Float , b4:Float
-'	Field c1:Float , c2:Float , c3:Float , c4:Float
-'	Field d1:Float , d2:Float , d3:Float , d4:Float		
-		
-		
-		
-
-		
+	
 
 	Method GetScaleX:Float()
 		Return Sqr(a1*a1 + a2*a2 + a3*a3);
