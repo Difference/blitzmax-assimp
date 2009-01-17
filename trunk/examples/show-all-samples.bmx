@@ -6,13 +6,17 @@ Import sidesign.minib3d
 
 Local width:Int=800,height:Int=600,depth:Int=16,mode:Int=0
 
+AppTitle = "Show all assimp sampels"
+
 Graphics3D width,height ,depth,mode
 
 Local cam:TCamera=CreateCamera()
-PositionEntity cam,0,15,-45
+PositionEntity cam,0,150,-145
 
 CameraClsColor cam,200,200,255
-CameraRange cam,0.1,100
+CameraRange cam,0.1,10000
+
+
 
 Local light:TLight=CreateLight()
 RotateEntity light,45,0,0
@@ -20,6 +24,7 @@ RotateEntity light,45,0,0
 
 ' get some files to show
 Local filelist:TList  = New TList
+enumFiles(filelist,"../assimp/test/models/md2")
 enumFiles(filelist,"../assimp/test/models")
 Local filearray:Object[] = filelist.toarray()
 Local fileNUmber:Int = 0
@@ -29,6 +34,11 @@ If filearray.length = 0 Then
 	End
 EndIf
 
+Local sp:tentity = CreateSphere()
+
+
+ScaleEntity sp, 24,24,24
+EntityAlpha sp, 0.3
 
 Local mesh:tMesh = CreateCube()
 
@@ -38,7 +48,7 @@ PointEntity cam,mesh
 Local go:Int =1
 Local lastslideTime:Int = MilliSecs()
 Local slideDuration:Int = 1000
-Local slideshow:Int = True
+Local slideshow:Int '= True
 
 
 
@@ -75,7 +85,7 @@ While Not KeyDown(KEY_ESCAPE)
 			
 			If mesh
 			'	EntityPickMode mesh,2
-				FitMesh mesh,-10,-10,-10,20,20,20,True
+			'	FitMesh mesh,-10,-10,-10,20,20,20,True
 			EndIf
 		EndIf
 
@@ -126,17 +136,19 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 '	aiProcess_ImproveCacheLocality | ..
 '	aiProcess_RemoveRedundantMaterials | ..	
 '	aiProcess_JoinIdenticalVertices | ..	
+'	aiProcess_ConvertToLeftHanded | ..
+
 		
 	flags:Int = ..
 	aiProcess_CalcTangentSpace | ..
 	aiProcess_Triangulate | ..
 	aiProcess_GenNormals | ..
-	aiProcess_ConvertToLeftHanded | ..
 	aiProcess_SortByPType | ..
 	aiProcess_FindDegenerates | ..
 	aiProcess_FindInvalidData | ..
 	aiProcess_GenUVCoords | ..
 	aiProcess_TransformUVCoords | ..
+	aiProcess_ConvertToLeftHanded | ..	
 	aiProcess_PreTransformVertices
 		
 
