@@ -3,7 +3,7 @@ SuperStrict
 
 Import scheutz.assimp
 Import sidesign.minib3d
-'Import "fitanimmesh.bmx"
+Import "fitanimmesh.bmx"
 
 Local width:Int=640,height:Int=480,depth:Int=16,mode:Int=0
 
@@ -14,7 +14,7 @@ Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,150,-245
 
 CameraClsColor cam,200,200,255
-CameraRange cam,0.1,1000
+CameraRange cam,0.1,2000
 
 Local light:TLight=CreateLight()
 RotateEntity light,45,0,0
@@ -22,8 +22,11 @@ RotateEntity light,45,0,0
 
 ' get some files to show
 Local filelist:TList  = New TList
-'enumFiles(filelist,"../assimp/test/models")
-enumFiles(filelist,"../assimp/test/models/collada")
+'enumFiles(filelist,"../assimp/test/models/md2")
+'enumFiles(filelist,"../assimp/test/models/collada")
+enumFiles(filelist,"../assimp/test/models")
+'enumFiles(filelist,"../troublemodels")
+
 Local filearray:Object[] = filelist.toarray()
 Local fileNUmber:Int = 0
 
@@ -58,6 +61,41 @@ Local slideshow:Int '= True
 
 Local currentModel:String  ="Press space to load the next model"
 
+Function FlipRot(e:tEntity,axis:Int)
+
+	Local cc:Int=CountChildren(e)
+
+	If cc
+		For Local c:Int =1 To cc
+			FlipRot(GetChild(e,c),axis)
+		Next	
+	EndIf
+
+
+
+	Local rotX:Float = EntityPitch(e)
+	Local rotY:Float = EntityYaw(e)
+	Local rotZ:Float = EntityRoll(e)
+	
+	Select axis	
+	
+		Case 1
+			rotX = -rotX
+		Case 2
+			rotY = -rotY		
+		Case 3
+			rotZ = -rotZ
+	End Select
+
+	
+	
+	
+
+	RotateEntity e,rotX,rotY,rotZ
+
+
+
+End Function
 
 
 
@@ -69,6 +107,19 @@ While Not KeyDown(KEY_ESCAPE)
 			go  =True
 		EndIf
 	EndIf	
+
+	If KeyHit(KEY_X)
+		FlipRot mainEnt , 1
+	EndIf
+
+	If KeyHit(KEY_Y)
+		FlipRot mainEnt , 2
+	EndIf
+
+	If KeyHit(KEY_Z)
+		FlipRot mainEnt , 3
+	EndIf
+
 
 
 
@@ -138,7 +189,8 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 '	aiProcess_PreTransformVertices
 '	
 '	aiProcess_ConvertToLeftHanded | ..	
-
+'	aiProcess_ConvertToLeftHanded | ..	
+	
 		
 	flags:Int = ..
 	aiProcess_CalcTangentSpace | ..
@@ -147,93 +199,99 @@ Function aiLoadMiniB3D:tEntity(filename:String)
 	aiProcess_SortByPType | ..
 	aiProcess_FindDegenerates | ..
 	aiProcess_FindInvalidData | ..
-	aiProcess_GenUVCoords | ..	
+	aiProcess_GenUVCoords | ..		
 	aiProcess_TransformUVCoords
+
+
+
 
 
 	If scene.ImportFile(filename, flags)
 
 
 	
-	'--- Make brushes ---------------------------------------------------------
-	Local brushes:tBrush[scene.NumMaterials]
-	
-	Local i:Int
-	
-	For Local mat:aimaterial = EachIn scene.Materials
-	
-	
-		Local DiffuseColors:Float[] = mat.GetMaterialColor(AI_MATKEY_COLOR_DIFFUSE)	
+		'--- Make brushes ---------------------------------------------------------
+		Local brushes:tBrush[scene.NumMaterials]
 		
-		brushes[i] = CreateBrush(mat.GetDiffuseRed()*255,mat.GetDiffuseGreen()*255,mat.GetDiffuseBlue()*255)
-	
-		BrushShininess brushes[i],mat.GetShininess()		
+		Local i:Int
 		
-		If mat.IsTwoSided() 'Or 2=2
-			BrushFX brushes[i] ,16
-		EndIf
+		For Local mat:aimaterial = EachIn scene.Materials
+		
+'Rem
+		DebugLog " "
+		DebugLog " -     --------   Material Name " + mat.GetMaterialName()
+		DebugLog " -     --------   mat.IsTwoSided() " + mat.IsTwoSided()
+		DebugLog " -     --------   mat.GetShininess() " + mat.GetShininess()
+		DebugLog " -     --------   mat.GetAlpha() " + mat.GetAlpha()
+	
+	
+	
+		Local names:String[] = mat.GetPropertyNames()
+	
+		For Local s:String = EachIn names
+			DebugLog s
+		Next
+'End Rem	
 
-		Local texFilename:String = mat.GetMaterialTexture()
-	
-		If Len(texFilename)
 		
-			' remove currentdir prefix, but leave relative subfolder path intact
-			If  texFilename[..2] = ".\" Or texFilename[..2] = "./"
-				texFilename = texFilename [2..]
-			EndIf
+			Local DiffuseColors:Float[] = mat.GetMaterialColor(AI_MATKEY_COLOR_DIFFUSE)	
 			
-			'assume the texture names are stored relative to the file
-			texFilename  = ExtractDir(filename) + "/" + texFilename
-
-
-			If Not FileType(texFilename  )
-				texFilename   = ExtractDir(filename) + "/" + StripDir(texFilename)
-			EndIf
+			brushes[i] = CreateBrush(mat.GetDiffuseRed()*255,mat.GetDiffuseGreen()*255,mat.GetDiffuseBlue()*255)
 		
+			BrushShininess brushes[i],mat.GetShininess()		
 			
-			If FileType(texFilename  )
-				Local tex:TTexture=LoadTexture(texFilename)	
-				If tex
-					BrushTexture brushes[i],tex	
-				EndIf	
+			If mat.IsTwoSided() 'Or 2=2
+				BrushFX brushes[i] ,16
+			EndIf
+	
+			Local texFilename:String = mat.GetMaterialTexture()
+		
+			If Len(texFilename)
+			
+				' remove currentdir prefix, but leave relative subfolder path intact
+				If  texFilename[..2] = ".\" Or texFilename[..2] = "./"
+					texFilename = texFilename [2..]
+				EndIf
+				
+				'assume the texture names are stored relative to the file
+				texFilename  = ExtractDir(filename) + "/" + texFilename
+	
+	
+				If Not FileType(texFilename  )
+					texFilename   = ExtractDir(filename) + "/" + StripDir(texFilename)
+				EndIf
+			
+			
+				DebugLog "Texture: " + texFilename   
+			
+				
+				If FileType(texFilename  )
+					Local tex:TTexture=LoadTexture(texFilename)	
+					If tex
+						BrushTexture brushes[i],tex	
+					EndIf	
+					
+				EndIf
 				
 			EndIf
-			
-		EndIf
-
-		i:+1
-	Next
 	
-	
-	
-	'--- Make mesh ---------------------------------------------------------	
-	
-'	Local mesh:tMesh = CreateMesh()
-	
-	
+			i:+1
+		Next
+		
+		
+		
+		'--- Make mesh ---------------------------------------------------------	
+		
+		
+		
 		DebugLog "scene.numMeshes:  "  + scene.numMeshes
+					
+		Local ent:tEntity = ProccesIaNodeAndChildren(scene,brushes,scene.RootNode)
 		
-'	Local surf:tSurface	
+		' make y up
+		TurnEntity ent , 90,0,0	
 		
-'	If brushes.length
-'		surf:tSurface = CreateSurface(mesh,brushes[0])
-'	EndIf
-'	
-	
-	Local ent:tEntity = ProccesIaNodeAndChildren(scene,brushes,scene.RootNode)
-	
-	' make y up
-	TurnEntity ent , 90,0,0
-	
-	'fitAnimmesh ent,-100,-100,-100,200,200,200,True
-	
-	
-'	For Local m:aimesh = EachIn scene.meshes
-		
-
-'		MakeAiMesh(m,surf)
-	
-'	Next
+		'fitAnimmesh ent,-100,-100,-100,200,200,200,True
 	
 		Return ent	
 
@@ -274,24 +332,18 @@ Function ProccesIaNodeAndChildren:tEntity(scene:aiScene,brushes:tBrush[],n:aiNod
 	EndIf
 
 
-		
-	' still some sign and coord swapping but result look s correct
-	' will try to move the Y_UP transformation to vertex reading code, so that only z has to be negated
-
-
+	' call this before reading the values, may go away in the future
+	n.transformation.Decompose()
+	
+	
 	PositionEntity e , n.transformation.Tx , n.transformation.Ty , -n.transformation.Tz,False
 	RotateEntity e ,   -n.transformation.Rz, n.transformation.Rx , n.transformation.Ry,False
 	ScaleEntity e ,    n.transformation.Sz , n.transformation.Sx , n.transformation.Sy,False
 
 
-
-
-
-
-
 	DebugLog "x y z: " + n.transformation.Tx  + " , " + n.transformation.Ty + " , " + n.transformation.Tz
 	DebugLog "rotate : " + n.transformation.Rx  + " , " + n.transformation.Ry + " , " + n.transformation.Rz
-	DebugLog "Scale : " + n.transformation.Sz  + " , " + n.transformation.Sy  + " , " + n.transformation.Sz
+	DebugLog "Scale : " + n.transformation.Sx  + " , " + n.transformation.Sy  + " , " + n.transformation.Sz
 
 	
 	For Local i:Int = 0 To n.NumChildren - 1
@@ -319,42 +371,22 @@ Function MakeAiMesh(m:aimesh , surf:tSurface)
 			
 
 			If m.HasNormals()
-				VertexNormal(surf,vid,-m.VertexNX(i) ,-m.VertexNY(i),-m.VertexNZ(i))
+				VertexNormal(surf,vid,m.VertexNX(i) ,m.VertexNY(i),-m.VertexNZ(i))
 			EndIf
 			
 			If m.HasTextureCoords(0)
-				VertexTexCoords(surf,vid,-m.VertexU(i) ,m.VertexV(i),m.VertexW(i))
+				VertexTexCoords(surf,vid,m.VertexU(i) ,-m.VertexV(i),m.VertexW(i))
 			EndIf
 
 			If m.HasTextureCoords(1)
-				VertexTexCoords(surf,vid,m.VertexU(i,1) ,m.VertexV(i,1),m.VertexW(i,1))
+				VertexTexCoords(surf,vid,m.VertexU(i,1) ,-m.VertexV(i,1),m.VertexW(i,1))
 			EndIf
 
 		Next
 	
 
-		For Local i:Int = 0 To m.NumFaces - 1
-		
-		
-			'DebugLog  m.TriangleVertex(i,0) + " , "  + m.TriangleVertex(i,1) + " , "  + m.TriangleVertex(i,2)
-		
-		
-			' this check is only in because assimp seems to be returning out of range indexes on rare occtions
-			' with aiProcess_PreTransformVertices on.
-			Local validIndex:Int = True
-			
-		
-			If m.TriangleVertex(i,0) >=m.NumVertices Then validIndex = False
-			If m.TriangleVertex(i,1) >=m.NumVertices Then validIndex = False
-			If m.TriangleVertex(i,2) >=m.NumVertices Then validIndex = False				
-		
-			If validIndex
-				AddTriangle(surf, m.TriangleVertex(i,2) + vertexOffset ,  m.TriangleVertex(i,1) + vertexOffset , m.TriangleVertex(i,0)+ vertexOffset)
-			Else
-				DebugLog "TriangleVertex index was out of range for triangle nr. : " + i
-				DebugLog "indexes: " + m.TriangleVertex(i,0) + " , "  + m.TriangleVertex(i,1) + " , "  + m.TriangleVertex(i,2)
-			
-			EndIf
+		For Local i:Int = 0 To m.NumFaces - 1	
+			AddTriangle(surf, m.TriangleVertex(i,2) + vertexOffset ,  m.TriangleVertex(i,1) + vertexOffset , m.TriangleVertex(i,0)+ vertexOffset)
 		Next
 
 

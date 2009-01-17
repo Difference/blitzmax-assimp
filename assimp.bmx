@@ -2,14 +2,16 @@ SuperStrict
 
 Rem
 bbdoc: assimp
-about: The Open Asset Import Library
+about: The Open Asset Import Library, wrapper by PS
 End Rem
 
 Module scheutz.assimp
 
-ModuleInfo "Version: 0.10"
+ModuleInfo "Version: 0.15"
 ModuleInfo "Author: Copyright (c) 2006-2008, ASSIMP Development Team"
 ModuleInfo "License: BSD License"
+ModuleInfo "Website and SVN at http://code.google.com/p/blitzmax-assimp/"
+
 
 ModuleInfo "CC_OPTS:-fexceptions"
 
@@ -235,23 +237,16 @@ Type aiMatrix4x4
 	Field Rz:Float
 
 
-	
-
-
-	
-
 	Function Create:aiMatrix4x4(p:Float Ptr)
 	
 		Local m:aiMatrix4x4 = New aiMatrix4x4
 		
-		
-		DebugLog "MAtrix"
-		
-		For Local i:Int =  0 To 15
-			DebugLog i + " " + p[i]
-		Next
-		
-		
+		Rem	
+			DebugLog "MAtrix"
+			For Local i:Int =  0 To 15
+				DebugLog i + " " + p[i]
+			Next		
+		EndRem
 		
 		m.a1 = p[0]
 		m.a2 = p[1]
@@ -273,19 +268,24 @@ Type aiMatrix4x4
 		m.d3 = p[14]
 		m.d4 = p[15]	
 		
-		
-		m.Decompose()
-		m.rx = m.heading
-		m.ry = m.attitude
-		m.rz = m.bank
 			
 		Return m									
 	
 	End Function
 
-	
-	
 	Method Decompose()
+
+		_Decompose()		
+		
+		rx = heading
+		ry = attitude
+		rz = bank
+		
+	End Method
+	
+	
+	Method _Decompose()
+
 		
 		Tx = a4
 		Ty = b4 
@@ -294,6 +294,14 @@ Type aiMatrix4x4
 		Sx = Sqr( a1*a1 + a2*a2 + a3*a3 )
 		Sy = Sqr( b1*b1 + b2*b2 + b3*b3 ) 
 		Sz = Sqr( c1*c1 + c2*c2 + c3*c3 )
+
+		Local D:Float = a1 * (b2 * c3 - c2 * b3) - b1 * (a2 * c3 - c2 * a3) + c1 * (a2 * b3 - b2 * a3);
+	
+	
+		Sx:* Sgn( D )
+		Sy:* Sgn( D )
+		Sz:* Sgn( D )
+
 		
 		Local rm:aiMatrix3x3 = New aiMatrix3x3	
 			
@@ -322,6 +330,7 @@ Type aiMatrix4x4
 			heading = ATan2(rm.a3,rm.c3)
 			attitude = 90 'Pi/2
 			bank = 0
+			'DebugLog "' singularity at north pole ******************************************************"
 			Return
 		EndIf
 		
@@ -329,13 +338,14 @@ Type aiMatrix4x4
 			heading = ATan2(rm.a3,rm.c3)
 			attitude = - 90 '-Pi/2
 			bank = 0
+			'DebugLog "' singularity at south pole ******************************************************"
 			Return
 		EndIf
 	
 		heading = ATan2(-rm.c1,rm.a1)
 		bank = ATan2(-rm.b3,rm.b2)
-		attitude = ASin(rm.b1)
-
+		attitude = ASin(rm.b1)	
+	
 	End Method 
 	
 	
@@ -353,9 +363,6 @@ Type aiMatrix4x4
 		Return Sqr(c1*c1 + c2*c2 + c3*c3);	
 	End Method
 
-
-
-		
 		
 End Type
 
@@ -382,7 +389,7 @@ Type aiNode
 		n.name = String.fromcstring(pointer + 4)
 
 
-'		DebugLog "Nodename " + n.name
+		'DebugLog "Nodename " + n.name
 
 		n.transformation = aiMatrix4x4.Create(Float Ptr (Byte Ptr pointer + MAXLEN + 4))
 
@@ -391,10 +398,10 @@ Type aiNode
 		Local pBase:Int Ptr = Int Ptr(Byte Ptr pointer + MAXLEN + 4 + 16*4)
 
 	
-'Rem
+		'Rem
 		n.NumMeshes = pBase[3]
 		
-'		DebugLog "----------------------------Mesh count for this node: "  + n.NumMeshes
+		'DebugLog "----------------------------Mesh count for this node: "  + n.NumMeshes
 		
 
 		Local pMeshIndexArray:Int Ptr = Int Ptr pBase[4]
@@ -403,37 +410,23 @@ Type aiNode
 
 		For Local i:Int = 0 To n.NumMeshes - 1
 			n.MeshIndexes[i] = pMeshIndexArray[i]
-			
-'			DebugLog "Mesh index : " + n.MeshIndexes[i]
 		Next
-'E'nd Rem
+		'End Rem
 
 
 		' get child nodes
 		n.NumChildren = pBase[1]
 
-		If n.NumChildren
-		
-'			DebugLog "n.NumChildren "  + n.NumChildren
-		
+		If n.NumChildren		
 			Local pChildArray:Int Ptr = Int Ptr pBase[2]
 		
 			n.Children = n.Children[..n.NumChildren]
 			
 			For Local i:Int = 0 To n.NumChildren - 1
 			
-			
-			
-'				DebugLog "child pointer point " + pChildArray[i]
-			
-'				DebugLog " -- ---  Adding child"
-
 				n.Children[i] = aiNode.Create(Byte Ptr pChildArray[i],n)
 			
-'				DebugLog " -- ---  Child added"
 			Next
-		Else
-'			DebugLog "No children! "	
 		
 		EndIf
 
@@ -522,8 +515,6 @@ Type aiMesh
 	End Method
 
 
-
-
 	Method GetTriangularFaces:Int[,]()
 	
 		Local faces:Int[NumFaces,3]
@@ -569,14 +560,13 @@ Type aiScene
 		?WIN32	
 		' TODO this is a fix for wavefront mtl not being found
 		' does this mess up UNC paths or something else?
-		filename.Replace("/","\")
+		filename = filename.Replace("/","\")
 		?
 		
-		
+		'DebugLog   "filename " +  filename
+			
 		pointer = aiImportFile(filename ,readflags)
 	
-					
-		
 		If pointer <> Null
 		
 			flags = pointer[0]
@@ -650,7 +640,7 @@ Type aiScene
 				materials [i].NumAllocated = materials [i].pMaterial[2]				
 	
 	
-'Rem ' loading properties is not needed, but I do it for now for a propertylist
+				'Rem ' loading properties is not needed, but Ido it for now to make a list of loaded properties
 				' redim
 				materials [i].Properties = materials [i].Properties[..materials [i].pMaterial[1]]
 				
@@ -661,7 +651,7 @@ Type aiScene
 						materials [i].Properties[p] = aiMaterialProperty.Create(Byte Ptr pMaterialPropertyArray[p])
 				Next
 						
-'EndRem
+				'EndRem
 			Next
 		
 		EndIf
