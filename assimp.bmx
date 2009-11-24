@@ -7,7 +7,7 @@ End Rem
 
 Module scheutz.assimp
 
-ModuleInfo "Version: 0.15"
+ModuleInfo "Version: 0.22"
 ModuleInfo "Author: Copyright (c) 2006-2008, ASSIMP Development Team"
 ModuleInfo "License: BSD License"
 ModuleInfo "Website and SVN at http://code.google.com/p/blitzmax-assimp/"
@@ -18,7 +18,7 @@ ModuleInfo "CC_OPTS:-fexceptions"
 
 Import "common.bmx"
 Import brl.math
-
+'Import brl.blitz
 
 
 
@@ -42,7 +42,7 @@ Type aiMaterialProperty
 		
 		mp.Semantic:Int = pVars[0]
 		mp.Index  =  pVars[1]
-		mp.DataLength=  pVars[2]
+		mp.DataLength =  pVars[2]
 		mp.mType =  pVars[3]
 		mp.mData =  Byte Ptr pVars[4]
 
@@ -56,7 +56,7 @@ Type aiMaterialProperty
 	End Method
 	
 	
-	Method GetStringProperty:String()
+	Method GetStringValue:String()
 		Return String.fromcstring(mData + 4 )
 	End Method
 
@@ -140,10 +140,39 @@ Type aiMaterial
 	
 	' ---- helper functions assumes material properties loaded with scene ----------------------------
 	
+	
+	Method GetTexture()
+	
+	End Method
+	
+	
 	Method GetPropertyNames:String[]()
 		Local names:String[NumProperties]	
 		For Local i:Int = 0 To NumProperties - 1
 			names[i] = Properties[i].mKey
+			'DebugLog "Property name: " + Properties[i].mKey
+			'DebugLog "Property type: " + Properties[i].mType
+			'DebugLog "Property Index " + Properties[i].Index
+			'DebugLog "Property length " + Properties[i].DataLength
+			'DebugLog "Property Semantic: " + Properties[i].Semantic
+			
+			Select Properties[i].mType
+
+				Case aiPTI_Float
+					For Local i:Int = 0 Until Properties[i].DataLength / 4 
+				
+				'		DebugLog "FLOAT: " + Properties[i].GetFloatValue(i)
+					Next
+				Case aiPTI_String
+			'		DebugLog "String: " + Properties[i].GetStringValue()
+				Case aiPTI_Integer
+				
+				Case aiPTI_Buffer
+				
+				
+			End Select
+			
+			
 		Next
 		Return names
 	End Method	
@@ -151,12 +180,18 @@ Type aiMaterial
 	
 	' ---- native ai functions -----------------------------------------------------------------
 	Method GetMaterialString:String(Key:String)
-		Local s:Byte[4+MAXLEN]
+		Local s:Byte[4+MAXLEN]	
 		
-		If aiGetMaterialString(pMaterial,Key,0,0,Varptr s[0]) = AI_SUCCESS
-			
+		'Local kp:Byte Ptr = Key.ToCstring()
+		
+		Local retVal:Int = aiGetMaterialString(pMaterial,Key,0,0,Varptr s[0])
+		
+		'MemFree kp
+		
+		If retVal = AI_SUCCESS
 			Return String.fromcstring(Varptr s[4])
-			
+		'Else
+			'DebugLog "mat. aiGetMaterialString failed with code " + retVal
 		EndIf	
 	End Method
 	
@@ -197,10 +232,18 @@ Type aiMaterial
 	Method GetMaterialTexture:String(index:Int=0)
 	
 		Local s:Byte[4+MAXLEN]
-		
-		If aiGetMaterialTexture(pMaterial,0,index,Varptr s[0]) = AI_SUCCESS
+
+		Local retval:Int =  aiGetMaterialTexture(pMaterial,aiTextureType_DIFFUSE,index,Varptr s[0])
+
+		If retVal = AI_SUCCESS
+			DebugLog "YYYYYYEYYEYEYEYEYEYEYEYEYYEYEYEYEYEYEYEYEYYEYEYEYEYEYEYEYEYYEYE*****"
 			Return String.fromcstring(Varptr s[4])
-		EndIf			
+		Else
+		
+			DebugLog "mat. GetMaterialTexture failed with code " + retVal
+			
+		EndIf	
+		
 	
 	End Method
 	
@@ -438,6 +481,28 @@ Type aiNode
 End Type
 
 
+Rem
+bbdoc: A mesh represents a geometry Or model with a single material.
+	about:
+
+* It usually consists of a number of vertices And a series of primitives/faces 
+* referencing the vertices. In addition there might be a series of bones, each 
+* of them addressing a number of vertices with a certain weight. Vertex data 
+* is presented in channels with each channel containing a single per-vertex 
+* information such as a set of texture coords Or a normal vector.
+* If a data pointer is non-Null, the corresponding data stream is present.
+* From C++-programs you can also use the comfort functions Has*() To
+* test For the presence of various data streams.
+*
+* A Mesh uses only a single material which is referenced by a material ID.
+* @note The mPositions member is usually Not optional. However, vertex positions 
+* *could* be missing If the AI_SCENE_FLAGS_INCOMPLETE flag is set in 
+* @code
+* aiScene::mFlags
+* @endcode
+*/
+EndRem
+
 Type aiMesh
 	Field PrimitiveTypes:Int
 	Field NumVertices:Int
@@ -455,10 +520,6 @@ Type aiMesh
 	Field MaterialIndex:Int
 	
 	
-	Method HasTextureCoords:Int(coord_set:Int)
-		If pTextureCoords[coord_set] <> Null Then Return True
-	End Method
-
 
 	'vertices
 	Method VertexX:Float(index:Int)
@@ -500,14 +561,54 @@ Type aiMesh
 	End Method
 	
 
+	Method VertexRed:Float(index:Int,color_set:Int=0)
+		Return Float Ptr(pColors[color_set])[index*4]
+	End Method
+	Method VertexGreen:Float(index:Int,color_set:Int=0)
+		Return Float Ptr(pColors[color_set])[index*4 + 1]
+	End Method
+	Method VertexBlue:Float(index:Int,color_set:Int=0)
+		Return Float Ptr(pColors[color_set])[index*4 + 2]
+	End Method
+	Method VertexAlpha:Float(index:Int,color_set:Int=0)
+		Return Float Ptr(pColors[color_set])[index*4 + 3]
+	End Method		
+
+
+	Method HasPositions:Int()
+		If NumVertices <= 0  Then Return False
+		If pVertices <> Null Then Return True
+	End Method
+	
+	
+	Method HasFaces:Int()
+		If NumVertices <= 0  Then Return False
+		If pFaces <> Null Then Return True
+	End Method	
+	
 	Method HasNormals:Int()
-		If pNormals = Null Then
-			Return False
-		Else
-			Return True
-		EndIf
+		If NumVertices <= 0 Then Return False
+		If pNormals <> Null Then Return True
+	End Method	
+	
+	Method HasTangentsAndBitangents:Int() 
+		If NumVertices <= 0  Then Return False	
+		If pTangents = Null Then Return False
+		If pBitangents <> Null Then Return True
+	End Method
+	
+	Method HasTextureCoords:Int(coord_set:Int)
+		If coord_set >= AI_MAX_NUMBER_OF_TEXTURECOORDS Then Return False
+		If pTextureCoords[coord_set] <> Null Then Return True
 	End Method
 
+	Method HasVertexColors:Int( color_set:Int)
+		If NumVertices <= 0  Then Return False
+		If color_set >= AI_MAX_NUMBER_OF_COLOR_SETS Then Return False
+		If pColors[color_set] <> Null Then Return True
+	End Method	
+	
+	
 
 	Method TriangleVertex:Int(index:Int,corner:Int)
 		Local faceIndexes:Int Ptr = Int Ptr pFaces[index*2+1]
@@ -630,9 +731,7 @@ Type aiScene
 			
 		
 			For Local i:Int = 0 To NumMaterials - 1 
-				
-				
-	
+				'DebugLog "Material found"
 				materials [i] = New aiMaterial 
 				
 				materials [i].pMaterial  = Int Ptr pMaterialArray[i]
@@ -648,6 +747,7 @@ Type aiScene
 				
 				
 				For Local p:Int = 0 To materials [i].NumProperties - 1
+						'DebugLog "Materialproperty found"
 						materials [i].Properties[p] = aiMaterialProperty.Create(Byte Ptr pMaterialPropertyArray[p])
 				Next
 						
