@@ -10,10 +10,7 @@ Import "fitanimmesh.bmx"
 
 Local width:Int=640,height:Int=480,depth:Int=16,mode:Int=0
 
-AppTitle = "Show all assimp sampels"
-
-
-
+AppTitle = "Show all assimp samples"
 
 Graphics3D width,height ,depth,mode
 
@@ -128,13 +125,8 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
 	
-'	Try 
+ 
 	RenderWorld
-'	Catch a:String
-'		DebugLog "RenderWorld bombs out with " + a
-'	End Try
-
-	
 	Text 0,0,fileNUmber + "/" + filearray.length + " " + StripDir(currentFile)
 
 	Flip
@@ -228,11 +220,6 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 		EndIf
 
 		Local texFilename:String = mat.GetMaterialTexture()
-	
-	
-		'Local tf:String = mat.GetMaterialString("AI_MATKEY_TEXTURE_DIFFUSE(0)")
-		
-		'DebugLog "TF: " + tf
 	
 	
 		DebugLog "TEXTURE filename: " + texFilename
