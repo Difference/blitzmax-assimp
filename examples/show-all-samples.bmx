@@ -4,9 +4,16 @@ SuperStrict
 Import scheutz.assimp
 Import sidesign.minib3d
 
-Local width:Int=800,height:Int=600,depth:Int=16,mode:Int=0
+Import "fileenumerator.bmx"
+Import "fitanimmesh.bmx"
+
+
+Local width:Int=640,height:Int=480,depth:Int=16,mode:Int=0
 
 AppTitle = "Show all assimp sampels"
+
+
+
 
 Graphics3D width,height ,depth,mode
 
@@ -14,7 +21,7 @@ Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,150,-145
 
 CameraClsColor cam,200,200,255
-CameraRange cam,0.1,10000
+CameraRange cam,0.1,1000
 
 
 
@@ -24,8 +31,23 @@ RotateEntity light,45,0,0
 
 ' get some files to show
 Local filelist:TList  = New TList
-enumFiles(filelist,"../assimp/test/models/md2")
-enumFiles(filelist,"../assimp/test/models")
+Local skipExt:TList = New TList
+
+'skipExt.addlast("hmp")
+skipExt.addlast("xml")
+'skipExt.addlast("nff")
+skipExt.addlast("ac")
+'enumFiles(filelist,"../assimp/test/models/stl",skipExt)
+'e'numFiles(filelist,"../assimp/test/models/obj",skipExt)
+enumFiles(filelist,"../assimp/test/models",skipExt)
+'enumFiles(filelist,"../assimp/test/models/dxf",skipExt)
+'enumFiles(filelist,"C:\data\My Dropbox",skipExt)
+'enumFiles(filelist,"../assimp/test/models",skipExt)
+'enumFiles(filelist,"./",skipExt)
+
+
+
+
 Local filearray:Object[] = filelist.toarray()
 Local fileNUmber:Int = 0
 
@@ -48,7 +70,7 @@ PointEntity cam,mesh
 Local go:Int =1
 Local lastslideTime:Int = MilliSecs()
 Local slideDuration:Int = 1000
-Local slideshow:Int '= True
+Local slideshow:Int = True
 
 
 
@@ -59,7 +81,7 @@ While Not KeyDown(KEY_ESCAPE)
 
 	If slideshow
 		If MilliSecs() > lastslideTime + slideDuration
-			go  =True
+			go  =1
 		EndIf
 	EndIf	
 
@@ -85,7 +107,7 @@ While Not KeyDown(KEY_ESCAPE)
 			
 			If mesh
 			'	EntityPickMode mesh,2
-			'	FitMesh mesh,-10,-10,-10,20,20,20,True
+			'	fitAnimmesh mesh,-100,-100,-100,200,200,200,True	
 			EndIf
 		EndIf
 
@@ -113,7 +135,7 @@ While Not KeyDown(KEY_ESCAPE)
 '	End Try
 
 	
-	Text 0,0,fileNUmber + "/" + filearray.length + " " + currentFile
+	Text 0,0,fileNUmber + "/" + filearray.length + " " + StripDir(currentFile)
 
 	Flip
 	
@@ -137,7 +159,7 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 '	aiProcess_RemoveRedundantMaterials | ..	
 '	aiProcess_JoinIdenticalVertices | ..	
 '	aiProcess_ConvertToLeftHanded | ..
-
+'	aiProcess_ConvertToLeftHanded | ..	
 		
 	flags:Int = ..
 	aiProcess_CalcTangentSpace | ..
@@ -148,7 +170,6 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 	aiProcess_FindInvalidData | ..
 	aiProcess_GenUVCoords | ..
 	aiProcess_TransformUVCoords | ..
-	aiProcess_ConvertToLeftHanded | ..	
 	aiProcess_PreTransformVertices
 		
 
@@ -164,21 +185,30 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 	
 	For Local mat:aimaterial = EachIn scene.Materials
 	
-Rem
+'Rem
+'Rem
 		DebugLog " "
 		DebugLog " -     --------   Material Name " + mat.GetMaterialName()
 		DebugLog " -     --------   mat.IsTwoSided() " + mat.IsTwoSided()
 		DebugLog " -     --------   mat.GetShininess() " + mat.GetShininess()
 		DebugLog " -     --------   mat.GetAlpha() " + mat.GetAlpha()
-	
+'E'ndRem	
 	
 	
 		Local names:String[] = mat.GetPropertyNames()
 	
 		For Local s:String = EachIn names
-			DebugLog s
+			DebugLog "Property: *" + s + "*"
+			
+			'DebugLog "matbase " + mat.GetFloatValue(s)
+			
+			Select s
+				Case AI_MATKEY_TEXTURE_BASE
+					DebugLog "matbase " +  mat.GetMaterialString(s)
+			End Select
+			
 		Next
-End Rem	
+'End Rem	
 	
 	
 		Local DiffuseColors:Float[] = mat.GetMaterialColor(AI_MATKEY_COLOR_DIFFUSE)	
@@ -194,13 +224,18 @@ End Rem
 		
 		
 		If mat.IsTwoSided()
-			BrushFX brushes[i] ,16
+	'		BrushFX brushes[i] ,16
 		EndIf
 
 		Local texFilename:String = mat.GetMaterialTexture()
 	
 	
-	'	DebugLog texFilename
+		'Local tf:String = mat.GetMaterialString("AI_MATKEY_TEXTURE_DIFFUSE(0)")
+		
+		'DebugLog "TF: " + tf
+	
+	
+		DebugLog "TEXTURE filename: " + texFilename
 	
 		If Len(texFilename)
 		
@@ -217,10 +252,11 @@ End Rem
 				texFilename   = ExtractDir(filename) + "/" + StripDir(texFilename)
 			EndIf
 
-	'		DebugLog texFilename
+			DebugLog texFilename
 			
 			
 			If FileType(texFilename  )
+				'DebugStop
 				Local tex:TTexture=LoadTexture(texFilename)	
 				If tex
 					BrushTexture brushes[i],tex	
@@ -301,7 +337,7 @@ End Rem
 	
 	
 	
-	
+
 	
 		Return mesh	
 
@@ -311,40 +347,5 @@ End Rem
 
 	Scene.ReleaseImport()
 
-End Function
-
-
-Function enumFiles(list:TList,dir:String)
-	
-	Local folder:Int=ReadDir(dir)
-	Local file:String
-
-	Repeat
-		
-		file=NextFile(folder)
-	
-		If (file <> ".") And (file <> "..") And (file)
-			Local fullPath:String=RealPath(dir+"/"+file)
-		
-			If FileType(fullPath)=FILETYPE_DIR
-				enumFiles(list,fullPath)
-			Else
-				'DebugLog ExtractExt(fullPath)
-				If aiIsExtensionSupported(fullPath)
-				
-					If Lower(ExtractExt(fullPath))<> "nff"	' Filter out nff for now
-													' assimp author is looking into a fix
-						list.AddLast(fullPath)
-					EndIf
-				
-				EndIf
-			End If	
-		End If
-		
-	Until (file=Null)
-	
-	CloseDir folder
-	'FlushMem
-	
 End Function
 
