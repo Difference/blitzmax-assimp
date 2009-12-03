@@ -7,13 +7,14 @@ End Rem
 
 Module scheutz.assimp
 
-ModuleInfo "Version: 0.22"
+ModuleInfo "Version: 0.29"
 ModuleInfo "Author: Copyright (c) 2006-2008, ASSIMP Development Team"
 ModuleInfo "License: BSD License"
 ModuleInfo "Website and SVN at http://code.google.com/p/blitzmax-assimp/"
 
 
 ModuleInfo "CC_OPTS:-fexceptions"
+ModuleInfo "CC_OPTS: -DASSIMP_BUILD_BOOST_WORKAROUND"
 
 
 Import "common.bmx"
