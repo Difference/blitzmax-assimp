@@ -1,4 +1,4 @@
-
+'Import "*.h"
 Import "assimp/contrib/irrXMLirrXML/*.h"
 Import "assimp/code/*.h"
 
