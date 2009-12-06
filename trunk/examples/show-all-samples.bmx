@@ -162,6 +162,7 @@ Function aiLoadMiniB3D:tMesh(filename:String)
 	aiProcess_FindInvalidData | ..
 	aiProcess_GenUVCoords | ..
 	aiProcess_TransformUVCoords | ..
+	aiProcess_FlipUVs | ..
 	aiProcess_PreTransformVertices
 		
 

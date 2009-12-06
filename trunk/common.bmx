@@ -60,12 +60,20 @@ End Extern
 	Const aiProcess_ImproveCacheLocality:Int = $800
 	Const aiProcess_RemoveRedundantMaterials:Int = $1000
 	Const aiProcess_FixInfacingNormals:Int = $2000
-	Const aiProcess_OptimizeGraph:Int = $4000
 	Const aiProcess_SortByPType:Int = $8000
 	Const aiProcess_FindDegenerates:Int = $10000
 	Const aiProcess_FindInvalidData:Int = $20000
 	Const aiProcess_GenUVCoords:Int = $40000
 	Const aiProcess_TransformUVCoords:Int = $80000
+	Const aiProcess_FindInstances:Int = $100000
+
+	Const aiProcess_OptimizeMeshes:Int = $200000 
+
+	Const aiProcess_OptimizeGraph:Int = $400000 
+
+	Const aiProcess_FlipUVs:Int = $800000
+
+	Const aiProcess_FlipWindingOrder:Int = $1000000
 
 
 	Const MAXLEN:Int = 1024
