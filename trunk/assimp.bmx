@@ -7,8 +7,8 @@ End Rem
 
 Module scheutz.assimp
 
-ModuleInfo "Version: 0.29"
-ModuleInfo "Author: Copyright (c) 2006-2008, ASSIMP Development Team"
+ModuleInfo "Version: 0.30"
+ModuleInfo "Author: Copyright (c) 2006-2009, ASSIMP Development Team"
 ModuleInfo "License: BSD License"
 ModuleInfo "Website and SVN at http://code.google.com/p/blitzmax-assimp/"
 
@@ -236,8 +236,7 @@ Type aiMaterial
 
 		Local retval:Int =  aiGetMaterialTexture(pMaterial,aiTextureType_DIFFUSE,index,Varptr s[0])
 
-		If retVal = AI_SUCCESS
-			DebugLog "YYYYYYEYYEYEYEYEYEYEYEYEYYEYEYEYEYEYEYEYEYYEYEYEYEYEYEYEYEYYEYE*****"
+		If retVal = AI_SUCCESS			
 			Return String.fromcstring(Varptr s[4])
 		Else
 		
