@@ -2,7 +2,7 @@ SuperStrict
 
 ' Include this file to use use assimp to load meshes in minib3d
 Import scheutz.assimp
-Import "minib3d-sf/minib3d.bmx"
+Import "minib3dsf/minib3d.bmx"
 
 
 

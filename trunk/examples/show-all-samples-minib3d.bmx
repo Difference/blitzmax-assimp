@@ -1,7 +1,7 @@
 SuperStrict
 
 Import "fileenumerator.bmx"
-Import "minib3d-sf/minib3d.bmx"
+'Import "minib3dsf/minib3d.bmx"
 Import "assimpminib3d.bmx"
 
 
