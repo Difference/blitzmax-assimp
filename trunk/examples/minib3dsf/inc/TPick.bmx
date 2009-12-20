@@ -202,8 +202,8 @@ Type TPick
 			If TMesh(ent)<>Null
 				TMesh(ent).col_tree.TreeCheck(TMesh(ent)) ' create collision tree for mesh if necessary
 				tree=TMesh(ent).col_tree.c_col_tree
-			'PSEDIT to avoid crashes	
-			ElseIf ent.pick_mode = 2	' skip pivots with pickmode 2
+			'SMALLFIXES to avoid crashes, skip pivots with pickmode 2
+			ElseIf ent.pick_mode = 2	
 				Continue
 			EndIf
 

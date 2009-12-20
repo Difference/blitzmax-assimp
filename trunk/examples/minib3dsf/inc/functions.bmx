@@ -793,7 +793,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online Help</a>
 End Rem
-Function Graphics3D(width,height,depth=0,mode=0,rate=60,flags=-1) 'PSEDIT added flags
+Function Graphics3D(width,height,depth=0,mode=0,rate=60,flags=-1) 'SMALLFIXES added flags
 	TGlobal.Graphics3D(width,height,depth,mode,rate,flags)
 End Function
 

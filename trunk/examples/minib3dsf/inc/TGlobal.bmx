@@ -11,7 +11,7 @@ Type TGlobal
 	Global jitter
 	Global j#[16,2]
 
-	Function Graphics3D(w,h,d=0,m=0,r=60,flags=-1)	' PSEDIT added flags
+	Function Graphics3D(w,h,d=0,m=0,r=60,flags=-1)	' SMALLFIXES added flags so that the ACCUMBUFFER can be left out (crashes parallels)
 
 		If flags = -1 Then flags = GRAPHICS_BACKBUFFER|GRAPHICS_DEPTHBUFFER|GRAPHICS_ACCUMBUFFER
 
