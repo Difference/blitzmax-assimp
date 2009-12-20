@@ -1704,7 +1704,7 @@ Type TMesh Extends TEntity
 				glColorPointer(4,GL_FLOAT,0,Null)
 				
 			Else
-				If THardwareInfo.VBOSupport 'PSEDIT this if statement is a hack to prevent crash when vbo is not supported by GFX
+				If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 					glBindBufferARB(GL_ARRAY_BUFFER_ARB,0) ' reset - necessary for when non-vbo surf follows vbo surf
 					glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB,0)
 				EndIf
@@ -1775,11 +1775,11 @@ Type TMesh Extends TEntity
 						tex_cube_mode=surf.brush.tex[ix].cube_mode
 						frame=surf.brush.tex_frame
 					EndIf
-If THardwareInfo.VBOSupport 'PSEDIT this if statement is a hack to prevent crash when vbo is not supported by GFX
+					If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
-					glActiveTextureARB(GL_TEXTURE0+ix)
-					glClientActiveTextureARB(GL_TEXTURE0+ix)
-EndIf
+						glActiveTextureARB(GL_TEXTURE0+ix)
+						glClientActiveTextureARB(GL_TEXTURE0+ix)
+					EndIf
 					glEnable(GL_TEXTURE_2D)
 					glBindTexture(GL_TEXTURE_2D,texture.gltex[frame]) ' call before glTexParameteri
 
@@ -1971,7 +1971,7 @@ EndIf
 			If vbo																																																																																																																																																																																																																																																																																
 				glDrawElements(GL_TRIANGLES,surf.no_tris*3,GL_UNSIGNED_SHORT,Null)
 			Else
-				'//PSEDIT DebugStop IRRmesh sometimes crash here unde parallels 
+				'//SMALLFIXES NOTFIXED 'DebugStop IRRmesh+others sometimes crash here under parallels 
 				glDrawElements(GL_TRIANGLES,surf.no_tris*3,GL_UNSIGNED_SHORT,surf.tris)
 			EndIf
 
@@ -1979,7 +1979,7 @@ EndIf
 			
 			' disable all texture layers
 			For Local ix=0 To tex_count-1
-				If THardwareInfo.VBOSupport 'PSEDIT this if statement is a hack to prevent crash when vbo is not supported by GFX
+				If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 					glActiveTextureARB(GL_TEXTURE0+ix)
 					glClientActiveTextureARB(GL_TEXTURE0+ix)
 				EndIf				

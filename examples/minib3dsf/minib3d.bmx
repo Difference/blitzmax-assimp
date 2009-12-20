@@ -7,7 +7,7 @@ End Rem
 'ModuleInfo "License: You are free to use this code as you please"
 'ModuleInfo "Please see readme.txt for more details"
 
-Strict
+SuperStrict
 
 Import BRL.GLMax2D
 Import BRL.GLGraphics

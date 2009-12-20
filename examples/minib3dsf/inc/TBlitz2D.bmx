@@ -3,7 +3,7 @@ Type TBlitz2D
 	Function Text(x,y,text$)
 	
 		' set active texture to texture 0 so gldrawtext will work correctly
-		If THardwareInfo.VBOSupport 'PSEDIT hack to keep non vbo GFX from crashing
+		If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing
 			glActiveTextureARB(GL_TEXTURE0)
 			glClientActiveTextureARB(GL_TEXTURE0)
 		EndIf

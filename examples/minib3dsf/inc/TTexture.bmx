@@ -36,6 +36,21 @@ Type TTexture
 	
 	End Method
 	
+	Method FreeTexture() 'SMALLFIXES Nwe function from http://www.blitzbasic.com/Community/posts.php?topic=88263#1002039
+	
+		ListRemove(tex_list,Self)
+		pixmap=Null
+		cube_pixmap=Null
+		
+		For Local name = EachIn gltex
+			glDeleteTextures 1, Varptr name
+		Next
+		gltex=Null
+	
+	End Method
+	
+	
+	
 	Function CreateTexture:TTexture(width,height,flags=1,frames=1,tex:TTexture=Null)
 	
 		If flags&128 Then Return CreateCubeMapTexture(width,height,flags,tex)

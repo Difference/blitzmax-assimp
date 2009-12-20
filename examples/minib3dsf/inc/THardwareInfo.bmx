@@ -48,7 +48,7 @@ Type THardwareInfo
 		THardwareInfo.AnIsoSupport    = Extensions.Find("GL_EXT_texture_filter_anisotropic")
 		THardwareInfo.MultiTexSupport = Extensions.Find("GL_ARB_multitexture") > -1
 		THardwareInfo.TexBlendSupport = Extensions.Find("GL_EXT_texture_env_combine") > -1
-		If Not THardwareInfo.TexBlendSupport 'PSEDIT use the ARB version that works the same
+		If Not THardwareInfo.TexBlendSupport 'SMALLFIXES use the ARB version that works the same
 			THardwareInfo.TexBlendSupport = Extensions.Find("GL_ARB_texture_env_combine") > -1
 		EndIf
 		THardwareInfo.CubemapSupport  = Extensions.Find("GL_ARB_texture_cube_map") > -1
