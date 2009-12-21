@@ -26,7 +26,7 @@ Type TTexture
 		EndIf
 	
 	End Method
-	
+Rem	
 	Method FreeTexture()
 	
 		ListRemove(tex_list,Self)
@@ -35,8 +35,8 @@ Type TTexture
 		gltex=Null
 	
 	End Method
-	
-	Method FreeTexture() 'SMALLFIXES Nwe function from http://www.blitzbasic.com/Community/posts.php?topic=88263#1002039
+EndRem	
+	Method FreeTexture() 'SMALLFIXES New function from http://www.blitzbasic.com/Community/posts.php?topic=88263#1002039
 	
 		ListRemove(tex_list,Self)
 		pixmap=Null
