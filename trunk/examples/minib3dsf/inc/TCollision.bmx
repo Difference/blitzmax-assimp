@@ -162,6 +162,7 @@ Function UpdateCollisions()
 				Next
 				
 				If ent2_hit<>Null
+					Local x=C_CollisionResponse(c_col_info,c_coll,response) 'SMALLFIXES Collision fix from http://www.blitzmax.com/Community/posts.php?topic=87446			
 
 					ent.no_collisions=ent.no_collisions+1
 
@@ -194,7 +195,8 @@ Function UpdateCollisions()
 					'ent.collision[i].ny#=TEntity.tformed_y
 					'ent.collision[i].nz#=TEntity.tformed_z
 						
-					If C_CollisionResponse(c_col_info,c_coll,response)=False Then Exit
+					'If C_CollisionResponse(c_col_info,c_coll,response)=False Then Exit
+					If x=False Then Exit 'SMALLFIXES Collision fix from http://www.blitzmax.com/Community/posts.php?topic=87446
 					
 				Else
 				
