@@ -14,7 +14,7 @@ skipExt.addlast("o")
 skipExt.addlast("s")
 skipExt.addlast("")
 skipExt.addlast("bak")
-
+skipExt.addlast("txt")
 
 enumFiles(filelist,AppDir,skipExt)
 
@@ -29,13 +29,19 @@ For Local filename:String = EachIn filearray
 
 Next
 
+Local fixesText:String
+
+Local f:TStream = WriteFile(AppDir + "/smallfixes.txt")
+
 For Local fi:tFixinfo = EachIn fixesList
 	
-	fi.List()
-
+	If StripDir(fi.filename) <> "makefixeslist.bmx"
+		DebugLog StripDir(fi.filename)
+		fi.listToFile(f)
+	EndIf
 Next
 
-
+CloseFile f
 
 
 Function FindFixes(filename:String,fixlist:TList)
@@ -68,6 +74,15 @@ Type tFixInfo
 	Field linenumber:Int
 	Field fixtext:String
 	
+	Method listToFile(f:TStream)
+	
+		WriteLine f,filename
+		WriteLine f,"Line: " + linenumber
+		WriteLine f,fixtext
+		WriteLine f,""
+	
+	End Method
+	
 	Method list()
 	
 		Local inf:String
@@ -76,7 +91,7 @@ Type tFixInfo
 		inf:+ "Line: " + linenumber + "~n"
 		inf:+ fixtext + "~n"
 		
-		Print inf
+		Print
 	
 	End Method
 	
