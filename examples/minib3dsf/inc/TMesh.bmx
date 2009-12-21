@@ -1199,9 +1199,12 @@ Type TMesh Extends TEntity
 		
 		no_surfs=no_surfs+1
 		
+		'SMALLFIXES CreateSurface & BrushFX/EntityFX fix from http://www.blitzbasic.com/Community/posts.php?topic=88060
 		If bru<>Null
-			surf.brush=bru.Copy()
+		   surf.brush=bru.Copy()
+	           brush = bru.Copy()
 		EndIf
+
 
 		' new mesh surface - update reset flags
 		reset_bounds=True

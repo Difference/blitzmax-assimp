@@ -19,19 +19,23 @@ Line: 50
 If Not THardwareInfo.TexBlendSupport 'SMALLFIXES use the ARB version that works the same
 
 TMesh.bmx
-Line: 1706
+Line: 1201
+'SMALLFIXES CreateSurface & BrushFX/EntityFX fix from http://www.blitzbasic.com/Community/posts.php?topic=88060
+
+TMesh.bmx
+Line: 1709
 If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
 TMesh.bmx
-Line: 1777
+Line: 1780
 If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
 TMesh.bmx
-Line: 1973
+Line: 1976
 '//SMALLFIXES NOTFIXED 'DebugStop IRRmesh+others sometimes crash here under parallels
 
 TMesh.bmx
-Line: 1981
+Line: 1984
 If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
 TPick.bmx

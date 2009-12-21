@@ -309,10 +309,19 @@ Type TGlobal
 			' get new bounds
 			mesh.GetBounds()
 	
-			' Perform frustum cull
-			
-			Local inview=cam.EntityInFrustum(mesh)
+			'SMALLFIXES CreateSurface & BrushFX/EntityFX fix from http://www.blitzbasic.com/Community/posts.php?topic=88060
+			'Local inview=cam.EntityInFrustum(mesh)
 
+			' Perform frustum cull			
+			Local inview%
+
+			If ((mesh.brush.fx And 16) = 16) Then 
+			   inview=True
+			Else
+			   inview=cam.EntityInFrustum(mesh)
+			End If
+
+			
 			If inview
 			
 				If mesh.auto_fade=True Then AutoFade(cam,mesh)
