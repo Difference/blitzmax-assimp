@@ -96,7 +96,8 @@ EndRem
 			If tex.flags&8 Then mipmap=True
 			Local mip_level=0
 			Repeat
-				glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format]
+				'glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format] 'BAD LINE!
+    				glPixelStorei 2,pixmap.pitch/BytesPerPixel[pixmap.format]    'SMALLFIXES http://www.blitzmax.com/Community/posts.php?topic=87020
 				glTexImage2D GL_TEXTURE_2D,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
 				If Not mipmap Then Exit
 				If width=1 And height=1 Exit

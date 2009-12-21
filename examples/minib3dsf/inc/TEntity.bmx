@@ -1122,7 +1122,8 @@ Type TEntity
 		
 		' remove from collision entity list if new type no=0 and previously added
 		If collision_type<>0 And type_no=0
-			ListRemove(TCollisionPair.ent_lists[type_no],Self)
+			'ListRemove(TCollisionPair.ent_lists[type_no],Self)
+			ListRemove(TCollisionPair.ent_lists[collision_type],Self) 'SMALLFIXES Collision fix from http://www.blitzbasic.com/Community/posts.php?topic=87551
 		EndIf
 		
 		collision_type=type_no
