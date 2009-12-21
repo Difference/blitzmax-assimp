@@ -1,0 +1,40 @@
+functions.bmx
+Line: 795
+Function Graphics3D(width,height,depth=0,mode=0,rate=60,flags=-1) 'SMALLFIXES added flags
+
+TBlitz2D.bmx
+Line: 5
+If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing
+
+TGlobal.bmx
+Line: 13
+Function Graphics3D(w,h,d=0,m=0,r=60,flags=-1)	' SMALLFIXES added flags so that the ACCUMBUFFER can be left out (crashes parallels)
+
+THardwareInfo.bmx
+Line: 50
+If Not THardwareInfo.TexBlendSupport 'SMALLFIXES use the ARB version that works the same
+
+TMesh.bmx
+Line: 1706
+If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
+
+TMesh.bmx
+Line: 1777
+If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
+
+TMesh.bmx
+Line: 1973
+'//SMALLFIXES NOTFIXED 'DebugStop IRRmesh+others sometimes crash here under parallels
+
+TMesh.bmx
+Line: 1981
+If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
+
+TPick.bmx
+Line: 204
+'SMALLFIXES to avoid crashes, skip pivots with pickmode 2
+
+TTexture.bmx
+Line: 38
+Method FreeTexture() 'SMALLFIXES Nwe function from http://www.blitzbasic.com/Community/posts.php?topic=88263#1002039
+
