@@ -2,14 +2,14 @@ Type TTexture
 
 	Global tex_list:TList=CreateList()
 
-	Field file$,flags,blend=2,coords,u_scale#=1.0,v_scale#=1.0,u_pos#,v_pos#,angle#
-	Field file_abs$,width,height ' returned by Name/Width/Height commands
+	Field file$,flags:Int,blend:Int=2,coords:Int,u_scale#=1.0,v_scale#=1.0,u_pos#,v_pos#,angle#
+	Field file_abs$,width:Int,height:Int ' returned by Name/Width/Height commands
 	Field pixmap:TPixmap
-	Field gltex[1]
+	Field gltex:Int[1]
 	Field cube_pixmap:TPixmap[7]
-	Field no_frames=1
-	Field no_mipmaps
-	Field cube_face=0,cube_mode=1
+	Field no_frames:Int=1
+	Field no_mipmaps:Int
+	Field cube_face:Int=0,cube_mode:Int=1
 
 	Method New()
 	
@@ -42,7 +42,7 @@ EndRem
 		pixmap=Null
 		cube_pixmap=Null
 		
-		For Local name = EachIn gltex
+		For Local name:Int = EachIn gltex
 			glDeleteTextures 1, Varptr name
 		Next
 		gltex=Null
@@ -51,7 +51,7 @@ EndRem
 	
 	
 	
-	Function CreateTexture:TTexture(width,height,flags=1,frames=1,tex:TTexture=Null)
+	Function CreateTexture:TTexture(width:Int,height:Int,flags:Int=1,frames:Int=1,tex:TTexture=Null)
 	
 		If flags&128 Then Return CreateCubeMapTexture(width,height,flags,tex)
 		
@@ -71,11 +71,11 @@ EndRem
 		
 		' pixmap -> tex
 			
-		Local x=0
+		Local x:Int=0
 	
 		Local pixmap:TPixmap
 	
-		For Local i=0 To tex.no_frames-1
+		For Local i:Int=0 To tex.no_frames-1
 	
 			pixmap=tex.pixmap.Window(x*width,0,width,height)
 			x=x+1
@@ -85,16 +85,16 @@ EndRem
 			pixmap=AdjustPixmap(pixmap)
 			tex.width=pixmap.width
 			tex.height=pixmap.height
-			Local width=pixmap.width
-			Local height=pixmap.height
+			Local width:Int=pixmap.width
+			Local height:Int=pixmap.height
 
-			Local name
+			Local name:Int
 			glGenTextures 1,Varptr name
 			glBindtexture GL_TEXTURE_2D,name
 
-			Local mipmap
+			Local mipmap:Int
 			If tex.flags&8 Then mipmap=True
-			Local mip_level=0
+			Local mip_level:Int=0
 			Repeat
 				'glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format] 'BAD LINE!
     				glPixelStorei 2,pixmap.pitch/BytesPerPixel[pixmap.format]    'SMALLFIXES http://www.blitzmax.com/Community/posts.php?topic=87020
@@ -117,13 +117,13 @@ EndRem
 
 	End Function
 
-	Function LoadTexture:TTexture(file$,flags=1,tex:TTexture=Null)
+	Function LoadTexture:TTexture(file$,flags:Int=1,tex:TTexture=Null)
 	
 		Return LoadAnimTexture:TTexture(file$,flags,0,0,0,1,tex)
 	
 	End Function
 	
-	Function LoadAnimTexture:TTexture(file$,flags,frame_width,frame_height,first_frame,frame_count,tex:TTexture=Null)
+	Function LoadAnimTexture:TTexture(file$,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null)
 
 		If flags&128 Then Return LoadCubeMapTexture(file$,flags,tex)
 	
@@ -153,7 +153,7 @@ EndRem
 		tex.pixmap=LoadPixmap(file$)
 		
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
-		Local alpha_present=False
+		Local alpha_present:Int=False
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 
 		' convert pixmap to appropriate format
@@ -188,18 +188,18 @@ EndRem
 		
 		' pixmap -> tex
 
-		Local xframes=tex.pixmap.width/frame_width
-		Local yframes=tex.pixmap.height/frame_height
+		Local xframes:Int=tex.pixmap.width/frame_width
+		Local yframes:Int=tex.pixmap.height/frame_height
 			
-		Local startx=first_frame Mod xframes
-		Local starty=(first_frame/yframes) Mod yframes
+		Local startx:Int=first_frame Mod xframes
+		Local starty:Int=(first_frame/yframes) Mod yframes
 			
-		Local x=startx
-		Local y=starty
+		Local x:Int=startx
+		Local y:Int=starty
 	
 		Local pixmap:TPixmap
 	
-		For Local i=0 To tex.no_frames-1
+		For Local i:Int=0 To tex.no_frames-1
 	
 			' get static pixmap window. when resize pixmap is called new pixmap will be returned.
 			pixmap=tex.pixmap.Window(x*frame_width,y*frame_height,frame_width,frame_height)
@@ -214,16 +214,16 @@ EndRem
 			pixmap=AdjustPixmap(pixmap)
 			tex.width=pixmap.width
 			tex.height=pixmap.height
-			Local width=pixmap.width
-			Local height=pixmap.height
+			Local width:Int=pixmap.width
+			Local height:Int=pixmap.height
 
-			Local name
+			Local name:Int
 			glGenTextures 1,Varptr name
 			glBindtexture GL_TEXTURE_2D,name
 
-			Local mipmap
+			Local mipmap:Int
 			If tex.flags&8 Then mipmap=True
-			Local mip_level=0
+			Local mip_level:Int=0
 			Repeat
 				glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format]
 				glTexImage2D GL_TEXTURE_2D,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
@@ -245,7 +245,7 @@ EndRem
 		
 	End Function
 
-	Function CreateCubeMapTexture:TTexture(width,height,flags,tex:TTexture=Null)
+	Function CreateCubeMapTexture:TTexture(width:Int,height:Int,flags:Int,tex:TTexture=Null)
 		
 		If tex=Null Then tex:TTexture=New TTexture ; ListAddLast(tex_list,tex)
 		
@@ -263,13 +263,13 @@ EndRem
 		
 		' pixmap -> tex
 				
-		Local name
+		Local name:Int
 		glGenTextures 1,Varptr name
 		glBindtexture GL_TEXTURE_CUBE_MAP,name
 	
 		Local pixmap:TPixmap
 	
-		For Local i=0 To 5
+		For Local i:Int=0 To 5
 		
 			pixmap=tex.pixmap.Window(width*i,0,width,height)
 
@@ -278,12 +278,12 @@ EndRem
 			pixmap=AdjustPixmap(pixmap)
 			tex.width=pixmap.width
 			tex.height=pixmap.height
-			Local width=pixmap.width
-			Local height=pixmap.height
+			Local width:Int=pixmap.width
+			Local height:Int=pixmap.height
 
-			Local mipmap
+			Local mipmap:Int
 			'If tex.flags&8 Then mipmap=True ***note*** prevent mipmaps being created for cubemaps - they are not used by TMesh.Update, so we don't need to create them
-			Local mip_level=0
+			Local mip_level:Int=0
 			Repeat
 				glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format]
 				Select i
@@ -312,7 +312,7 @@ EndRem
 		
 	End Function
 
-	Function LoadCubeMapTexture:TTexture(file$,flags=1,tex:TTexture=Null)
+	Function LoadCubeMapTexture:TTexture(file$,flags:Int=1,tex:TTexture=Null)
 		
 		If tex=Null Then tex:TTexture=New TTexture
 		
@@ -340,7 +340,7 @@ EndRem
 		tex.pixmap=LoadPixmap(file$)
 		
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
-		Local alpha_present=False
+		Local alpha_present:Int=False
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 
 		' convert pixmap to appropriate format
@@ -367,13 +367,13 @@ EndRem
 		
 		' pixmap -> tex
 			
-		Local name
+		Local name:Int
 		glGenTextures 1,Varptr name
 		glBindtexture GL_TEXTURE_CUBE_MAP,name
 	
 		Local pixmap:TPixmap
 	
-		For Local i=0 To 5
+		For Local i:Int=0 To 5
 		
 			pixmap=tex.pixmap.Window((tex.pixmap.width/6)*i,0,tex.pixmap.width/6,tex.pixmap.height)
 
@@ -382,12 +382,12 @@ EndRem
 			pixmap=AdjustPixmap(pixmap)
 			tex.width=pixmap.width
 			tex.height=pixmap.height
-			Local width=pixmap.width
-			Local height=pixmap.height
+			Local width:Int=pixmap.width
+			Local height:Int=pixmap.height
 
-			Local mipmap
+			Local mipmap:Int
 			'If tex.flags&8 Then mipmap=True ***note*** prevent mipmaps being created for cubemaps - they are not used by TMesh.Update, so we don't need to create them
-			Local mip_level=0
+			Local mip_level:Int=0
 			Repeat
 				glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format]
 				Select i
@@ -416,13 +416,13 @@ EndRem
 
 	End Function
 
-	Method TextureBlend(blend_no)
+	Method TextureBlend(blend_no:Int)
 		
 		blend=blend_no
 		
 	End Method
 	
-	Method TextureCoords(coords_no)
+	Method TextureCoords(coords_no:Int)
 	
 		coords=coords_no
 	
@@ -448,13 +448,13 @@ EndRem
 	
 	End Method
 	
-	Method TextureWidth()
+	Method TextureWidth:Int()
 	
 		Return width
 	
 	End Method
 	
-	Method TextureHeight()
+	Method TextureHeight:Int()
 	
 		Return height
 	
@@ -466,7 +466,7 @@ EndRem
 	
 	End Method
 	
-	Function GetBrushTexture:TTexture(brush:TBrush,index=0)
+	Function GetBrushTexture:TTexture(brush:TBrush,index:Int=0)
 	
 		Return brush.tex[index]
 	
@@ -478,7 +478,7 @@ EndRem
 	
 	End Function
 	
-	Function TextureFilter(match_text$,flags)
+	Function TextureFilter(match_text$,flags:Int)
 	
 		Local filter:TTextureFilter=New TTextureFilter
 		filter.text$=match_text$
@@ -487,26 +487,26 @@ EndRem
 	
 	End Function
 	
-	Method SetCubeFace(face)
+	Method SetCubeFace(face:Int)
 		cube_face=face
 	End Method
 	
-	Method SetCubeMode(mode)
+	Method SetCubeMode(mode:Int)
 		cube_mode=mode
 	End Method
 	
-	Method BackBufferToTex(mipmap_no=0,frame=0)
+	Method BackBufferToTex(mipmap_no:Int=0,frame:Int=0)
 	
 		If flags&128=0 ' normal texture
 	
-			Local x=0,y=0
+			Local x:Int=0,y:Int=0
 	
 			glBindtexture GL_TEXTURE_2D,gltex[frame]
 			glCopyTexImage2D(GL_TEXTURE_2D,mipmap_no,GL_RGBA8,x,TGlobal.height-y-height,width,height,0)
 			
 		Else ' cubemap texture
 
-			Local x=0,y=0
+			Local x:Int=0,y:Int=0
 	
 			glBindtexture GL_TEXTURE_CUBE_MAP_EXT,gltex[0]
 			Select cube_face
@@ -522,11 +522,11 @@ EndRem
 
 	End Method
 		
-	Method CountMipmaps()
+	Method CountMipmaps:Int()
 		Return no_mipmaps
 	End Method
 	
-	Method MipmapWidth(mipmap_no)
+	Method MipmapWidth:Int(mipmap_no:Int)
 		If mipmap_no>=0 And mipmap_no<=no_mipmaps
 			Return width/(mipmap_no+1)
 		Else
@@ -534,7 +534,7 @@ EndRem
 		EndIf
 	End Method
 	
-	Method MipmapHeight(mipmap_no)
+	Method MipmapHeight:Int(mipmap_no:Int)
 		If mipmap_no>=0 And mipmap_no<=no_mipmaps
 			Return height/(mipmap_no+1)
 		Else
@@ -544,7 +544,7 @@ EndRem
 	
 	' Internal - not recommended for general use
 	
-	Function FileFind(file$ Var)
+	Function FileFind:Int(file$ Var)
 	
 		If FileType(file$)=0
 			Repeat
@@ -606,8 +606,8 @@ EndRem
 	Function AdjustPixmap:TPixmap(pixmap:TPixmap)
 	
 		' adjust width and height size to next biggest power of 2 size
-		Local width=Pow2Size(pixmap.width)
-		Local height=Pow2Size(pixmap.height)
+		Local width:Int=Pow2Size(pixmap.width)
+		Local height:Int=Pow2Size(pixmap.height)
 
 		' ***note*** commented out as it fails on some cards
 		Rem
@@ -633,8 +633,8 @@ EndRem
 		
 	End Function
 	
-	Function Pow2Size( n )
-		Local t=1
+	Function Pow2Size:int( n:Int )
+		Local t:Int=1
 		While t<n
 			t:*2
 		Wend
@@ -649,10 +649,10 @@ EndRem
 		
 		Local out:TPixmap=CreatePixmap( tmp.width,tmp.height,PF_RGBA8888 )
 		
-		For Local y=0 Until pixmap.height
+		For Local y:Int=0 Until pixmap.height
 			Local t:Byte Ptr=tmp.PixelPtr( 0,y )
 			Local o:Byte Ptr=out.PixelPtr( 0,y )
-			For Local x=0 Until pixmap.width
+			For Local x:Int=0 Until pixmap.width
 
 				o[0]=t[0]
 				o[1]=t[1]
@@ -673,6 +673,6 @@ Type TTextureFilter
 	Global filter_list:TList=CreateList()
 
 	Field text$
-	Field flags
+	Field flags:Int
 	
 End Type

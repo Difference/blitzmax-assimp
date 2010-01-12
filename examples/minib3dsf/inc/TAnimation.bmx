@@ -1,6 +1,6 @@
 Type TAnimation
 
-	Function AnimateMesh(ent1:TEntity,framef:Float,start_frame,end_frame)
+	Function AnimateMesh(ent1:TEntity,framef:Float,start_frame:Int,end_frame:Int)
 		
 		If TMesh(ent1)<>Null
 			
@@ -12,16 +12,16 @@ Type TAnimation
 			If framef>end_frame Then framef=end_frame
 			If framef<start_frame Then framef=start_frame
 			
-			Local frame=framef ' float to int
+			Local frame:Int=framef ' float to int
 	
 			For Local bent:TBone=EachIn TMesh(ent1).bones
 						
-				Local i=0
-				Local ii=0
+				Local i:Int=0
+				Local ii:Int=0
 				Local fd1:Float=0 ' anim time since last key
 				Local fd2:Float=0 ' anim time until next key
-				Local found=False
-				Local no_keys=False
+				Local found:Int=False
+				Local no_keys:Int=False
 				Local w1:Float
 				Local x1:Float
 				Local y1:Float
@@ -31,7 +31,7 @@ Type TAnimation
 				Local y2:Float
 				Local z2:Float
 				
-				Local flag=0
+				Local flag:Int=0
 				
 				' position
 						
@@ -228,7 +228,7 @@ Type TAnimation
 	' interpolates between current animation pose (via saved keyframe) and first keyframe of new animation.
 	' framef:Float interpolates between 0 and 1
 	
-	Function AnimateMesh2(ent1:TEntity,framef:Float,start_frame,end_frame)
+	Function AnimateMesh2(ent1:TEntity,framef:Float,start_frame:Int,end_frame:Int)
 		
 		If TMesh(ent1)<>Null
 	
@@ -240,12 +240,12 @@ Type TAnimation
 	
 			For Local bent:TBone=EachIn TMesh(ent1).bones
 					
-				Local i=0
-				Local ii=0
+				Local i:Int=0
+				Local ii:Int=0
 				Local fd1:Float=framef ' fd1 always between 0 and 1 for this function
 				Local fd2:Float=1.0-fd1 ' fd1+fd2 always equals 0 for this function
-				Local found=False
-				Local no_keys=False
+				Local found:Int=False
+				Local no_keys:Int=False
 				Local w1:Float
 				
 				' get current keyframe
@@ -258,7 +258,7 @@ Type TAnimation
 				Local y2:Float
 				Local z2:Float
 				
-				Local flag=0
+				Local flag:Int=0
 				
 				' position
 	
@@ -430,8 +430,8 @@ Type TAnimation
 			' mesh shape will be changed, update reset_vbo flag (1=vertices move)
 			anim_surf.reset_vbo:|1
 				
-			Local vid
-			Local vid3
+			Local vid:Int
+			Local vid3:Int
 			
 			For vid=0 Until anim_surf.no_verts
 			
@@ -518,7 +518,7 @@ Type TAnimation
 		' cycle through all surfs
 		For Local anim_surf:TSurface=EachIn mesh.anim_surf_list
 				
-			For Local vid=0 Until anim_surf.no_verts
+			For Local vid:Int=0 Until anim_surf.no_verts
 
 				' normalise weights
 		
@@ -561,8 +561,8 @@ End Type
 
 Type TAnimationKeys
 
-	Field frames
-	Field flags[1]
+	Field frames:Int
+	Field flags:Int[1]
 	Field px:Float[1]
 	Field py:Float[1]
 	Field pz:Float[1]

@@ -31,7 +31,7 @@ textures above.
 
 See the cubemap.bmx example included with MiniB3D to learn more about cubemapping.
 End Rem
-Function BackBufferToTex(tex:TTexture,mipmap_no=0,frame=0)
+Function BackBufferToTex(tex:TTexture,mipmap_no:Int=0,frame:Int=0)
 	tex.BackBufferToTex(mipmap_no,frame)
 End Function
 
@@ -64,14 +64,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddTriangle">Online Help</a>
 End Rem
-Function AddTriangle(surf:TSurface,v0,v1,v2)
+Function AddTriangle:Int(surf:TSurface,v0:Int,v1:Int,v2:Int)
 	Return surf.AddTriangle(v0,v1,v2)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddVertex">Online Help</a>
 End Rem
-Function AddVertex(surf:TSurface,x#,y#,z#,u#=0.0,v#=0.0,w#=0.0)
+Function AddVertex:Int(surf:TSurface,x#,y#,z#,u#=0.0,v#=0.0,w#=0.0)
 	Return surf.AddVertex(x#,y#,z#,u#,v#,w#)
 End Function
 
@@ -85,35 +85,35 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online Help</a>
 End Rem
-Function AntiAlias(samples)
+Function AntiAlias(samples:Int)
 	TGlobal.AntiAlias(samples)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online Help</a>
 End Rem
-Function Animate(ent:TEntity,mode=1,speed#=1.0,seq=0,trans=0)
-	ent.Animate(mode,speed#,seq,trans)
+Function Animate(ent:TEntity,mode:Int=1,speed#=1.0,seq:Int=0,trans:Int=0)
+	ent.Animate(mode:Int,speed#,seq:Int,trans:Int)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animating">Online Help</a>
 End Rem
-Function Animating(ent:TEntity)
+Function Animating:Int(ent:TEntity)
 	Return ent.Animating()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimLength">Online Help</a>
 End Rem
-Function AnimLength(ent:TEntity)
+Function AnimLength:Int(ent:TEntity)
 	Return ent.AnimLength()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimSeq">Online Help</a>
 End Rem
-Function AnimSeq(ent:TEntity)
+Function AnimSeq:Int(ent:TEntity)
 	Return ent.AnimSeq()
 End Function
 
@@ -134,7 +134,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushBlend">Online Help</a>
 End Rem
-Function BrushBlend(brush:TBrush,blend)
+Function BrushBlend(brush:TBrush,blend:Int)
 	brush.BrushBlend(blend)
 End Function
 
@@ -148,7 +148,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushFX">Online Help</a>
 End Rem
-Function BrushFX(brush:TBrush,fx)
+Function BrushFX(brush:TBrush,fx:Int)
 	brush.BrushFX(fx)
 End Function
 
@@ -162,7 +162,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushTexture">Online Help</a>
 End Rem
-Function BrushTexture(brush:TBrush,tex:TTexture,frame=0,index=0)
+Function BrushTexture(brush:TBrush,tex:TTexture,frame:Int=0,index:Int=0)
 	brush.BrushTexture(tex,frame,index)
 End Function
 
@@ -176,7 +176,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraClsMode">Online Help</a>
 End Rem
-Function CameraClsMode(cam:TCamera,cls_depth,cls_zbuffer)
+Function CameraClsMode(cam:TCamera,cls_depth:Int,cls_zbuffer:Int)
 	cam.CameraClsMode(cls_depth,cls_zbuffer)
 End Function
 
@@ -190,7 +190,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogMode">Online Help</a>
 End Rem
-Function CameraFogMode(cam:TCamera,mode)
+Function CameraFogMode(cam:TCamera,mode:Int)
 	cam.CameraFogMode(mode)
 End Function
 
@@ -218,7 +218,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraProjMode">Online Help</a>
 End Rem
-Function CameraProjMode(cam:TCamera,mode)
+Function CameraProjMode(cam:TCamera,mode:Int)
 	cam.CameraProjMode(mode)
 End Function
 
@@ -232,7 +232,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraViewport">Online Help</a>
 End Rem
-Function CameraViewport(cam:TCamera,x,y,width,height)
+Function CameraViewport(cam:TCamera,x:Int,y:Int,width:Int,height:Int)
 	cam.CameraViewport(x,y,width,height)
 End Function
 
@@ -253,7 +253,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearSurface">Online Help</a>
 End Rem
-Function ClearSurface(surf:TSurface,clear_verts=True,clear_tris=True)
+Function ClearSurface(surf:TSurface,clear_verts:Int=True,clear_tris:Int=True)
 	surf.ClearSurface(clear_verts,clear_tris)
 End Function
 
@@ -267,98 +267,98 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearWorld">Online Help</a>
 End Rem
-Function ClearWorld(entities=True,brushes=True,textures=True)
+Function ClearWorld(entities:Int=True,brushes:Int=True,textures:Int=True)
 	TGlobal.ClearWorld(entities,brushes,textures)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionEntity">Online Help</a>
 End Rem
-Function CollisionEntity:TEntity(ent:TEntity,index)
+Function CollisionEntity:TEntity(ent:TEntity,index:Int)
 	Return ent.CollisionEntity(index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Collisions">Online Help</a>
 End Rem
-Function Collisions(src_no,dest_no,method_no,response_no=0)
+Function Collisions(src_no:Int,dest_no:Int,method_no:Int,response_no:Int=0)
 	TGlobal.Collisions(src_no,dest_no,method_no,response_no)
 End Function
 	
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNX">Online Help</a>
 End Rem
-Function CollisionNX#(ent:TEntity,index)
+Function CollisionNX#(ent:TEntity,index:Int)
 	Return ent.CollisionNX#(index)
 End Function
 	
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNY">Online Help</a>
 End Rem
-Function CollisionNY#(ent:TEntity,index)
+Function CollisionNY#(ent:TEntity,index:Int)
 	Return ent.CollisionNY#(index)
 End Function
 	
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNZ">Online Help</a>
 End Rem
-Function CollisionNZ#(ent:TEntity,index)
+Function CollisionNZ#(ent:TEntity,index:Int)
 	Return ent.CollisionNZ#(index)
 End Function
 	
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionSurface">Online Help</a>
 End Rem
-Function CollisionSurface:TSurface(ent:TEntity,index)
+Function CollisionSurface:TSurface(ent:TEntity,index:Int)
 	Return ent.CollisionSurface(index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionTime">Online Help</a>
 End Rem
-Function CollisionTime#(ent:TEntity,index)
+Function CollisionTime#(ent:TEntity,index:Int)
 	Return ent.CollisionTime#(index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionTriangle">Online Help</a>
 End Rem	
-Function CollisionTriangle(ent:TEntity,index)
+Function CollisionTriangle:Int(ent:TEntity,index:Int)
 	Return ent.CollisionTriangle(index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionX">Online Help</a>
 End Rem
-Function CollisionX#(ent:TEntity,index)
+Function CollisionX#(ent:TEntity,index:Int)
 	Return ent.CollisionX#(index)
 End Function
 	
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionY">Online Help</a>
 End Rem
-Function CollisionY#(ent:TEntity,index)
+Function CollisionY#(ent:TEntity,index:Int)
 	Return ent.CollisionY#(index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionZ">Online Help</a>
 End Rem
-Function CollisionZ#(ent:TEntity,index)
+Function CollisionZ#(ent:TEntity,index:Int)
 	Return ent.CollisionZ#(index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountChildren">Online Help</a>
 End Rem
-Function CountChildren(ent:TEntity)
+Function CountChildren:Int(ent:TEntity)
 	Return ent.CountChildren()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountCollisions">Online Help</a>
 End Rem
-Function CountCollisions(ent:TEntity)
+Function CountCollisions:Int(ent:TEntity)
 	Return ent.CountCollisions()
 End Function
 
@@ -379,21 +379,21 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountSurfaces">Online Help</a>
 End Rem
-Function CountSurfaces(mesh:TMesh)
+Function CountSurfaces:Int(mesh:TMesh)
 	Return mesh.CountSurfaces()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountTriangles">Online Help</a>
 End Rem
-Function CountTriangles(surf:TSurface)
+Function CountTriangles:Int(surf:TSurface)
 	Return surf.CountTriangles()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountVertices">Online Help</a>
 End Rem
-Function CountVertices(surf:TSurface)
+Function CountVertices:Int(surf:TSurface)
 	Return surf.CountVertices()
 End Function
 
@@ -414,14 +414,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCone">Online Help</a>
 End Rem
-Function CreateCone:TMesh(segments=8,solid=True,parent:TEntity=Null)
+Function CreateCone:TMesh(segments:Int=8,solid:Int=True,parent:TEntity=Null)
 	Return TMesh.CreateCone(segments,solid,parent)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online Help</a>
 End Rem
-Function CreateCylinder:TMesh(segments=8,solid=True,parent:TEntity=Null)
+Function CreateCylinder:TMesh(segments:Int=8,solid:Int=True,parent:TEntity=Null)
 	Return TMesh.CreateCylinder(segments,solid,parent)
 End Function
 
@@ -442,7 +442,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateLight">Online Help</a>
 End Rem
-Function CreateLight:TLight(light_type=1,parent:TEntity=Null)
+Function CreateLight:TLight(light_type:Int=1,parent:TEntity=Null)
 	Return TLight.CreateLight(light_type,parent)
 End Function
 
@@ -456,7 +456,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online Help</a>
 End Rem
-Function CreateSphere:TMesh(segments=8,parent:TEntity=Null)
+Function CreateSphere:TMesh(segments:Int=8,parent:TEntity=Null)
 	Return TMesh.CreateSphere(segments,parent)
 End Function
 
@@ -478,7 +478,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTexture">Online Help</a>
 End Rem
-Function CreateTexture:TTexture(width,height,flags=1,frames=1)
+Function CreateTexture:TTexture(width:Int,height:Int,flags:Int=1,frames:Int=1)
 	Return TTexture.CreateTexture(width,height,flags,frames)
 End Function
 
@@ -513,7 +513,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityBlend">Online Help</a>
 End Rem
-Function EntityBlend(ent:TEntity,blend)
+Function EntityBlend(ent:TEntity,blend:Int)
 	ent.EntityBlend(blend)
 End Function
 
@@ -534,7 +534,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityCollided">Online Help</a>
 End Rem
-Function EntityCollided:TEntity(ent:TEntity,type_no)
+Function EntityCollided:TEntity(ent:TEntity,type_no:Int)
 	Return ent.EntityCollided(type_no)
 End Function
 
@@ -555,14 +555,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityFX">Online Help</a>
 End Rem
-Function EntityFX(ent:TEntity,fx)
+Function EntityFX(ent:TEntity,fx:Int)
 	ent.EntityFX(fx)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityInView">Online Help</a>
 End Rem
-Function EntityInView(ent:TEntity,cam:TCamera)
+Function EntityInView:Int(ent:TEntity,cam:TCamera)
 	Return cam.EntityInView(ent)
 End Function
 
@@ -576,14 +576,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityOrder">Online Help</a>
 End Rem
-Function EntityOrder(ent:TEntity,order)
+Function EntityOrder(ent:TEntity,order:Int)
 	ent.EntityOrder(order)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityParent">Online Help</a>
 End Rem
-Function EntityParent(ent:TEntity,parent_ent:TEntity,glob=True)
+Function EntityParent(ent:TEntity,parent_ent:TEntity,glob:Int=True)
 	ent.EntityParent(parent_ent,glob)
 End Function
 
@@ -597,14 +597,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPickMode">Online Help</a>
 End Rem
-Function EntityPickMode(ent:TEntity,pick_mode,obscurer=True)
+Function EntityPickMode(ent:TEntity,pick_mode:Int,obscurer:Int=True)
 	ent.EntityPickMode(pick_mode,obscurer)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPitch">Online Help</a>
 End Rem
-Function EntityPitch#(ent:TEntity,glob=False)
+Function EntityPitch#(ent:TEntity,glob:Int=False)
 	Return ent.EntityPitch#(glob)
 End Function
 
@@ -618,7 +618,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRoll">Online Help</a>
 End Rem
-Function EntityRoll#(ent:TEntity,glob=False)
+Function EntityRoll#(ent:TEntity,glob:Int=False)
 	Return ent.EntityRoll#(glob)
 End Function
 
@@ -632,56 +632,56 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityTexture">Online Help</a>
 End Rem
-Function EntityTexture(ent:TEntity,tex:TTexture,frame=0,index=0)
+Function EntityTexture(ent:TEntity,tex:TTexture,frame:Int=0,index:Int=0)
 	TMesh(ent).EntityTexture(tex:TTexture,frame,index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online Help</a>
 End Rem
-Function EntityType(ent:TEntity,type_no,recursive=False)
+Function EntityType(ent:TEntity,type_no:Int,recursive:Int=False)
 	ent.EntityType(type_no,recursive)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityVisible">Online Help</a>
 End Rem
-Function EntityVisible(src_ent:TEntity,dest_ent:TEntity)
+Function EntityVisible:Int(src_ent:TEntity,dest_ent:TEntity)
 	Return TPick.EntityVisible(src_ent,dest_ent)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityX">Online Help</a>
 End Rem
-Function EntityX#(ent:TEntity,glob=False)
+Function EntityX#(ent:TEntity,glob:Int=False)
 	Return ent.EntityX#(glob)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityY">Online Help</a>
 End Rem
-Function EntityY#(ent:TEntity,glob=False)
+Function EntityY#(ent:TEntity,glob:Int=False)
 	Return ent.EntityY#(glob)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityYaw">Online Help</a>
 End Rem
-Function EntityYaw#(ent:TEntity,glob=False)
+Function EntityYaw#(ent:TEntity,glob:Int=False)
 	Return ent.EntityYaw#(glob)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityZ">Online Help</a>
 End Rem
-Function EntityZ#(ent:TEntity,glob=False)
+Function EntityZ#(ent:TEntity,glob:Int=False)
 	Return ent.EntityZ#(glob)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ExtractAnimSeq">Online Help</a>
 End Rem
-Function ExtractAnimSeq(ent:TEntity,first_frame,last_frame,seq=0)
+Function ExtractAnimSeq:Int(ent:TEntity,first_frame:Int,last_frame:Int,seq:Int=0)
 	Return ent.ExtractAnimSeq(first_frame,last_frame,seq)
 End Function
 
@@ -702,7 +702,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FitMesh">Online Help</a><p>
 End Rem
-Function FitMesh:TMesh(mesh:TMesh,x#,y#,z#,width#,height#,depth#,uniform=False)
+Function FitMesh:TMesh(mesh:TMesh,x#,y#,z#,width#,height#,depth#,uniform:Int=False)
 	mesh.FitMesh(x#,y#,z#,width#,height#,depth#,uniform)
 End Function
 
@@ -737,14 +737,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online Help</a>
 End Rem
-Function GetBrushTexture:TTexture(brush:TBrush,index=0)
+Function GetBrushTexture:TTexture(brush:TBrush,index:Int=0)
 	Return TTexture.GetBrushTexture(brush,index)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetChild">Online Help</a>
 End Rem
-Function GetChild:TEntity(ent:TEntity,child_no)
+Function GetChild:TEntity(ent:TEntity,child_no:Int)
 	Return ent.GetChild(child_no)
 End Function
 
@@ -758,14 +758,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetEntityType">Online Help</a>
 End Rem	
-Function GetEntityType(ent:TEntity)
+Function GetEntityType:Int(ent:TEntity)
 	Return ent.GetEntityType()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online Help</a>
 End Rem
-Function GetMatElement#(ent:TEntity,row,col)
+Function GetMatElement#(ent:TEntity,row:Int,col:Int)
 	ent.GetMatElement#(row,col)
 End Function
 
@@ -779,7 +779,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetSurface">Online Help</a>
 End Rem
-Function GetSurface:TSurface(mesh:TMesh,surf_no)
+Function GetSurface:TSurface(mesh:TMesh,surf_no:Int)
 	Return mesh.GetSurface(surf_no)
 End Function
 
@@ -793,7 +793,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online Help</a>
 End Rem
-Function Graphics3D(width,height,depth=0,mode=0,rate=60,flags=-1) 'SMALLFIXES added flags
+Function Graphics3D(width:Int,height:Int,depth:Int=0,mode:Int=0,rate:Int=60,flags:Int=-1) 'SMALLFIXES added flags
 	TGlobal.Graphics3D(width,height,depth,mode,rate,flags)
 End Function
 
@@ -849,14 +849,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online Help</a>
 End Rem
-Function LoadAnimTexture:TTexture(file$,flags,frame_width,frame_height,first_frame,frame_count)
+Function LoadAnimTexture:TTexture(file$,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int)
 	Return TTexture.LoadAnimTexture(file$,flags,frame_width,frame_height,first_frame,frame_count)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online Help</a>
 End Rem
-Function LoadBrush:TBrush(file$,flags=1,u_scale#=1.0,v_scale#=1.0)
+Function LoadBrush:TBrush(file$,flags:Int=1,u_scale#=1.0,v_scale#=1.0)
 	Return TBrush.LoadBrush(file$,flags,u_scale#,v_scale#)
 End Function
 
@@ -870,14 +870,14 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online Help</a>
 End Rem
-Function LoadTexture:TTexture(file$,flags=1)
+Function LoadTexture:TTexture(file$,flags:Int=1)
 	Return TTexture.LoadTexture(file$,flags)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadSprite">Online Help</a>
 End Rem
-Function LoadSprite:TSprite(tex_file$,tex_flag=1,parent:TEntity=Null)
+Function LoadSprite:TSprite(tex_file$,tex_flag:Int=1,parent:TEntity=Null)
 	Return TSprite.LoadSprite(tex_file$,tex_flag,parent)
 End Function
 
@@ -933,7 +933,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface">Online Help</a>
 End Rem
-Function PaintSurface(surf:TSurface,brush:TBrush)
+Function PaintSurface:Int(surf:TSurface,brush:TBrush)
 	Return surf.PaintSurface(brush)
 End Function
 
@@ -982,7 +982,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTriangle">Online Help</a>
 End Rem
-Function PickedTriangle()
+Function PickedTriangle:Int()
 	Return TPick.PickedTriangle()
 End Function
 
@@ -1017,7 +1017,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionEntity">Online Help</a>
 End Rem
-Function PositionEntity(ent:TEntity,x#,y#,z#,glob=False)
+Function PositionEntity(ent:TEntity,x#,y#,z#,glob:Int=False)
 	ent.PositionEntity(x#,y#,z#,glob)
 End Function
 
@@ -1073,7 +1073,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online Help</a>
 End Rem
-Function RotateEntity(ent:TEntity,x#,y#,z#,glob=False)
+Function RotateEntity(ent:TEntity,x#,y#,z#,glob:Int=False)
 	ent.RotateEntity(x#,y#,z#,glob)
 End Function
 
@@ -1101,7 +1101,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleEntity">Online Help</a>
 End Rem
-Function ScaleEntity(ent:TEntity,x#,y#,z#,glob=False)
+Function ScaleEntity(ent:TEntity,x#,y#,z#,glob:Int=False)
 	ent.ScaleEntity(x#,y#,z#,glob)
 End Function
 
@@ -1129,21 +1129,21 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online Help</a>
 End Rem
-Function SetAnimTime(ent:TEntity,time#,seq=0)
+Function SetAnimTime(ent:TEntity,time#,seq:Int=0)
 	ent.SetAnimTime(time#,seq)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online Help</a>
 End Rem
-Function SetCubeFace(tex:TTexture,face)
+Function SetCubeFace(tex:TTexture,face:Int)
 	tex.SetCubeFace(face)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeMode">Online Help</a>
 End Rem
-Function SetCubeMode(tex:TTexture,mode)
+Function SetCubeMode(tex:TTexture,mode:Int)
 	tex.SetCubeMode(mode)
 End Function
 
@@ -1157,35 +1157,35 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online Help</a>
 End Rem	
-Function SpriteViewMode(sprite:TSprite,mode)
+Function SpriteViewMode(sprite:TSprite,mode:Int)
 	sprite.SpriteViewMode(mode)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureBlend">Online Help</a>
 End Rem
-Function TextureBlend(tex:TTexture,blend)
+Function TextureBlend(tex:TTexture,blend:Int)
 	tex.TextureBlend(blend)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureCoords">Online Help</a>
 End Rem
-Function TextureCoords(tex:TTexture,coords)
+Function TextureCoords(tex:TTexture,coords:Int)
 	tex.TextureCoords(coords)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureHeight">Online Help</a>
 End Rem	
-Function TextureHeight(tex:TTexture)
+Function TextureHeight:Int(tex:TTexture)
 	Return tex.TextureHeight()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online Help</a>
 End Rem
-Function TextureFilter(match_text$,flags)
+Function TextureFilter(match_text$,flags:Int)
 	TTexture.TextureFilter(match_text$,flags)
 End Function
 
@@ -1199,7 +1199,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureWidth">Online Help</a>
 End Rem	
-Function TextureWidth(tex:TTexture)
+Function TextureWidth:Int(tex:TTexture)
 	Return tex.TextureWidth()
 End Function
 
@@ -1248,21 +1248,21 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TranslateEntity">Online Help</a>
 End Rem
-Function TranslateEntity(ent:TEntity,x#,y#,z#,glob=False)
+Function TranslateEntity(ent:TEntity,x#,y#,z#,glob:Int=False)
 	ent.TranslateEntity(x#,y#,z#,glob)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TriangleVertex">Online Help</a>
 End Rem
-Function TriangleVertex(surf:TSurface,tri_no,corner)
+Function TriangleVertex:Int(surf:TSurface,tri_no:Int,corner:Int)
 	Return surf.TriangleVertex(tri_no,corner)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TurnEntity">Online Help</a>
 End Rem
-Function TurnEntity(ent:TEntity,x#,y#,z#,glob=False)
+Function TurnEntity(ent:TEntity,x#,y#,z#,glob:Int=False)
 	ent.TurnEntity(x#,y#,z#,glob)
 End Function
 
@@ -1297,132 +1297,132 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexAlpha">Online Help</a>
 End Rem
-Function VertexAlpha#(surf:TSurface,vid)
+Function VertexAlpha#(surf:TSurface,vid:Int)
 	Return surf.VertexAlpha#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexBlue">Online Help</a>
 End Rem
-Function VertexBlue#(surf:TSurface,vid)
+Function VertexBlue#(surf:TSurface,vid:Int)
 	Return surf.VertexBlue#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexColor">Online Help</a>
 End Rem
-Function VertexColor(surf:TSurface,vid,r#,g#,b#,a#=1.0)
+Function VertexColor:Int(surf:TSurface,vid:Int,r#,g#,b#,a#=1.0)
 	Return surf.VertexColor(vid,r#,g#,b#,a#)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexCoords">Online Help</a>
 End Rem
-Function VertexCoords(surf:TSurface,vid,x#,y#,z#)
+Function VertexCoords:Int(surf:TSurface,vid:Int,x#,y#,z#)
 	Return surf.VertexCoords(vid,x#,y#,z#)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexGreen">Online Help</a>
 End Rem
-Function VertexGreen#(surf:TSurface,vid)
+Function VertexGreen#(surf:TSurface,vid:Int)
 	Return surf.VertexGreen#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNormal">Online Help</a>
 End Rem
-Function VertexNormal(surf:TSurface,vid,nx#,ny#,nz#)
+Function VertexNormal:Int(surf:TSurface,vid:Int,nx#,ny#,nz#)
 	Return surf.VertexNormal(vid,nx#,ny#,nz#)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNX">Online Help</a>
 End Rem
-Function VertexNX#(surf:TSurface,vid)
+Function VertexNX#(surf:TSurface,vid:Int)
 	Return surf.VertexNX#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNY">Online Help</a>
 End Rem
-Function VertexNY#(surf:TSurface,vid)
+Function VertexNY#(surf:TSurface,vid:Int)
 	Return surf.VertexNY#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNZ">Online Help</a>
 End Rem
-Function VertexNZ#(surf:TSurface,vid)
+Function VertexNZ#(surf:TSurface,vid:Int)
 	Return surf.VertexNZ#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexRed">Online Help</a>
 End Rem
-Function VertexRed#(surf:TSurface,vid)
+Function VertexRed#(surf:TSurface,vid:Int)
 	Return surf.VertexRed#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexTexCoords">Online Help</a>
 End Rem
-Function VertexTexCoords(surf:TSurface,vid,u#,v#,w#=0.0,coord_set=0)
+Function VertexTexCoords:int(surf:TSurface,vid:Int,u#,v#,w#=0.0,coord_set:Int=0)
 	Return surf.VertexTexCoords(vid,u#,v#,w#,coord_set)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexU">Online Help</a>
 End Rem
-Function VertexU#(surf:TSurface,vid,coord_set=0)
+Function VertexU#(surf:TSurface,vid:Int,coord_set:Int=0)
 	Return surf.VertexU#(vid,coord_set)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexV">Online Help</a>
 End Rem
-Function VertexV#(surf:TSurface,vid,coord_set=0)
+Function VertexV#(surf:TSurface,vid:Int,coord_set:Int=0)
 	Return surf.VertexV#(vid,coord_set)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexW">Online Help</a>
 End Rem
-Function VertexW#(surf:TSurface,vid,coord_set=0)
+Function VertexW#(surf:TSurface,vid:Int,coord_set:Int=0)
 	Return surf.VertexW#(vid,coord_set)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexX">Online Help</a>
 End Rem
-Function VertexX#(surf:TSurface,vid)
+Function VertexX#(surf:TSurface,vid:Int)
 	Return surf.VertexX#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexY">Online Help</a>
 End Rem
-Function VertexY#(surf:TSurface,vid)
+Function VertexY#(surf:TSurface,vid:Int)
 	Return surf.VertexY#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexZ">Online Help</a>
 End Rem
-Function VertexZ#(surf:TSurface,vid)
+Function VertexZ#(surf:TSurface,vid:Int)
 	Return surf.VertexZ#(vid)
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online Help</a>
 End Rem
-Function Wireframe(enable)
+Function Wireframe(enable:Int)
 	TGlobal.Wireframe(enable)
 End Function
 
 ' Blitz2D
 
-Function Text(x,y,str$)
+Function Text(x:Int,y:Int,str$)
 	TBlitz2D.Text(x,y,str$)
 End Function
 
@@ -1436,15 +1436,15 @@ End Function
 
 ' ***extras***
 
-Function EntityScaleX:Float(ent:TEntity,glob=False)
+Function EntityScaleX:Float(ent:TEntity,glob:Int=False)
 	Return ent.EntityScaleX:Float(glob)
 End Function
 
-Function EntityScaleY:Float(ent:TEntity,glob=False)
+Function EntityScaleY:Float(ent:TEntity,glob:Int=False)
 	Return ent.EntityScaleY:Float(glob)
 End Function
 
-Function EntityScaleZ:Float(ent:TEntity,glob=False)
+Function EntityScaleZ:Float(ent:TEntity,glob:Int=False)
 	Return ent.EntityScaleZ:Float(glob)
 End Function
 
@@ -1454,13 +1454,13 @@ Function LightMesh(mesh:TMesh,red#,green#,blue#,range#=0,light_x#=0,light_y#=0,l
 End Function
 Function MeshesIntersect(mesh1:TMesh,mesh2:TMesh)
 End Function
-Function CreatePlane(sub_divs=1,parent:TEntity=Null)
+Function CreatePlane(sub_divs:Int=1,parent:TEntity=Null)
 End Function
-Function AlignToVector(vx:Float,vy:Float,vz:Float,axis,rate=1)
+Function AlignToVector(vx:Float,vy:Float,vz:Float,axis:Int,rate:Int=1)
 End Function
 Function LoadAnimSeq(ent:TEntity,filename$)
 End Function
-Function SetAnimKey(ent:TEntity,frame,pos_key=True,rot_key=True,scale_key=True)
+Function SetAnimKey(ent:TEntity,frame:Int,pos_key:Int=True,rot_key:Int=True,scale_key:Int=True)
 End Function
-Function AddAnimSeq(ent:TEntity,length)
+Function AddAnimSeq(ent:TEntity,length:Int)
 End Function

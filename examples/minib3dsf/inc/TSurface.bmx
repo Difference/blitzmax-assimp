@@ -2,8 +2,8 @@ Type TSurface
 
 	' no of vertices and triangles in surface
 
-	Field no_verts=0
-	Field no_tris=0
+	Field no_verts:Int=0
+	Field no_tris:Int=0
 	
 	' arrays containing vertex and triangle info
 	
@@ -31,20 +31,20 @@ Type TSurface
 	
 	' vbo
 	
-	Field vbo_id[7]
+	Field vbo_id:Int[7]
 	
 	' misc vars
 	
-	Field vert_array_size=1
-	Field tri_array_size=1
-	Field vmin=1000000 ' used for trimming verts from b3d files
-	Field vmax=0 ' used for trimming verts from b3d files
+	Field vert_array_size:Int=1
+	Field tri_array_size:Int=1
+	Field vmin:Int=1000000 ' used for trimming verts from b3d files
+	Field vmax:Int=0 ' used for trimming verts from b3d files
 
 	' reset flag - this is set when mesh shape is changed in TSurface and TMesh
-	Field reset_vbo=-1 ' (-1 = all)
+	Field reset_vbo:Int=-1 ' (-1 = all)
 	
 	' used by Compare to sort array, and TMesh.Update to enable/disable alpha blending
-	Field alpha_enable=False
+	Field alpha_enable:Int=False
 
 	Method New()
 	
@@ -65,7 +65,7 @@ Type TSurface
 	End Method
 
 	' used to sort surfaces into alpha order. used by TMesh.Update
-	Method Compare(other:Object)
+	Method Compare:Int(other:Object)
 	
 		If TSurface(other)
 		
@@ -129,13 +129,13 @@ Type TSurface
 		brush.shine#=bru.shine#
 		brush.blend=bru.blend
 		brush.fx=bru.fx
-		For Local i=0 To 7
+		For Local i:Int=0 To 7
 			brush.tex[i]=bru.tex[i]
 		Next
 	
 	End Method
 	
-	Method ClearSurface(clear_verts=True,clear_tris=True)
+	Method ClearSurface(clear_verts:Int=True,clear_tris:Int=True)
 	
 		If clear_verts
 		
@@ -166,7 +166,7 @@ Type TSurface
 	
 	End Method
 			
-	Method AddVertex(x#,y#,z#,u#=0.0,v#=0.0,w#=0.0)
+	Method AddVertex:Int(x#,y#,z#,u#=0.0,v#=0.0,w#=0.0)
 		
 		no_verts=no_verts+1
 
@@ -178,7 +178,7 @@ Type TSurface
 				vert_array_size=vert_array_size*2
 			Until vert_array_size>no_verts
 			
-			Local vas=vert_array_size
+			Local vas:Int=vert_array_size
 		
 			vert_coords=vert_coords[..vas*3]
 			vert_tex_coords0=vert_tex_coords0[..vas*2]
@@ -188,15 +188,15 @@ Type TSurface
 		
 		EndIf
 		
-		Local vxi=(no_verts*3)-3
-		Local vyi=(no_verts*3)-2
-		Local vzi=(no_verts*3)-1		
-		Local vui=(no_verts*2)-2
-		Local vvi=(no_verts*2)-1
-		Local vri=(no_verts*4)-4
-		Local vgi=(no_verts*4)-3
-		Local vbi=(no_verts*4)-2
-		Local vai=(no_verts*4)-1
+		Local vxi:Int=(no_verts*3)-3
+		Local vyi:Int=(no_verts*3)-2
+		Local vzi:Int=(no_verts*3)-1		
+		Local vui:Int=(no_verts*2)-2
+		Local vvi:Int=(no_verts*2)-1
+		Local vri:Int=(no_verts*4)-4
+		Local vgi:Int=(no_verts*4)-3
+		Local vbi:Int=(no_verts*4)-2
+		Local vai:Int=(no_verts*4)-1
 		
 		vert_coords[vxi]=x#
 		vert_coords[vyi]=y#
@@ -215,7 +215,7 @@ Type TSurface
 	
 	End Method
 	
-	Method AddTriangle(v0,v1,v2)
+	Method AddTriangle:Int(v0:Int,v1:Int,v2:Int)
 	
 		no_tris=no_tris+1
 		
@@ -227,15 +227,15 @@ Type TSurface
 				tri_array_size=tri_array_size*2
 			Until tri_array_size>no_tris
 		
-			Local tas=tri_array_size
+			Local tas:Int=tri_array_size
 		
 			tris=tris[..tas*3]
 			
 		EndIf
 		
-		Local v0i=(no_tris*3)-3
-		Local v1i=(no_tris*3)-2
-		Local v2i=(no_tris*3)-1	
+		Local v0i:Int=(no_tris*3)-3
+		Local v1i:Int=(no_tris*3)-2
+		Local v2i:Int=(no_tris*3)-1	
 	
 		tris[v0i]=v2
 		tris[v1i]=v1
@@ -248,19 +248,19 @@ Type TSurface
 	
 	End Method
 	
-	Method CountVertices()
+	Method CountVertices:Int()
 	
 		Return no_verts
 	
 	End Method
 	
-	Method CountTriangles()
+	Method CountTriangles:Int()
 	
 		Return no_tris
 	
 	End Method
 	
-	Method VertexCoords(vid,x#,y#,z#)
+	Method VertexCoords(vid:Int,x#,y#,z#)
 	
 		vid=vid*3
 		vert_coords#[vid]=x#
@@ -272,7 +272,7 @@ Type TSurface
 	
 	End Method
 			
-	Method VertexColor(vid,r#,g#,b#,a#=1.0)
+	Method VertexColor(vid:Int,r#,g#,b#,a#=1.0)
 	
 		vid=vid*4
 		vert_col#[vid]=r#/255.0
@@ -285,7 +285,7 @@ Type TSurface
 
 	End Method
 	
-	Method VertexNormal(vid,nx#,ny#,nz#)
+	Method VertexNormal(vid:Int,nx#,ny#,nz#)
 	
 		vid=vid*3
 		vert_norm#[vid]=nx#
@@ -297,7 +297,7 @@ Type TSurface
 
 	End Method
 	
-	Method VertexTexCoords(vid,u#,v#,w#=0.0,coord_set=0)
+	Method VertexTexCoords(vid:Int,u#,v#,w#=0.0,coord_set:Int=0)
 	
 		vid=vid*2
 		
@@ -321,89 +321,89 @@ Type TSurface
 
 	End Method
 		
-	Method VertexX#(vid)
+	Method VertexX#(vid:Int)
 	
 		Return vert_coords[vid*3]
 
 	End Method
 
-	Method VertexY#(vid)
+	Method VertexY#(vid:Int)
 	
 		Return vert_coords[(vid*3)+1]
 
 	End Method
 	
-	Method VertexZ#(vid)
+	Method VertexZ#(vid:Int)
 	
 		Return -vert_coords[(vid*3)+2] ' ***ogl***
 
 	End Method
 	
-	Method VertexRed#(vid)
+	Method VertexRed#(vid:Int)
 	
 		Return vert_col[vid*4]*255.0
 
 	End Method
 	
-	Method VertexGreen#(vid)
+	Method VertexGreen#(vid:Int)
 	
 		Return vert_col[(vid*4)+1]*255.0
 
 	End Method
 	
-	Method VertexBlue#(vid)
+	Method VertexBlue#(vid:Int)
 	
 		Return vert_col[(vid*4)+2]*255.0
 
 	End Method
 	
-	Method VertexAlpha#(vid)
+	Method VertexAlpha#(vid:Int)
 	
 		Return vert_col[(vid*4)+3]
 
 	End Method
 	
-	Method VertexNX#(vid)
+	Method VertexNX#(vid:Int)
 	
 		Return vert_norm[vid*3]
 
 	End Method
 	
-	Method VertexNY#(vid)
+	Method VertexNY#(vid:Int)
 	
 		Return vert_norm[(vid*3)+1]
 
 	End Method
 	
-	Method VertexNZ#(vid)
+	Method VertexNZ#(vid:Int)
 	
 		Return -vert_norm[(vid*3)+2] ' ***ogl***
 
 	End Method
 	
-	Method VertexU#(vid,coord_set=0)
+	Method VertexU#(vid:Int,coord_set:Int=0)
 	
 		If coord_set=0 Then Return vert_tex_coords0[vid*2]
 		If coord_set=1 Then Return vert_tex_coords1[vid*2]
 
 	End Method
 	
-	Method VertexV#(vid,coord_set=0)
+	Method VertexV#(vid:Int,coord_set:Int=0)
 	
 		If coord_set=0 Then Return vert_tex_coords0[(vid*2)+1]
 		If coord_set=1 Then Return vert_tex_coords1[(vid*2)+1]
 
 	End Method
 	
-	Method VertexW#(vid,coord_set=0)
+	Method VertexW#(vid:Int,coord_set:Int=0)
 	
 		Return 0
 
 	End Method
 	
-	Method TriangleVertex(tri_no,corner)
+	Method TriangleVertex:int(tri_no:Int,corner:Int)
 	
-		Local vid[3]
+		Local vid:Int[3]
 	
 		tri_no=(tri_no+1)*3
 		vid[0]=tris[tri_no-1]
@@ -507,11 +507,11 @@ Type TSurface
 	
 	End Method
 		
-	Method TriangleNX#(tri_no)
+	Method TriangleNX#(tri_no:Int)
 
-		Local v0=TriangleVertex(tri_no,0)
-		Local v1=TriangleVertex(tri_no,1)
-		Local v2=TriangleVertex(tri_no,2)
+		Local v0:Int=TriangleVertex(tri_no,0)
+		Local v1:Int=TriangleVertex(tri_no,1)
+		Local v2:Int=TriangleVertex(tri_no,2)
 	
 		'Local ax#=VertexX#(v1)-VertexX#(v0)
 		Local ay#=VertexY#(v1)-VertexY#(v0)
@@ -525,11 +525,11 @@ Type TSurface
 		
 	End Method
 
-	Method TriangleNY#(tri_no)
+	Method TriangleNY#(tri_no:Int)
 	
-		Local v0=TriangleVertex(tri_no,0)
-		Local v1=TriangleVertex(tri_no,1)
-		Local v2=TriangleVertex(tri_no,2)
+		Local v0:Int=TriangleVertex(tri_no,0)
+		Local v1:Int=TriangleVertex(tri_no,1)
+		Local v2:Int=TriangleVertex(tri_no,2)
 
 		Local ax#=VertexX#(v1)-VertexX#(v0)
 		'Local ay#=VertexY#(v1)-VertexY#(v0)
@@ -543,11 +543,11 @@ Type TSurface
 			
 	End Method
 
-	Method TriangleNZ#(tri_no)
+	Method TriangleNZ#(tri_no:Int)
 	
-		Local v0=TriangleVertex(tri_no,0)
-		Local v1=TriangleVertex(tri_no,1)
-		Local v2=TriangleVertex(tri_no,2)
+		Local v0:Int=TriangleVertex(tri_no,0)
+		Local v1:Int=TriangleVertex(tri_no,1)
+		Local v2:Int=TriangleVertex(tri_no,2)
 		
 		Local ax#=VertexX#(v1)-VertexX#(v0)
 		Local ay#=VertexY#(v1)-VertexY#(v0)
@@ -610,12 +610,12 @@ Type TSurface
 	End Method
 	
 	' removes a tri from a surface
-	Function RemoveTri(surf:TSurface,tri)
+	Function RemoveTri(surf:TSurface,tri:Int)
 	
-		Local no_tris=CountTriangles(surf)
-		Local tris[no_tris,3]
+		Local no_tris:Int=CountTriangles(surf)
+		Local tris:Int[no_tris,3]
 		
-		For Local t=0 To no_tris-1
+		For Local t:Int=0 To no_tris-1
 	
 			tris[t,0]=TriangleVertex(surf,t,0)
 			tris[t,1]=TriangleVertex(surf,t,1)	
@@ -625,11 +625,11 @@ Type TSurface
 		
 		ClearSurface surf,False,True
 	
-		For Local t=0 To no_tris-1
+		For Local t:Int=0 To no_tris-1
 	
-			Local v0=tris[t,0]
-			Local v1=tris[t,1]
-			Local v2=tris[t,2]
+			Local v0:Int=tris[t,0]
+			Local v1:Int=tris[t,1]
+			Local v2:Int=tris[t,2]
 		
 			If t<>tri Then AddTriangle(surf,v0,v1,v2)
 			
@@ -640,18 +640,18 @@ Type TSurface
 	' removes redundent verts (non-working)
 	Function RemoveVerts(surf:TSurface)
 	
-		Local no_tris=CountTriangles(surf)
-		Local tris[no_tris,3]
+		Local no_tris:Int=CountTriangles(surf)
+		Local tris:Int[no_tris,3]
 		
-		Local no_verts=CountVertices(surf)
+		Local no_verts:Int=CountVertices(surf)
 		
-		Local vert_used[no_verts]
+		Local vert_used:Int[no_verts]
 		Local vert_info:Float[no_verts,15]
-		Local new_vert_index[no_verts]
+		Local new_vert_index:Int[no_verts]
 		
-		For Local t=0 To no_tris-1
+		For Local t:Int=0 To no_tris-1
 	
-			For Local i=0 To 2
+			For Local i:Int=0 To 2
 	
 				tris[t,i]=TriangleVertex(surf,t,i)
 				
@@ -679,11 +679,11 @@ Type TSurface
 		
 		ClearSurface surf,True,True
 	
-		For Local v=0 To no_verts-1
+		For Local v:Int=0 To no_verts-1
 		
 			If vert_used[v]=True
 		
-				Local new_index=AddVertex(surf,vert_info[v,0],vert_info[v,1],vert_info[v,2])
+				Local new_index:Int=AddVertex(surf,vert_info[v,0],vert_info[v,1],vert_info[v,2])
 				VertexNormal surf,new_index,vert_info[v,3],vert_info[v,4],vert_info[v,5]
 				VertexColor surf,new_index,vert_info[v,6],vert_info[v,7],vert_info[v,8]
 				VertexTexCoords surf,new_index,vert_info[v,9],vert_info[v,10],vert_info[v,11],0
@@ -694,11 +694,11 @@ Type TSurface
 			
 		Next
 		
-		For Local t=0 To no_tris-1
+		For Local t:Int=0 To no_tris-1
 	
-			Local v0=new_vert_index[tris[t,0]]
-			Local v1=new_vert_index[tris[t,1]]
-			Local v2=new_vert_index[tris[t,2]]
+			Local v0:Int=new_vert_index[tris[t,0]]
+			Local v1:Int=new_vert_index[tris[t,1]]
+			Local v2:Int=new_vert_index[tris[t,2]]
 			
 			AddTriangle(surf,v0,v1,v2)
 			

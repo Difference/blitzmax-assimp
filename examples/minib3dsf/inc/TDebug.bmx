@@ -1,10 +1,10 @@
 Type TDebug
 	
-	Global cno ' child no (numpad keys - + to change)
-	Global surf_no ' surf no (numpad keys / * to change)
+	Global cno:Int ' child no (numpad keys - + to change)
+	Global surf_no:Int ' surf no (numpad keys / * to change)
 	
-	Global info=1 ' current info page (numpad keys 1-4)
-	Global show_ents=True ' show/hide debug ents (key 0)
+	Global info:Int=1 ' current info page (numpad keys 1-4)
+	Global show_ents:Int=True ' show/hide debug ents (key 0)
 	
 	' debug entities
 	Global bounding_sphere:TMesh
@@ -14,13 +14,13 @@ Type TDebug
 
 	Function DebugWorld()
 	
-		Local no_ents
-		Local no_cams
-		Local no_lights
-		Local no_pivs
-		Local no_meshes
-		Local no_sprites
-		Local no_bones
+		Local no_ents:Int
+		Local no_cams:Int
+		Local no_lights:Int
+		Local no_pivs:Int
+		Local no_meshes:Int
+		Local no_sprites:Int
+		Local no_bones:Int
 		
 		For Local ent:TEntity=EachIn TEntity.entity_list
 		
@@ -47,15 +47,15 @@ Type TDebug
 
 	Function DebugEntity:TEntity(ent:TEntity,cam:TCamera=Null)
 
-		If ent=Null Then Return
+		If ent=Null Then Return null
 
-		Local no_children=0
+		Local no_children:Int=0
 		Local old_cent:TEntity=ent.GetChildFromAll(cno,no_children)
 		If old_cent<>Null Then old_cent.EntityColor 255,255,255
 	
 		If KeyHit(KEY_NUMADD) Then cno=cno+1
 		If KeyHit(KEY_NUMSUBTRACT) Then cno=cno-1
-		Local no_childs=TEntity.CountAllChildren(ent)
+		Local no_childs:Int=TEntity.CountAllChildren(ent)
 		If cno<0 Then cno=0
 		If cno>no_childs Then cno=no_childs
 
@@ -173,15 +173,15 @@ Type TDebug
 	
 		debug_mesh.ShowEntity
 	
-		For Local tri=0 Until surf.CountTriangles()
+		For Local tri:Int=0 Until surf.CountTriangles()
 	
-			Local v[3]
+			Local v:Int[3]
 			v[0]=surf.TriangleVertex(tri,0)
 			v[1]=surf.TriangleVertex(tri,1)
 			v[2]=surf.TriangleVertex(tri,2)
 			
-			Local nv[3]
-			For Local i=0 To 2
+			Local nv:Int[3]
+			For Local i:Int=0 To 2
 			
 				Local vx:Float=surf.VertexX(v[i])
 				Local vy:Float=surf.VertexY(v[i])
@@ -299,12 +299,12 @@ Type TDebug
 		If xx#<0.0001 And xx#>-0.0001  Then xx#=0
 		TBlitz2D.Text 0,360,"Roll: "+String(xx#)
 		
-		Local tx=0
-		Local ty=380
-		For Local iy=0 To 3
+		Local tx:Int=0
+		Local ty:Int=380
+		For Local iy:Int=0 To 3
 			tx=0
 			ty=ty+20
-			For Local ix=0 To 3
+			For Local ix:Int=0 To 3
 				xx#=ent.mat.grid[ix,iy]
 				If xx#<0.0001 And xx#>-0.0001 Then xx#=0
 				TBlitz2D.Text tx,ty,String(xx#)

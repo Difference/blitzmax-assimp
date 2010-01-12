@@ -1,17 +1,17 @@
 Type TGlobal
 
-	Global width,height,mode,depth,rate
+	Global width:Int,height:Int,mode:Int,depth:Int,rate:Int
 	Global ambient_red#=0.5,ambient_green#=0.5,ambient_blue#=0.5
 
-	Global vbo_enabled=False ' this is set in GraphicsInit - will be set to true if USE_VBO is true and the hardware supports vbos
+	Global vbo_enabled:Int=False ' this is set in GraphicsInit - will be set to true if USE_VBO is true and the hardware supports vbos
 
 	' anti aliasing globs
-	Global aa ' anti_alias true/false
-	Global ACSIZE ' accum size
-	Global jitter
+	Global aa:Int ' anti_alias true/false
+	Global ACSIZE:Int ' accum size
+	Global jitter:Int
 	Global j#[16,2]
 
-	Function Graphics3D(w,h,d=0,m=0,r=60,flags=-1)	' SMALLFIXES added flags so that the ACCUMBUFFER can be left out (crashes parallels)
+	Function Graphics3D(w:Int,h:Int,d:Int=0,m:Int=0,r:Int=60,flags:Int=-1)	' SMALLFIXES added flags so that the ACCUMBUFFER can be left out (crashes parallels)
 
 		If flags = -1 Then flags = GRAPHICS_BACKBUFFER|GRAPHICS_DEPTHBUFFER|GRAPHICS_ACCUMBUFFER
 
@@ -50,7 +50,7 @@ Type TGlobal
 								
 	End Function
 
-	Function AntiAlias(samples)
+	Function AntiAlias(samples:Int)
 
 		aa=True
 
@@ -70,7 +70,7 @@ Type TGlobal
 			Default aa=False; ACSIZE=0; Return
 		End Select
 
-		For Local i=0 Until samples
+		For Local i:Int=0 Until samples
 		
 			ReadData j[i,0],j[i,1]
 		
@@ -78,7 +78,7 @@ Type TGlobal
 
 	End Function
 	
-	Function Wireframe(enable)
+	Function Wireframe(enable:Int)
 	
 		If enable
 			glPolygonMode(GL_FRONT,GL_LINE)
@@ -104,7 +104,7 @@ Type TGlobal
 
 	End Function
 
-	Function Collisions(src_no,dest_no,method_no,response_no=0)
+	Function Collisions(src_no:Int,dest_no:Int,method_no:Int,response_no:Int=0)
 	
 		Local col:TCollisionPair=New TCollisionPair
 		col.src_type=src_no
@@ -131,7 +131,7 @@ Type TGlobal
 	
 	End Function
 	
-	Function ClearWorld(entities=True,brushes=True,textures=True)
+	Function ClearWorld(entities:Int=True,brushes:Int=True,textures:Int=True)
 	
 		If entities
 			
@@ -166,8 +166,8 @@ Type TGlobal
 		
 		' anim
 	
-		Local first
-		Local last
+		Local first:Int
+		Local last:int
 
 		For Local mesh:TEntity=EachIn TEntity.entity_list
 		
@@ -176,7 +176,7 @@ Type TGlobal
 				first=mesh.anim_seqs_first[mesh.anim_seq]
 				last=mesh.anim_seqs_last[mesh.anim_seq]
 		
-				Local anim_start=False
+				Local anim_start:Int=False
 
 				If mesh.anim_trans>0
 					mesh.anim_trans=mesh.anim_trans-1

@@ -3,7 +3,7 @@ Type TSprite Extends TMesh
 	Field angle#
 	Field scale_x#=1.0,scale_y#=1.0
 	Field handle_x#,handle_y# 
-	Field view_mode=1
+	Field view_mode:Int=1
 
 	Method New()
 	
@@ -145,7 +145,7 @@ Type TSprite Extends TMesh
 
 	End Function
 
-	Function LoadSprite:TSprite(tex_file$,tex_flag=1,parent_ent:TEntity=Null)
+	Function LoadSprite:TSprite(tex_file$,tex_flag:Int=1,parent_ent:TEntity=Null)
 
 		Local sprite:TSprite=CreateSprite(parent_ent)
 		
@@ -181,7 +181,7 @@ Type TSprite Extends TMesh
 	
 	End Method
 	
-	Method SpriteViewMode(mode)
+	Method SpriteViewMode(mode:int)
 	
 		view_mode=mode
 	

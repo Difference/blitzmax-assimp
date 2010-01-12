@@ -2,7 +2,7 @@ Type TPick
 
 	' EntityPickMode in TEntity
 
-	Const EPSILON=.0001
+	Const EPSILON:Float=.0001
 	
 	Global ent_list:TList=New TList ' list containing pickable entities
 
@@ -11,7 +11,7 @@ Type TPick
 	Global picked_time:Float
 	Global picked_ent:TEntity
 	Global picked_surface:TSurface
-	Global picked_triangle
+	Global picked_triangle:Int
 
 	Function CameraPick:TEntity(cam:TCamera,vx:Float,vy:Float)
 
@@ -59,7 +59,7 @@ Type TPick
 
 	End Function
 
-	Function EntityVisible(src_ent:TEntity,dest_ent:TEntity)
+	Function EntityVisible:Int(src_ent:TEntity,dest_ent:TEntity)
 
 		' get pick values
 		
@@ -72,7 +72,7 @@ Type TPick
 		Local ptime:Float=picked_time
 		Local pent:TEntity=picked_ent
 		Local psurf:TSurface=picked_surface
-		Local ptri=picked_triangle
+		Local ptri:Int=picked_triangle
 
 		' perform line pick
 
@@ -87,7 +87,7 @@ Type TPick
 		Local pick:TEntity=Pick(ax,ay,az,bx,by,bz)
 		
 		' if picked entity was dest ent then dest_picked flag to true
-		Local dest_picked=False
+		Local dest_picked:Int=False
 		If picked_ent=dest_ent Then dest_picked=True
 		
 		' restore pick values
@@ -150,7 +150,7 @@ Type TPick
 		Return picked_surface
 	End Function
 	
-	Function PickedTriangle()
+	Function PickedTriangle:int()
 		Return picked_triangle
 	End Function
 
@@ -179,7 +179,7 @@ Type TPick
 		
 		Local c_col:Byte Ptr=C_CreateCollisionObject()
 		
-		Local pick=False
+		Local pick:Int=False
 		
 		For Local ent:TEntity=EachIn ent_list
 		

@@ -17,7 +17,7 @@ Type TModel
 		
 		' get directory of b3d file name, set current dir to match it so we can find textures
 		Local dir$=f_name$
-		Local in=0
+		Local in:Int=0
 		While Instr(dir$,"\",in+1)<>0
 			in=Instr(dir$,"\",in+1)
 		Wend
@@ -36,24 +36,24 @@ Type TModel
 		
 		tag$=ReadTag$(file)
 		ReadLong(file)
-		Local vno=ReadInt(file)
+		Local vno:Int=ReadInt(file)
 		If tag$<>"BB3D" RuntimeError "Invalid b3d file"
 		If vno/100>0 RuntimeError "Invalid b3d file version"
 		
 		' Locals
 		
-		Local size
-		Local node_level=-1
-		Local old_node_level=-1
-		Local node_pos[100]
+		Local size:Int
+		Local node_level:Int=-1
+		Local old_node_level:Int=-1
+		Local node_pos:Int[100]
 	
 		' tex local vars
-		Local tex_no=0
+		Local tex_no:Int=0
 		Local tex:TTexture[1]
 		Local te_file$
-		Local te_flags
-		Local te_blend
-		Local te_coords
+		Local te_flags:Int
+		Local te_blend:Int
+		Local te_coords:Int
 		Local te_u_pos#
 		Local te_v_pos#
 		Local te_u_scale#
@@ -61,18 +61,18 @@ Type TModel
 		Local te_angle#
 		
 		' brush local vars
-		Local brush_no
+		Local brush_no:Int
 		Local brush:TBrush[1]
-		Local b_no_texs
+		Local b_no_texs:Int
 		Local b_name$
 		Local b_red#
 		Local b_green#
 		Local b_blue#
 		Local b_alpha#
 		Local b_shine#
-		Local b_blend
-		Local b_fx
-		Local b_tex_id
+		Local b_blend:Int
+		Local b_fx:Int
+		Local b_tex_id:Int
 		
 		' node local vars
 		Local n_name$=""
@@ -92,15 +92,15 @@ Type TModel
 		
 		' mesh local vars
 		Local mesh:TMesh
-		Local m_brush_id
+		Local m_brush_id:Int
 	
 		' verts local vars
 		Local v_mesh:TMesh
 		Local v_surf:TSurface
-		Local v_flags
-		Local v_tc_sets
-		Local v_tc_size
-		Local v_sz
+		Local v_flags:Int
+		Local v_tc_sets:Int
+		Local v_tc_size:Int
+		Local v_sz:Int
 		Local v_x#
 		Local v_y#
 		Local v_z#
@@ -114,16 +114,16 @@ Type TModel
 		Local v_v#
 		Local v_w#
 		Local v_a#	
-		Local v_id
+		Local v_id:Int
 		
 		' tris local vars
 		Local surf:TSurface
-		Local tr_brush_id
-		Local tr_sz
-		Local tr_vid
-		Local tr_vid0
-		Local tr_vid1
-		Local tr_vid2
+		Local tr_brush_id:Int
+		Local tr_sz:Int
+		Local tr_vid:Int
+		Local tr_vid0:Int
+		Local tr_vid1:Int
+		Local tr_vid2:Int
 		Local tr_x#
 		Local tr_y#
 		Local tr_z#
@@ -137,22 +137,22 @@ Type TModel
 		Local tr_v#
 		Local tr_w#
 		Local tr_a#	
-		Local tr_no
+		Local tr_no:Int
 		
 		' anim local vars
-		Local a_flags
-		Local a_frames
-		Local a_fps
+		Local a_flags:Int
+		Local a_frames:Int
+		Local a_fps:Int
 					
 		' bone local vars
 		Local bo_bone:TBone
-		Local bo_no_bones
-		Local bo_vert_id
+		Local bo_no_bones:Int
+		Local bo_vert_id:Int
 		Local bo_vert_w#
 		
 		' key local vars	
-		Local k_flags
-		Local k_frame
+		Local k_flags:Int
+		Local k_frame:Int
 		Local k_px#
 		Local k_py#
 		Local k_pz#
@@ -192,7 +192,7 @@ Type TModel
 			
 					If node_level>0
 					
-						Local fd=0
+						Local fd:Int=0
 						Repeat
 							fd=StreamPos(file)-node_pos[node_level-1]
 							If fd=>8
@@ -228,8 +228,8 @@ Type TModel
 					' get parent entity of last entity of new node level
 					If node_level>1
 					
-						Local cc
-						For Local levs=1 To node_level-2
+						Local cc:Int
+						For Local levs:Int=1 To node_level-2
 							cc=tent.CountChildren()
 							tent=tent.GetChild(cc)
 						Next
@@ -248,7 +248,7 @@ Type TModel
 				Local tab$=""
 				Local info$=""
 				If tag$="NODE" And parent_ent<>Null Then info$=" (parent= "+parent_ent.name$+")"
-				For Local i=1 To node_level
+				For Local i:Int=1 To node_level
 					tab$=tab$+"-"
 				Next
 				' DebugLog tab$+tag$+info$
@@ -343,7 +343,7 @@ Type TModel
 						brush[brush_no].blend=b_blend
 						brush[brush_no].fx=b_fx
 				
-						For Local ix=0 To b_no_texs-1
+						For Local ix:Int=0 To b_no_texs-1
 						
 							b_tex_id=ReadInt(file)
 			
@@ -524,8 +524,8 @@ Type TModel
 						v_surf.VertexNormal(v_id,v_nx,v_ny,v_nz)
 						
 						'read tex coords...
-						For Local j=0 To v_tc_sets-1 ' texture coords per vertex - 1 for simple uv, 8 max
-							For Local k=1 To v_tc_size ' components per set - 2 for simple uv, 4 max
+						For Local j:Int=0 To v_tc_sets-1 ' texture coords per vertex - 1 for simple uv, 8 max
+							For Local k:Int=1 To v_tc_size ' components per set - 2 for simple uv, 4 max
 								If k=1 v_u#=ReadFloat(file)
 								If k=2 v_v#=ReadFloat(file)
 								If k=3 v_w#=ReadFloat(file)
@@ -539,7 +539,7 @@ Type TModel
 					
 				Case "TRIS"
 							
-					Local old_tr_brush_id=tr_brush_id
+					Local old_tr_brush_id:Int=tr_brush_id
 					tr_brush_id=ReadInt(file)
 	
 					' don't create new surface if tris chunk has same brush as chunk immediately before it
@@ -636,7 +636,7 @@ Type TModel
 	
 				Case "BONE"
 				
-					Local ix=0
+					Local ix:Int=0
 					
 					new_tag$=ReadTag$(file)
 				
@@ -657,7 +657,7 @@ Type TModel
 						
 								If anim_surf<>Null
 								
-									Local vid=bo_vert_id-anim_surf.vmin
+									Local vid:Int=bo_vert_id-anim_surf.vmin
 								
 									If bo_vert_w#>anim_surf.vert_weight1[vid]
 														
@@ -868,8 +868,8 @@ Type TModel
 				
 		If surf.no_tris=0 Then Return ' surf has no tri info, do not trim
 				
-		Local vmin=surf.vmin
-		Local vmax=surf.vmax
+		Local vmin:Int=surf.vmin
+		Local vmax:Int=surf.vmax
 
 		surf.vert_coords=surf.vert_coords[vmin*3..vmax*3+3]
 		surf.vert_col=surf.vert_col[vmin*4..vmax*4+4]
@@ -877,7 +877,7 @@ Type TModel
 		surf.vert_tex_coords0=surf.vert_tex_coords0[vmin*2..vmax*2+2]
 		surf.vert_tex_coords1=surf.vert_tex_coords1[vmin*2..vmax*2+2]
 		
-		For Local i=0 Until (surf.no_tris*3)+3
+		For Local i:Int=0 Until (surf.no_tris*3)+3
 			surf.tris[i]=surf.tris[i]-vmin ' reassign vertex indices
 		Next
 		
@@ -888,7 +888,7 @@ Type TModel
 	Function b3dReadString:String(file:TStream Var)
 		Local t$=""
 		Repeat
-			Local ch=ReadByte(file)
+			Local ch:Int=ReadByte(file)
 			If ch=0 Return t$
 			t$=t$+Chr$(ch)
 		Forever
@@ -896,14 +896,14 @@ Type TModel
 	
 	Function ReadTag$(file:TStream)
 		
-		Local pos=StreamPos(file)
+		Local pos:Int=StreamPos(file)
 		
 		Local tag$=""
 		
-		For Local i = 1 To 4
+		For Local i:Int = 1 To 4
 			
 			If StreamPos(file) < StreamSize(file) Then
-				Local rb = ReadByte(file)
+				Local rb:Int = ReadByte(file)
 			
 				tag:String = tag:String + Chr:String(rb)
 			EndIf
@@ -916,7 +916,7 @@ Type TModel
 		
 	End Function
 	
-	Function NewTag(tag$)
+	Function NewTag:int(tag$)
 	
 		Select tag$
 		

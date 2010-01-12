@@ -11,9 +11,9 @@ Type TEntity
 	
 	Field name$
 	Field class$
-	Field hide=False
-	Field order,alpha_order#
-	Field auto_fade,fade_near#,fade_far#,fade_alpha#
+	Field hide:Int=False
+	Field order:Int,alpha_order#
+	Field auto_fade:Int,fade_near#,fade_far#,fade_alpha#
 
 	Field brush:TBrush=New TBrush
 	
@@ -21,22 +21,22 @@ Type TEntity
 	
 	Field radius_x#=1.0,radius_y#=1.0
 	Field box_x#=-1.0,box_y#=-1.0,box_z#=-1.0,box_w#=2.0,box_h#=2.0,box_d#=2.0
-	Field collision_type
-	Field no_collisions,collision:TCollisionImpact[]
-	Field pick_mode,obscurer
+	Field collision_type:Int
+	Field no_collisions:Int,collision:TCollisionImpact[]
+	Field pick_mode:Int,obscurer:Int
 
-	Field anim ' true if mesh contains anim data
-	Field anim_render ' true to render as anim mesh
-	Field anim_mode
+	Field anim:Int ' true if mesh contains anim data
+	Field anim_render:Int ' true to render as anim mesh
+	Field anim_mode:Int
 	Field anim_time#
 	Field anim_speed#
-	Field anim_seq
-	Field anim_trans
-	Field anim_dir=1 ' 1=forward, -1=backward
-	Field anim_seqs_first[1]
-	Field anim_seqs_last[1]
-	Field no_seqs=0
-	Field anim_update
+	Field anim_seq:Int
+	Field anim_trans:Int
+	Field anim_dir:Int=1 ' 1=forward, -1=backward
+	Field anim_seqs_first:Int[1]
+	Field anim_seqs_last:Int[1]
+	Field no_seqs:Int=0
+	Field anim_update:Int
 	
 	Global tformed_x#
 	Global tformed_y#
@@ -104,7 +104,7 @@ Type TEntity
 
 	' Entity movement
 
-	Method PositionEntity(x#,y#,z#,glob=False)
+	Method PositionEntity(x#,y#,z#,glob:Int=False)
 
 		px=x
 		py=y
@@ -188,7 +188,7 @@ Type TEntity
 
 	End Method
 
-	Method TranslateEntity(tx#,ty#,tz#,glob=False)
+	Method TranslateEntity(tx#,ty#,tz#,glob:Int=False)
 
 		'Local tx#=x
 		'Local ty#=y
@@ -233,7 +233,7 @@ Type TEntity
 
 	End Method
 	
-	Method ScaleEntity(x#,y#,z#,glob=False)
+	Method ScaleEntity(x#,y#,z#,glob:Int=False)
 
 		sx#=x#
 		sy#=y#
@@ -271,7 +271,7 @@ Type TEntity
 
 	End Method
 
-	Method RotateEntity(x#,y#,z#,glob=False)
+	Method RotateEntity(x#,y#,z#,glob:Int=False)
 
 		rx=-x#
 		ry=y#
@@ -301,7 +301,7 @@ Type TEntity
 
 	End Method
 
-	Method TurnEntity(x#,y#,z#,glob=False)
+	Method TurnEntity(x#,y#,z#,glob:Int=False)
 
 		Local tx#=-x
 		Local ty#=y
@@ -355,7 +355,7 @@ Type TEntity
 	' Entity animation
 
 	' load anim seq - copies anim data from mesh to self
-	Method LoadAnimSeq(file:String)
+	Method LoadAnimSeq:Int(file:String)
 	
 		If FileType(file)=0 Then Return 0
 	
@@ -428,7 +428,7 @@ Type TEntity
 	
 	End Method
 	
-	Method ExtractAnimSeq(first_frame,last_frame,seq=0)
+	Method ExtractAnimSeq:Int(first_frame:Int,last_frame:Int,seq:Int=0)
 	
 		no_seqs=no_seqs+1
 	
@@ -437,7 +437,7 @@ Type TEntity
 		anim_seqs_last=anim_seqs_last[..no_seqs+1]
 	
 		' if seq specifed then extract anim sequence from within existing sequnce
-		Local offset=0
+		Local offset:Int=0
 		If seq<>0
 			offset=anim_seqs_first[seq]
 		EndIf
@@ -449,7 +449,7 @@ Type TEntity
 	
 	End Method
 
-	Method Animate(mode=1,speed#=1.0,seq=0,trans=0)
+	Method Animate(mode:Int=1,speed#=1.0,seq:Int=0,trans:Int=0)
 	
 		anim_mode=mode
 		anim_speed#=speed#
@@ -466,7 +466,7 @@ Type TEntity
 	
 	' Updates:
 	' 30/01/06 - updated to make anim_time return wrapped value
-	Method SetAnimTime(time#,seq=0)
+	Method SetAnimTime(time#,seq:Int=0)
 	
 		anim_mode=-1 ' use a mode of -1 for setanimtime
 		anim_speed#=0
@@ -475,9 +475,9 @@ Type TEntity
 		anim_time#=time#
 		anim_update=False ' set anim_update to false so UpdateWorld won't animate entity
 
-		Local first=anim_seqs_first[anim_seq]
-		Local last=anim_seqs_last[anim_seq]
-		Local first2last=anim_seqs_last[anim_seq]-anim_seqs_first[anim_seq]
+		Local first:Int=anim_seqs_first[anim_seq]
+		Local last:Int=anim_seqs_last[anim_seq]
+		Local first2last:Int=anim_seqs_last[anim_seq]-anim_seqs_first[anim_seq]
 		
 		time#=time#+first ' offset time so that anim time of 0 will equal first frame of sequence
 		
@@ -498,13 +498,13 @@ Type TEntity
 
 	End Method
 	
-	Method AnimSeq()
+	Method AnimSeq:Int()
 	
 		Return anim_seq ' current anim sequence
 	
 	End Method
 	
-	Method AnimLength()
+	Method AnimLength:Int()
 	
 		Return anim_seqs_last[anim_seq]-anim_seqs_first[anim_seq] ' no of frames in anim sequence
 	
@@ -524,7 +524,7 @@ Type TEntity
 
 	End Method
 	
-	Method Animating()
+	Method Animating:Int()
 	
 		If anim_trans>0 Then Return True
 		If anim_mode>0 Then Return True
@@ -555,7 +555,7 @@ Type TEntity
 	
 	End Method
 
-	Method EntityTexture(texture:TTexture,frame=0,index=0)
+	Method EntityTexture(texture:TTexture,frame:Int=0,index:Int=0)
 
 		brush.tex[index]=texture
 		If index+1>brush.no_texs Then brush.no_texs=index+1
@@ -566,7 +566,7 @@ Type TEntity
 	
 	End Method
 	
-	Method EntityBlend(blend_no)
+	Method EntityBlend(blend_no:Int)
 	
 		brush.blend=blend_no
 		
@@ -583,7 +583,7 @@ Type TEntity
 		
 	End Method
 	
-	Method EntityFX(fx_no)
+	Method EntityFX(fx_no:Int)
 	
 		brush.fx=fx_no
 		
@@ -608,13 +608,13 @@ Type TEntity
 		brush.shine#=bru.shine#
 		brush.blend=bru.blend
 		brush.fx=bru.fx
-		For Local i=0 To 7
+		For Local i:Int=0 To 7
 			brush.tex[i]=bru.tex[i]
 		Next
 	
 	End Method
 	
-	Method EntityOrder(order_no)
+	Method EntityOrder(order_no:Int)
 	
 		order=order_no
 
@@ -637,7 +637,7 @@ Type TEntity
 
 	End Method
 
-	Method Hidden()
+	Method Hidden:Int()
 	
 		If hide=True Return True
 		
@@ -657,7 +657,7 @@ Type TEntity
 	
 	End Method
 	
-	Method EntityParent(parent_ent:TEntity,glob=True)
+	Method EntityParent(parent_ent:TEntity,glob:Int=True)
 
 		'' remove old parent
 
@@ -734,7 +734,7 @@ Type TEntity
 
 	' Entity state
 
-	Method EntityX#(glob=False)
+	Method EntityX#(glob:Int=False)
 	
 		If glob=False
 		
@@ -748,7 +748,7 @@ Type TEntity
 	
 	End Method
 	
-	Method EntityY#(glob=False)
+	Method EntityY#(glob:Int=False)
 	
 		If glob=False
 		
@@ -762,7 +762,7 @@ Type TEntity
 	
 	End Method
 	
-	Method EntityZ#(glob=False)
+	Method EntityZ#(glob:Int=False)
 	
 		If glob=False
 		
@@ -776,7 +776,7 @@ Type TEntity
 	
 	End Method
 
-	Method EntityPitch#(glob=False)
+	Method EntityPitch#(glob:Int=False)
 		
 		If glob=False
 		
@@ -795,7 +795,7 @@ Type TEntity
 			
 	End Method
 	
-	Method EntityYaw#(glob=False)
+	Method EntityYaw#(glob:Int=False)
 		
 		If glob=False
 		
@@ -813,7 +813,7 @@ Type TEntity
 			
 	End Method
 	
-	Method EntityRoll#(glob=False)
+	Method EntityRoll#(glob:Int=False)
 		
 		If glob=False
 		
@@ -843,9 +843,9 @@ Type TEntity
 		
 	End Method
 	
-	Method CountChildren()
+	Method CountChildren:Int()
 
-		Local no_children=0
+		Local no_children:Int=0
 		
 		For Local ent:TEntity=EachIn child_list
 
@@ -857,9 +857,9 @@ Type TEntity
 
 	End Method
 	
-	Method GetChild:TEntity(child_no)
+	Method GetChild:TEntity(child_no:Int)
 	
-		Local no_children=0
+		Local no_children:Int=0
 		
 		For Local ent:TEntity=EachIn child_list
 
@@ -905,7 +905,7 @@ Type TEntity
 	End Method
 	
 	' Calls function in TPick
-	Method EntityVisible(src_entity:TEntity,dest_entity:TEntity)
+	Method EntityVisible:Int(src_entity:TEntity,dest_entity:TEntity)
 	
 		Return TPick.EntityVisible(src_entity,dest_entity)
 	
@@ -1073,7 +1073,7 @@ Type TEntity
 	
 	End Function
 	
-	Method GetMatElement#(row,col)
+	Method GetMatElement#(row:Int,col:Int)
 	
 		Return mat.grid[row,col]
 	
@@ -1109,7 +1109,7 @@ Type TEntity
 	
 	End Method
 
-	Method EntityType(type_no,recursive=False)
+	Method EntityType(type_no:Int,recursive:Int=False)
 	
 		' add to collision entity list if new type no<>0 and not previously added
 		If collision_type=0 And type_no<>0
@@ -1144,7 +1144,7 @@ Type TEntity
 		
 	End Method
 	
-	Method EntityPickMode(no,obscure=True)
+	Method EntityPickMode(no:Int,obscure:Int=True)
 	
 		' add to pick entity list if new mode no<>0 and not previously added
 		If pick_mode=0 And no<>0
@@ -1161,16 +1161,16 @@ Type TEntity
 			
 	End Method
 	
-	Method EntityCollided:TEntity(type_no)
+	Method EntityCollided:TEntity(type_no:Int)
 
 		' if self is source entity and type_no is dest entity
-		For Local i=1 To CountCollisions()
+		For Local i:Int=1 To CountCollisions()
 			If CollisionEntity(i).collision_type=type_no Then Return CollisionEntity(i)
 		Next
 
 		' if self is dest entity and type_no is src entity
 		For Local ent:TEntity=EachIn TCollisionPair.ent_lists[type_no]
-			For Local i=1 To ent.CountCollisions()
+			For Local i:Int=1 To ent.CountCollisions()
 				If CollisionEntity(i)=Self Then Return ent		
 			Next
 		Next
@@ -1179,13 +1179,13 @@ Type TEntity
 
 	End Method
 	
-	Method CountCollisions()
+	Method CountCollisions:Int()
 	
 		Return no_collisions
 	
 	End Method
 	
-	Method CollisionX#(index)
+	Method CollisionX#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1195,7 +1195,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionY#(index)
+	Method CollisionY#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1205,7 +1205,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionZ#(index)
+	Method CollisionZ#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1215,7 +1215,7 @@ Type TEntity
 	
 	End Method
 
-	Method CollisionNX#(index)
+	Method CollisionNX#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1225,7 +1225,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionNY#(index)
+	Method CollisionNY#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1235,7 +1235,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionNZ#(index)
+	Method CollisionNZ#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1245,7 +1245,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionTime#(index)
+	Method CollisionTime#(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1255,7 +1255,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionEntity:TEntity(index)
+	Method CollisionEntity:TEntity(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1265,7 +1265,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionSurface:TSurface(index)
+	Method CollisionSurface:TSurface(index:Int)
 	
 		If index>0 And index<=no_collisions
 
@@ -1275,7 +1275,7 @@ Type TEntity
 	
 	End Method
 	
-	Method CollisionTriangle(index)
+	Method CollisionTriangle:Int(index:Int)
 	
 		If index>0 And index<=no_collisions
 		
@@ -1285,7 +1285,7 @@ Type TEntity
 	
 	End Method
 	
-	Method GetEntityType()
+	Method GetEntityType:Int()
 
 		Return collision_type
 
@@ -1300,7 +1300,7 @@ Type TEntity
 	
 	End Method
 	
-	Method EntityScaleX#(glob=False)
+	Method EntityScaleX#(glob:Int=False)
 	
 		If glob=True
 
@@ -1328,7 +1328,7 @@ Type TEntity
 		
 	End Method
 	
-	Method EntityScaleY#(glob=False)
+	Method EntityScaleY#(glob:Int=False)
 	
 		If glob=True
 
@@ -1356,7 +1356,7 @@ Type TEntity
 		
 	End Method
 	
-	Method EntityScaleZ#(glob=False)
+	Method EntityScaleZ#(glob:Int=False)
 	
 		If glob=True
 
@@ -1483,7 +1483,7 @@ Type TEntity
 
 	End Method
 	
-	Function CountAllChildren(ent:TEntity,no_children=0)
+	Function CountAllChildren:int(ent:TEntity,no_children:Int=0)
 		
 		Local ent2:TEntity
 	
@@ -1499,7 +1499,7 @@ Type TEntity
 
 	End Function
 	
-	Method GetChildFromAll:TEntity(child_no,no_children Var,ent:TEntity=Null)
+	Method GetChildFromAll:TEntity(child_no:Int,no_children:Int Var,ent:TEntity=Null)
 
 		If ent=Null Then ent=Self
 		
@@ -1525,7 +1525,7 @@ Type TEntity
 	
 	' Internal - not recommended for general use
 
-	Method UpdateMat(load_identity=False)
+	Method UpdateMat(load_identity:Int=False)
 
 		If load_identity=True
 			mat.LoadIdentity()
