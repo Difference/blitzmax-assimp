@@ -2,7 +2,7 @@ Type TVector
 
 	Field x#,y#,z#
 	
-	Const EPSILON=.0001
+	Const EPSILON:Float=.0001
 
 	Method New()
 	
@@ -139,7 +139,7 @@ Type TVector
 
 	End Method
 	
-	Method Compare( with:Object )
+	Method Compare:int( with:Object )
 		Local q:TVector=TVector(with)
 		If x-q.x>EPSILON Return 1
 		If q.x-x>EPSILON Return -1

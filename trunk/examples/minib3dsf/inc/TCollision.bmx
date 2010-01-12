@@ -3,10 +3,10 @@ Type TCollisionPair
 	Global list:TList=New TList
 	Global ent_lists:TList[MAX_TYPES]
 
-	Field src_type
-	Field des_type
-	Field col_method=0
-	Field response=0
+	Field src_type:Int
+	Field des_type:Int
+	Field col_method:Int=0
+	Field response:Int=0
 	
 	Method New()
 	
@@ -49,11 +49,11 @@ Type TCollisionImpact
 	Field time#
 	Field ent:TEntity
 	Field surf:TSurface
-	Field tri
+	Field tri:Int
 
 End Type
 
-Const MAX_TYPES=100
+Const MAX_TYPES:Int=100
 
 'collision methods
 Const COLLISION_METHOD_SPHERE:Int=1
@@ -83,7 +83,7 @@ Function UpdateCollisions()
 	Global c_tform:Byte Ptr=C_CreateTFormObject(c_mat,c_vec_v)
 
 	' loop through collision setup list, containing pairs of src entities and des entities to be check for collisions
-	For Local i=0 Until MAX_TYPES
+	For Local i:Int=0 Until MAX_TYPES
 	
 		' if no entities exist of src_type then do not check for collisions
 		If TCollisionPair.ent_lists[i]=Null Then Continue
@@ -105,10 +105,10 @@ Function UpdateCollisions()
 
 			Local c_coll:Byte Ptr=Null
 
-			Local response
+			Local response:Int
 			Repeat
 
-				Local hit=False
+				Local hit:Int=False
 	
 				c_coll=C_CreateCollisionObject()
 
@@ -162,11 +162,11 @@ Function UpdateCollisions()
 				Next
 				
 				If ent2_hit<>Null
-					Local x=C_CollisionResponse(c_col_info,c_coll,response) 'SMALLFIXES Collision fix from http://www.blitzmax.com/Community/posts.php?topic=87446			
+					Local x:Int=C_CollisionResponse(c_col_info,c_coll,response) 'SMALLFIXES Collision fix from http://www.blitzmax.com/Community/posts.php?topic=87446			
 
 					ent.no_collisions=ent.no_collisions+1
 
-					Local i=ent.no_collisions-1
+					Local i:Int=ent.no_collisions-1
 					ent.collision=ent.collision[..i+1]			
 					ent.collision[i]=New TCollisionImpact
 					ent.collision[i].x#=C_CollisionX()
@@ -210,7 +210,7 @@ Function UpdateCollisions()
 
 			C_DeleteCollisionObject(c_coll)
 
-			Local hits=C_CollisionFinal(c_col_info)
+			Local hits:Int=C_CollisionFinal(c_col_info)
 			
 			If hits
 				
@@ -235,7 +235,7 @@ Function UpdateCollisions()
 End Function
 
 ' perform quick check to see whether it is possible that ent and ent 2 are intersecting
-Function QuickCheck(ent:TEntity,ent2:TEntity)
+Function QuickCheck:int(ent:TEntity,ent2:TEntity)
 
 	' check to see if src ent has moved since last update - if not, no intersection
 	If ent.old_x=ent.EntityX(True) And ent.old_y=ent.EntityY(True) And ent.old_z=ent.EntityZ(True)

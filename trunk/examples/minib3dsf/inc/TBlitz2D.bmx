@@ -1,6 +1,6 @@
 Type TBlitz2D
 
-	Function Text(x,y,text$)
+	Function Text(x:Int,y:Int,text$)
 	
 		' set active texture to texture 0 so gldrawtext will work correctly
 		If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing

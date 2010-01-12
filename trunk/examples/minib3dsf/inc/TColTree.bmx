@@ -1,7 +1,7 @@
 Type TColTree
 
 	Field c_col_tree:Byte Ptr=Null
-	Field reset_col_tree=False
+	Field reset_col_tree:Int=False
 
 	Method New()
 	
@@ -43,34 +43,34 @@ Type TColTree
 			Local total_verts:Int=0
 			Local mesh_info:Byte Ptr=C_NewMeshInfo()
 		
-			For Local s=1 To mesh.CountSurfaces()
+			For Local s:Int=1 To mesh.CountSurfaces()
 			
 				Local surf:TSurface=mesh.GetSurface(s)
 				
-				Local no_tris=surf.no_tris
-				Local no_verts=surf.no_verts
+				Local no_tris:Int=surf.no_tris
+				Local no_verts:Int=surf.no_verts
 				Local tris:Short[]=surf.tris[..]
 				Local verts:Float[]=surf.vert_coords[..]
 										
 				If no_tris<>0 And no_verts<>0
 				
 					' inc vert index
-					For Local i=0 To no_tris-1
+					For Local i:Int=0 To no_tris-1
 						tris[i*3+0]:+total_verts
 						tris[i*3+1]:+total_verts
 						tris[i*3+2]:+total_verts
 					Next
 				
 					' reverse vert order
-					For Local i=0 To no_tris-1
-						Local t_v0=tris[i*3+0]
-						Local t_v2=tris[i*3+2]
+					For Local i:Int=0 To no_tris-1
+						Local t_v0:Int=tris[i*3+0]
+						Local t_v2:Int=tris[i*3+2]
 						tris[i*3+0]=t_v2
 						tris[i*3+2]=t_v0
 					Next
 					
 					' negate z vert coords
-					For Local i=0 To no_verts-1
+					For Local i:Int=0 To no_verts-1
 						verts[i*3+2]=-verts[i*3+2]
 					Next
 		

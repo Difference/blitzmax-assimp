@@ -69,7 +69,7 @@ End Function
 	
 ' a=box a
 ' b=box b
-Function BoxBoxIntersection(ax1:Float,ay1:Float,az1:Float,ax2:Float,ay2:Float,az2:Float,..
+Function BoxBoxIntersection:Int(ax1:Float,ay1:Float,az1:Float,ax2:Float,ay2:Float,az2:Float,..
 							bx1:Float,by1:Float,bz1:Float,bx2:Float,by2:Float,bz2:Float)
 
 	If ax2<bx1 Or ax1>bx2 Return 0
@@ -80,7 +80,7 @@ Function BoxBoxIntersection(ax1:Float,ay1:Float,az1:Float,ax2:Float,ay2:Float,az
 
 End Function
 	
-Function BoxSphereIntersection(	x1:Float,y1:Float,z1:Float,x2:Float,y2:Float,z2:Float,..
+Function BoxSphereIntersection:int(	x1:Float,y1:Float,z1:Float,x2:Float,y2:Float,z2:Float,..
 								sx:Float,sy:Float,sz:Float,sr:Float)
 
 	Local dmin#=0

@@ -47,8 +47,8 @@ Type TQuaternion
 		mat.grid[2,2]=1-2*(xx+yy)
 		mat.grid[3,3]=1
 	
-		For Local iy=0 To 3
-			For Local ix=0 To 3
+		For Local iy:Int=0 To 3
+			For Local ix:Int=0 To 3
 				xx#=mat.grid[ix,iy]
 				If xx#<0.0001 And xx#>-0.0001 Then xx#=0
 				mat.grid[ix,iy]=xx#
@@ -88,8 +88,8 @@ Type TQuaternion
 		mat.grid[2,2]=1-2*(xx+yy)
 		mat.grid[3,3]=1
 	
-		For Local iy=0 To 3
-			For Local ix=0 To 3
+		For Local iy:Int=0 To 3
+			For Local ix:Int=0 To 3
 				xx#=mat.grid[ix,iy]
 				If xx#<0.0001 And xx#>-0.0001 Then xx#=0
 				mat.grid[ix,iy]=xx#
@@ -106,7 +106,7 @@ Type TQuaternion
 	
 	End Function
 			
-	Function Slerp(Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx# Var,Cy# Var,Cz# Var,Cw# Var,t#)
+	Function Slerp:int(Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx# Var,Cy# Var,Cz# Var,Cw# Var,t#)
 	
 		If Abs(ax-bx)<0.001 And Abs(ay-by)<0.001 And Abs(az-bz)<0.001 And Abs(aw-bw)<0.001
 			cx#=ax

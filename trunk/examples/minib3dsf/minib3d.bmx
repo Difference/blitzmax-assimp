@@ -7,8 +7,8 @@ End Rem
 'ModuleInfo "License: You are free to use this code as you please"
 'ModuleInfo "Please see readme.txt for more details"
 
-Strict
-
+SuperStrict
+'Strict
 Import BRL.GLMax2D
 Import BRL.GLGraphics
 Import PUB.Glew
@@ -124,8 +124,8 @@ Extern
 					
 End Extern
 
-Const USE_MAX2D=True	' true to enable max2d/minib3d integration
-Const USE_VBO=True	' true to use vbos if supported by hardware
-Const VBO_MIN_TRIS=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
-Const LOG_NEW=False	' true to write to debuglog when new minib3d object created
-Const LOG_DEL=False	' true to write to debuglog when minib3d object destroyed
+Const USE_MAX2D:Int=True	' true to enable max2d/minib3d integration
+Const USE_VBO:Int=True	' true to use vbos if supported by hardware
+Const VBO_MIN_TRIS:Int=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
+Const LOG_NEW:Int=False	' true to write to debuglog when new minib3d object created
+Const LOG_DEL:Int=False	' true to write to debuglog when minib3d object destroyed

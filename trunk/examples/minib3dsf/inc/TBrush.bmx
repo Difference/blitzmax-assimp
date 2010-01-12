@@ -1,11 +1,11 @@
 Type TBrush
 
-	Field no_texs
+	Field no_texs:Int
 	Field name$
 	Field red#=1.0,green#=1.0,blue#=1.0,alpha#=1.0
 	Field shine#
-	Field blend,fx
-	Field tex_frame
+	Field blend:Int,fx:Int
+	Field tex_frame:Int
 	Field tex:TTexture[8]
 
 	Method New()
@@ -66,7 +66,7 @@ Type TBrush
 		
 	End Function
 	
-	Function LoadBrush:TBrush(file$,flags=1,u_scale#=1.0,v_scale#=1.0)
+	Function LoadBrush:TBrush(file$,flags:Int=1,u_scale#=1.0,v_scale#=1.0)
 	
 		Local brush:TBrush=New TBrush
 		brush.tex[0]=TTexture.LoadTexture:TTexture(file$,flags)
@@ -98,7 +98,7 @@ Type TBrush
 	
 	End Method
 	
-	Method BrushTexture(texture:TTexture,frame=0,index=0)
+	Method BrushTexture(texture:TTexture,frame:Int=0,index:Int=0)
 	
 		tex[index]=texture
 		If index+1>no_texs Then no_texs=index+1
@@ -109,13 +109,13 @@ Type TBrush
 	
 	End Method
 	
-	Method BrushBlend(blend_no)
+	Method BrushBlend(blend_no:Int)
 	
 		blend=blend_no
 	
 	End Method
 	
-	Method BrushFX(fx_no)
+	Method BrushFX(fx_no:Int)
 	
 		fx=fx_no
 	
@@ -133,7 +133,7 @@ Type TBrush
 
 	End Function
 	
-	Function CompareBrushes(brush1:TBrush,brush2:TBrush)
+	Function CompareBrushes:int(brush1:TBrush,brush2:TBrush)
 	
 		' returns true if specified brush1 has same properties as brush2
 
@@ -148,7 +148,7 @@ Type TBrush
 			If brush1.shine#<>brush2.shine# Then Return False
 			If brush1.blend<>brush2.blend Then Return False
 			If brush1.fx<>brush2.fx Then Return False
-			For Local i=0 To 7
+			For Local i:Int=0 To 7
 				If brush1.tex[i]=Null And brush2.tex[i]<>Null Then Return False
 				If brush1.tex[i]<>Null And brush2.tex[i]=Null Then Return False
 				If brush1.tex[i]<>Null And brush2.tex[i]<>Null

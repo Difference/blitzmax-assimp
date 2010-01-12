@@ -1,15 +1,15 @@
 Type TLight Extends TEntity
 
-	Global light_no=0
-	Global no_lights=0
-	Global max_lights=8
+	Global light_no:Int=0
+	Global no_lights:Int=0
+	Global max_lights:Int=8
 	
 	' enter gl consts here for each available light
-	Global gl_light[]=[GL_LIGHT0,GL_LIGHT1,GL_LIGHT2,GL_LIGHT3,GL_LIGHT4,GL_LIGHT5,GL_LIGHT6,GL_LIGHT7]
+	Global gl_light:Int[]=[GL_LIGHT0,GL_LIGHT1,GL_LIGHT2,GL_LIGHT3,GL_LIGHT4,GL_LIGHT5,GL_LIGHT6,GL_LIGHT7]
 
 	Global light_list:TList=CreateList()
 
-	Field light_type=0
+	Field light_type:Int=0
 	Field range#=1.0/1000.0
 	Field red#=1.0,green#=1.0,blue#=1.0
 	Field inner_ang#=0.0,outer_ang#=45.0
@@ -126,13 +126,13 @@ Type TLight Extends TEntity
 		
 	End Method
 	
-	Function CreateLight:TLight(l_type=1,parent_ent:TEntity=Null)
+	Function CreateLight:TLight(l_type:Int=1,parent_ent:TEntity=Null)
 
 		Local light:TLight=New TLight
 		light.light_type=l_type
 		light.class$="Light"
 		
-		If no_lights=>max_lights Then Return ' no more lights available, return and gc will collect create light
+		If no_lights=>max_lights Then Return Null' no more lights available, return and gc will collect create light
 		
 		' no of lights increased, enable additional gl light
 		no_lights=no_lights+1

@@ -2,23 +2,23 @@ Type TCamera Extends TEntity
 
 	Global cam_list:TList=CreateList()
 
-	Field vx,vy,vwidth,vheight
+	Field vx:Int,vy:Int,vwidth:Int,vheight:Int
 	Field cls_r#=0.0,cls_g#=0.0,cls_b#=0.0
-	Field cls_color=True,cls_zbuffer=True
+	Field cls_color:Int=True,cls_zbuffer:Int=True
 	
 	Field range_near#=1.0,range_far#=1000.0
 	Field zoom#=1.0
 	
-	Field proj_mode=1
+	Field proj_mode:Int=1
 	
-	Field fog_mode
+	Field fog_mode:Int
 	Field fog_r#,fog_g#,fog_b#
 	Field fog_range_near#=1.0,fog_range_far#=1000.0
 	
 	' used by CameraProject
-	Field mod_mat![16]
-	Field proj_mat![16]
-    Field viewport[4]
+	Field mod_mat:Double[16]
+	Field proj_mat:Double[16]
+    Field viewport:Int[4]
 	Global projected_x#
 	Global projected_y#
 	Global projected_z#
@@ -167,7 +167,7 @@ Type TCamera Extends TEntity
 
 	End Function
 
-	Method CameraViewport(x,y,w,h)
+	Method CameraViewport(x:Int,y:Int,w:Int,h:Int)
 
 		vx=x
 		vy=TGlobal.height-h-y
@@ -184,7 +184,7 @@ Type TCamera Extends TEntity
 
 	End Method
 	
-	Method CameraClsMode(color,zbuffer)
+	Method CameraClsMode(color:Int,zbuffer:Int)
 
 		cls_color=color
 		cls_zbuffer=zbuffer
@@ -204,7 +204,7 @@ Type TCamera Extends TEntity
 
 	End Method
 	
-	Method CameraProjMode(mode=1)
+	Method CameraProjMode(mode:Int=1)
 	
 		proj_mode=mode
 		
@@ -217,7 +217,7 @@ Type TCamera Extends TEntity
 	
 	End Method
 	
-	Method CameraFogMode(mode)
+	Method CameraFogMode(mode:Int)
 
 		fog_mode=mode
 
@@ -439,7 +439,7 @@ Type TCamera Extends TEntity
 		' is sphere in frustum
 
 		Local d#
-		For Local p=0 To 5
+		For Local p:Int=0 To 5
 			d# = frustum[p,0] * x + frustum[p,1] * y + frustum[p,2] * -z + frustum[p,3]
 			If d <= -radius Then Return 0
 		Next

@@ -2,11 +2,11 @@ Type TMesh Extends TEntity
 	
 	Field min_x#,min_y#,min_z#,max_x#,max_y#,max_z#
 
-	Field no_surfs=0
+	Field no_surfs:Int=0
 	Field surf_list:TList=CreateList()
 	Field anim_surf_list:TList=CreateList() ' only used if mesh contains anim info, only contains vertex coords array, initialised upon loading b3d
 	
-	Field no_bones=0
+	Field no_bones:Int=0
 	Field bones:TBone[]
 	
 	Field mat_sp:TMatrix=New TMatrix ' mat_sp used in TMesh's Update to provide necessary additional transform matrix for sprites
@@ -14,7 +14,7 @@ Type TMesh Extends TEntity
 	Field col_tree:TColTree=New TColTree
 
 	' reset flags - these are set when mesh shape is changed by various commands in TMesh
-	Field reset_bounds=True
+	Field reset_bounds:Int=True
 	'Field reset_col_tree=True
 
 	Method New()
@@ -169,7 +169,7 @@ Type TMesh Extends TEntity
 	
 		mesh.reset_bounds=reset_bounds
 
-		Local no_bones=0
+		Local no_bones:Int=0
 		CopyBonesList(mesh,mesh.bones,no_bones)
 
 		Return mesh
@@ -385,7 +385,7 @@ Type TMesh Extends TEntity
 	End Function
 	
 	' Function by Coyote
-	Function CreateSphere:TMesh(segments=8,parent_ent:TEntity=Null)
+	Function CreateSphere:TMesh(segments:Int=8,parent_ent:TEntity=Null)
 
 		If segments<2 Or segments>100 Then Return Null
 		
@@ -401,18 +401,18 @@ Type TMesh Extends TEntity
 	
 		If segments=2 ' diamond shape - no center strips
 		
-			For Local i=1 To (segments*2)
-				Local np=thissurf.AddVertex(0.0,height,0.0,upos#-(udiv#/2.0),0)'northpole
-				Local sp=thissurf.AddVertex(0.0,-height,0.0,upos#-(udiv#/2.0),1)'southpole
+			For Local i:Int=1 To (segments*2)
+				Local np:Int=thissurf.AddVertex(0.0,height,0.0,upos#-(udiv#/2.0),0)'northpole
+				Local sp:Int=thissurf.AddVertex(0.0,-height,0.0,upos#-(udiv#/2.0),1)'southpole
 				Local XPos#=-Cos(RotAngle#)
 				Local ZPos#=Sin(RotAngle#)
-				Local v0=thissurf.AddVertex(XPos#,0,ZPos#,upos#,0.5)
+				Local v0:Int=thissurf.AddVertex(XPos#,0,ZPos#,upos#,0.5)
 				RotAngle#=RotAngle#+div#
 				If RotAngle#>=360.0 Then RotAngle#=RotAngle#-360.0
 				XPos#=-Cos(RotAngle#)
 				ZPos#=Sin(RotAngle#)
 				upos#=upos#-udiv#
-				Local v1=thissurf.AddVertex(XPos#,0,ZPos#,upos#,0.5)
+				Local v1:Int=thissurf.AddVertex(XPos#,0,ZPos#,upos#,0.5)
 				thissurf.AddTriangle(np,v0,v1)
 				thissurf.AddTriangle(v1,v0,sp)	
 			Next
@@ -420,18 +420,18 @@ Type TMesh Extends TEntity
 		Else ' have center strips now
 		
 			' poles first
-			For Local i=1 To (segments*2)
+			For Local i:Int=1 To (segments*2)
 			
-				Local np=thissurf.AddVertex(0.0,height,0.0,upos#-(udiv#/2.0),0)'northpole
-				Local sp=thissurf.AddVertex(0.0,-height,0.0,upos#-(udiv#/2.0),1)'southpole
+				Local np:Int=thissurf.AddVertex(0.0,height,0.0,upos#-(udiv#/2.0),0)'northpole
+				Local sp:Int=thissurf.AddVertex(0.0,-height,0.0,upos#-(udiv#/2.0),1)'southpole
 				
 				Local YPos#=Cos(div#)
 				
 				Local XPos#=-Cos(RotAngle#)*(Sin(div#))
 				Local ZPos#=Sin(RotAngle#)*(Sin(div#))
 				
-				Local v0t=thissurf.AddVertex(XPos#,YPos#,ZPos#,upos#,vdiv#)
-				Local v0b=thissurf.AddVertex(XPos#,-YPos#,ZPos#,upos#,1-vdiv#)
+				Local v0t:Int=thissurf.AddVertex(XPos#,YPos#,ZPos#,upos#,vdiv#)
+				Local v0b:Int=thissurf.AddVertex(XPos#,-YPos#,ZPos#,upos#,1-vdiv#)
 				
 				RotAngle#=RotAngle#+div#
 				
@@ -440,8 +440,8 @@ Type TMesh Extends TEntity
 				
 				upos#=upos#-udiv#
 	
-				Local v1t=thissurf.AddVertex(XPos#,YPos#,ZPos#,upos#,vdiv#)
-				Local v1b=thissurf.AddVertex(XPos#,-YPos#,ZPos#,upos#,1-vdiv#)
+				Local v1t:Int=thissurf.AddVertex(XPos#,YPos#,ZPos#,upos#,vdiv#)
+				Local v1b:Int=thissurf.AddVertex(XPos#,-YPos#,ZPos#,upos#,1-vdiv#)
 				
 				thissurf.AddTriangle(np,v0t,v1t)
 				thissurf.AddTriangle(v1b,v0b,sp)	
@@ -452,13 +452,13 @@ Type TMesh Extends TEntity
 	
 			upos#=1.0
 			RotAngle#=90
-			For Local i=1 To (segments*2)
+			For Local i:Int=1 To (segments*2)
 			
 				Local mult#=1
 				Local YPos#=Cos(div#*(mult#))
 				Local YPos2#=Cos(div#*(mult#+1.0))
 				Local Thisvdiv#=vdiv#
-				For Local j=1 To (segments-2)
+				For Local j:Int=1 To (segments-2)
 	
 					
 					Local XPos#=-Cos(RotAngle#)*(Sin(div#*(mult#)))
@@ -467,8 +467,8 @@ Type TMesh Extends TEntity
 					Local XPos2#=-Cos(RotAngle#)*(Sin(div#*(mult#+1.0)))
 					Local ZPos2#=Sin(RotAngle#)*(Sin(div#*(mult#+1.0)))
 								
-					Local v0t=thissurf.AddVertex(XPos#,YPos#,ZPos#,upos#,Thisvdiv#)
-					Local v0b=thissurf.AddVertex(XPos2#,YPos2#,ZPos2#,upos#,Thisvdiv#+vdiv#)
+					Local v0t:Int=thissurf.AddVertex(XPos#,YPos#,ZPos#,upos#,Thisvdiv#)
+					Local v0b:Int=thissurf.AddVertex(XPos2#,YPos2#,ZPos2#,upos#,Thisvdiv#+vdiv#)
 				
 					' 2nd tex coord set
 					thissurf.VertexTexCoords(v0t,upos#,Thisvdiv#,0.0,1)
@@ -484,8 +484,8 @@ Type TMesh Extends TEntity
 				
 					Local temp_upos#=upos#-udiv#
 	
-					Local v1t=thissurf.AddVertex(XPos#,YPos#,ZPos#,temp_upos#,Thisvdiv#)
-					Local v1b=thissurf.AddVertex(XPos2#,YPos2#,ZPos2#,temp_upos#,Thisvdiv#+vdiv#)
+					Local v1t:Int=thissurf.AddVertex(XPos#,YPos#,ZPos#,temp_upos#,Thisvdiv#)
+					Local v1b:Int=thissurf.AddVertex(XPos2#,YPos2#,ZPos2#,temp_upos#,Thisvdiv#+vdiv#)
 					
 					' 2nd tex coord set
 					thissurf.VertexTexCoords(v1t,temp_upos#,Thisvdiv#,0.0,1)
@@ -512,13 +512,13 @@ Type TMesh Extends TEntity
 	End Function
 
 	' Function by Coyote
-	Function CreateCylinder:TMesh(verticalsegments=8,solid=True,parent_ent:TEntity=Null)
+	Function CreateCylinder:TMesh(verticalsegments:Int=8,solid:Int=True,parent_ent:TEntity=Null)
 	
-		Local ringsegments=0 ' default?
+		Local ringsegments:Int=0 ' default?
 	
-		Local tr,tl,br,bl' 		side of cylinder
-		Local ts0,ts1,newts' 	top side vertexs
-		Local bs0,bs1,newbs' 	bottom side vertexs
+		Local tr:Int,tl:Int,br:Int,bl:Int' 		side of cylinder
+		Local ts0:Int,ts1:Int,newts:Int' 	top side vertexs
+		Local bs0:Int,bs1:Int,newbs:Int' 	bottom side vertexs
 		If verticalsegments<3 Or verticalsegments>100 Then Return Null
 		If ringsegments<0 Or ringsegments>100 Then Return Null
 		
@@ -541,8 +541,8 @@ Type TMesh Extends TEntity
 	
 		' re-diminsion arrays to hold needed memory.
 		' this is used just for helping to build the ring segments...
-		Local tRing[verticalsegments+1]
-		Local bRing[verticalsegments+1]
+		Local tRing:Int[verticalsegments+1]
+		Local bRing:Int[verticalsegments+1]
 		
 		' render end caps if solid
 		If solid=True
@@ -568,7 +568,7 @@ Type TMesh Extends TEntity
 			thissidesurf.VertexTexCoords(ts1,XPos#/2.0+0.5,ZPos#/2.0+0.5,0.0,1)
 			thissidesurf.VertexTexCoords(bs1,XPos#/2.0+0.5,ZPos#/2.0+0.5,0.0,1)
 			
-			For Local i=1 To (verticalsegments-2)
+			For Local i:Int=1 To (verticalsegments-2)
 				SideRotAngle#=SideRotAngle#+div#
 	
 				XPos#=-Cos(SideRotAngle#)
@@ -603,7 +603,7 @@ Type TMesh Extends TEntity
 		Local thisVPos#=0
 		tRing[0]=thissurf.AddVertex(XPos#,thisHeight,ZPos#,thisUPos#,thisVPos#)		
 		thissurf.VertexTexCoords(tRing[0],thisUPos#,thisVPos#,0.0,1) ' 2nd tex coord set
-		For Local i=0 To (verticalsegments-1)
+		For Local i:Int=0 To (verticalsegments-1)
 			SideRotAngle#=SideRotAngle#+div#
 			XPos#=-Cos(SideRotAngle#)
 			ZPos#=Sin(SideRotAngle#)
@@ -612,10 +612,10 @@ Type TMesh Extends TEntity
 			thissurf.VertexTexCoords(tRing[i+1],thisUPos#,thisVPos#,0.0,1) ' 2nd tex coord set
 		Next	
 		
-		For Local ring=0 To ringsegments
+		For Local ring:Int=0 To ringsegments
 	
 			' decrement vertical segment
-			Local thisHeight=thisHeight-ringSegmentHeight#
+			Local thisHeight:Int=thisHeight-ringSegmentHeight#
 			
 			' now bottom ring
 			SideRotAngle#=90
@@ -625,7 +625,7 @@ Type TMesh Extends TEntity
 			thisVPos#=thisVPos#+vdiv#
 			bRing[0]=thissurf.AddVertex(XPos#,thisHeight,ZPos#,thisUPos#,thisVPos#)
 			thissurf.VertexTexCoords(bRing[0],thisUPos#,thisVPos#,0.0,1) ' 2nd tex coord set
-			For Local i=0 To (verticalsegments-1)
+			For Local i:Int=0 To (verticalsegments-1)
 				SideRotAngle#=SideRotAngle#+div#
 				XPos#=-Cos(SideRotAngle#)
 				ZPos#=Sin(SideRotAngle#)
@@ -635,7 +635,7 @@ Type TMesh Extends TEntity
 			Next
 			
 			' Fill in ring segment sides with triangles
-			For Local v=1 To (verticalsegments)
+			For Local v:Int=1 To (verticalsegments)
 				tl=tRing[v]
 				tr=tRing[v-1]
 				bl=bRing[v]
@@ -646,7 +646,7 @@ Type TMesh Extends TEntity
 			Next
 			
 			' make bottom ring segmentthe top ring segment for the next loop.
-			For Local v=0 To (verticalsegments)
+			For Local v:Int=0 To (verticalsegments)
 				tRing[v]=bRing[v]
 			Next		
 		Next
@@ -657,10 +657,10 @@ Type TMesh Extends TEntity
 	End Function
 	
 	' Function by Coyote
-	Function CreateCone:TMesh(segments=8,solid=True,parent_ent:TEntity=Null)
+	Function CreateCone:TMesh(segments:Int=8,solid:Int=True,parent_ent:TEntity=Null)
 	
-		Local top,br,bl' 		side of cone
-		Local bs0,bs1,newbs' 	bottom side vertices
+		Local top:Int,br:Int,bl:Int' 		side of cone
+		Local bs0:Int,bs1:Int,newbs:Int' 	bottom side vertices
 		
 		If segments<3 Or segments>100 Then Return Null
 		
@@ -705,7 +705,7 @@ Type TMesh Extends TEntity
 		thissurf.AddTriangle(bl,top,br)
 	
 		' rest of sides
-		For Local i=1 To (segments-1)
+		For Local i:Int=1 To (segments-1)
 			br=bl
 			upos#=upos#-udiv#
 			top=thissurf.AddVertex(0.0,height,0.0,upos#-(udiv#/2.0),0)
@@ -750,28 +750,28 @@ Type TMesh Extends TEntity
 
 		'Local cs2=mesh2.CountSurfaces()
 	
-		For Local s1=1 To CountSurfaces()
+		For Local s1:Int=1 To CountSurfaces()
 			
 			Local surf1:TSurface=GetSurface(s1)
 
 			' if surface is empty, don't add it
 			If surf1.CountVertices()=0 And surf1.CountTriangles()=0 Continue
 				
-			Local new_surf=True
+			Local new_surf:Int=True
 			
-			For Local s2=1 To mesh2.CountSurfaces()	
+			For Local s2:Int=1 To mesh2.CountSurfaces()	
 			'For Local s2=1 To cs2
 			
 				Local surf2:TSurface=mesh2.GetSurface(s2)
 				
-				Local no_verts2=surf2.CountVertices()
+				Local no_verts2:Int=surf2.CountVertices()
 	
 				' if brushes properties are the same, add surf1 verts and tris to surf2
 				If TBrush.CompareBrushes(surf1.brush,surf2.brush)=True
 				
 					' add vertices
 				
-					For Local v=0 To surf1.CountVertices()-1
+					For Local v:Int=0 To surf1.CountVertices()-1
 		
 						Local vx#=surf1.VertexX#(v)
 						Local vy#=surf1.VertexY#(v)
@@ -790,7 +790,7 @@ Type TMesh Extends TEntity
 						Local vv1#=surf1.VertexV#(v,1)
 						Local vw1#=surf1.VertexW#(v,1)
 						
-						Local v2=surf2.AddVertex(vx#,vy#,vz#)
+						Local v2:Int=surf2.AddVertex(vx#,vy#,vz#)
 						surf2.VertexColor(v2,vr#,vg#,vb#,va#)
 						surf2.VertexNormal(v2,vnx#,vny#,vnz#)
 						surf2.VertexTexCoords(v2,vu0#,vv0#,vw0#,0)
@@ -800,11 +800,11 @@ Type TMesh Extends TEntity
 		
 					' add triangles
 				
-					For Local t=0 To surf1.CountTriangles()-1
+					For Local t:Int=0 To surf1.CountTriangles()-1
 		
-						Local v0=surf1.TriangleVertex(t,0)+no_verts2
-						Local v1=surf1.TriangleVertex(t,1)+no_verts2
-						Local v2=surf1.TriangleVertex(t,2)+no_verts2
+						Local v0:Int=surf1.TriangleVertex(t,0)+no_verts2
+						Local v1:Int=surf1.TriangleVertex(t,1)+no_verts2
+						Local v2:Int=surf1.TriangleVertex(t,2)+no_verts2
 						
 						surf2.AddTriangle(v0,v1,v2)
 
@@ -828,7 +828,7 @@ Type TMesh Extends TEntity
 				
 				' add vertices
 			
-				For Local v=0 To surf1.CountVertices()-1
+				For Local v:Int=0 To surf1.CountVertices()-1
 	
 					Local vx#=surf1.VertexX#(v)
 					Local vy#=surf1.VertexY#(v)
@@ -847,7 +847,7 @@ Type TMesh Extends TEntity
 					Local vv1#=surf1.VertexV#(v,1)
 					Local vw1#=surf1.VertexW#(v,1)
 									
-					Local v2=surf.AddVertex(vx#,vy#,vz#)
+					Local v2:Int=surf.AddVertex(vx#,vy#,vz#)
 					surf.VertexColor(v2,vr#,vg#,vb#,va#)
 					surf.VertexNormal(v2,vnx#,vny#,vnz#)
 					surf.VertexTexCoords(v2,vu0#,vv0#,vw0#,0)
@@ -857,11 +857,11 @@ Type TMesh Extends TEntity
 	
 				' add triangles
 			
-				For Local t=0 To surf1.CountTriangles()-1
+				For Local t:Int=0 To surf1.CountTriangles()-1
 	
-					Local v0=surf1.TriangleVertex(t,0)
-					Local v1=surf1.TriangleVertex(t,1)
-					Local v2=surf1.TriangleVertex(t,2)
+					Local v0:Int=surf1.TriangleVertex(t,0)
+					Local v1:Int=surf1.TriangleVertex(t,1)
+					Local v2:Int=surf1.TriangleVertex(t,2)
 					
 					surf.AddTriangle(v0,v1,v2)
 
@@ -893,15 +893,15 @@ Type TMesh Extends TEntity
 		For Local surf:TSurface=EachIn surf_list
 		
 			' flip triangle vertex order
-			For Local t=1 To surf.no_tris
+			For Local t:Int=1 To surf.no_tris
 			
-				Local i0=t*3-3
-				Local i1=t*3-2
-				Local i2=t*3-1
+				Local i0:Int=t*3-3
+				Local i1:Int=t*3-2
+				Local i2:Int=t*3-1
 			
-				Local v0=surf.tris[i0]
-				Local v1=surf.tris[i1]
-				Local v2=surf.tris[i2]
+				Local v0:Int=surf.tris[i0]
+				Local v1:Int=surf.tris[i1]
+				Local v2:Int=surf.tris[i2]
 		
 				surf.tris[i0]=v2
 				'surf.tris[i1]
@@ -910,7 +910,7 @@ Type TMesh Extends TEntity
 			Next
 			
 			' flip vertex normals
-			For Local v=0 To surf.no_verts-1
+			For Local v:Int=0 To surf.no_verts-1
 			
 				surf.vert_norm[v*3]=surf.vert_norm[v*3]*-1 ' x
 				surf.vert_norm[(v*3)+1]=surf.vert_norm[(v*3)+1]*-1 ' y
@@ -943,7 +943,7 @@ Type TMesh Extends TEntity
 			surf.brush.shine#=bru.shine#
 			surf.brush.blend=bru.blend
 			surf.brush.fx=bru.fx
-			For Local i=0 To 7
+			For Local i:Int=0 To 7
 				surf.brush.tex[i]=bru.tex[i]
 			Next
 
@@ -951,7 +951,7 @@ Type TMesh Extends TEntity
 
 	End Method
 	
-	Method FitMesh(x#,y#,z#,width#,height#,depth#,uniform=False)
+	Method FitMesh(x#,y#,z#,width#,height#,depth#,uniform:Int=False)
 	
 		' if uniform=true than adjust fitmesh dimensions
 		
@@ -1003,11 +1003,11 @@ Type TMesh Extends TEntity
 		Local maxy#=-9999999999
 		Local maxz#=-9999999999
 	
-		For Local s=1 To CountSurfaces()
+		For Local s:Int=1 To CountSurfaces()
 			
 			Local surf:TSurface=GetSurface(s)
 				
-			For Local v=0 To surf.CountVertices()-1
+			For Local v:Int=0 To surf.CountVertices()-1
 		
 				Local vx#=surf.VertexX#(v)
 				Local vy#=surf.VertexY#(v)
@@ -1025,11 +1025,11 @@ Type TMesh Extends TEntity
 							
 		Next
 		
-		For Local s=1 To CountSurfaces()
+		For Local s:Int=1 To CountSurfaces()
 			
 			Local surf:TSurface=GetSurface(s)
 				
-			For Local v=0 To surf.CountVertices()-1
+			For Local v:Int=0 To surf.CountVertices()-1
 		
 				' update vertex positions
 		
@@ -1080,11 +1080,11 @@ Type TMesh Extends TEntity
 	
 	Method ScaleMesh(sx#,sy#,sz#)
 	
-		For Local s=1 To no_surfs
+		For Local s:Int=1 To no_surfs
 	
 			Local surf:TSurface=GetSurface(s)
 				
-			For Local v=0 To surf.no_verts-1
+			For Local v:Int=0 To surf.no_verts-1
 		
 				surf.vert_coords[v*3]:*sx#
 				surf.vert_coords[v*3+1]:*sy#
@@ -1111,11 +1111,11 @@ Type TMesh Extends TEntity
 		mat.LoadIdentity()
 		mat.Rotate(pitch#,yaw#,roll#)
 
-		For Local s=1 To no_surfs
+		For Local s:Int=1 To no_surfs
 	
 			Local surf:TSurface=GetSurface(s)
 				
-			For Local v=0 To surf.no_verts-1
+			For Local v:Int=0 To surf.no_verts-1
 		
 				Local vx#=surf.vert_coords[v*3]
 				Local vy#=surf.vert_coords[v*3+1]
@@ -1150,11 +1150,11 @@ Type TMesh Extends TEntity
 
 		pz#=-pz#
 	
-		For Local s=1 To no_surfs
+		For Local s:Int=1 To no_surfs
 	
 			Local surf:TSurface=GetSurface(s)
 				
-			For Local v=0 To surf.no_verts-1
+			For Local v:Int=0 To surf.no_verts-1
 		
 				surf.vert_coords[v*3]:+px#
 				surf.vert_coords[v*3+1]:+py#
@@ -1175,7 +1175,7 @@ Type TMesh Extends TEntity
 
 	Method UpdateNormals()
 
-		For Local s=1 To CountSurfaces()
+		For Local s:Int=1 To CountSurfaces()
 
 			Local surf:TSurface=GetSurface( s )
 			
@@ -1238,15 +1238,15 @@ Type TMesh Extends TEntity
 		
 	End Method
 
-	Method CountSurfaces()
+	Method CountSurfaces:Int()
 	
 		Return no_surfs
 	
 	End Method
 	
-	Method GetSurface:TSurface(surf_no_get)
+	Method GetSurface:TSurface(surf_no_get:Int)
 	
-		Local surf_no=0
+		Local surf_no:Int=0
 	
 		For Local surf:TSurface=EachIn surf_list
 		
@@ -1277,11 +1277,11 @@ Type TMesh Extends TEntity
 	End Method
 		
 	' returns total no. of vertices in mesh
-	Method CountVertices()
+	Method CountVertices:Int()
 	
-		Local verts=0
+		Local verts:Int=0
 	
-		For Local s=1 To CountSurfaces()
+		For Local s:Int=1 To CountSurfaces()
 		
 			Local surf:TSurface=GetSurface(s)	
 		
@@ -1294,11 +1294,11 @@ Type TMesh Extends TEntity
 	End Method
 	
 	' returns total no. of triangles in mesh
-	Method CountTriangles()
+	Method CountTriangles:Int()
 	
-		Local tris=0
+		Local tris:Int=0
 	
-		For Local s=1 To CountSurfaces()
+		For Local s:Int=1 To CountSurfaces()
 		
 			Local surf:TSurface=GetSurface(s)	
 		
@@ -1311,7 +1311,7 @@ Type TMesh Extends TEntity
 	End Method
 		
 	 ' used by CopyEntity
-	Function CopyBonesList(ent:TEntity,bones:TBone[] Var,no_bones Var)
+	Function CopyBonesList(ent:TEntity,bones:TBone[] Var,no_bones:Int Var)
 
 		For Local ent:TEntity=EachIn ent.child_list
 			If TBone(ent)<>Null
@@ -1367,11 +1367,11 @@ Type TMesh Extends TEntity
 	' used by LoadMesh
 	Method TransformMesh(mat:TMatrix)
 
-		For Local s=1 To no_surfs
+		For Local s:Int=1 To no_surfs
 	
 			Local surf:TSurface=GetSurface(s)
 				
-			For Local v=0 To surf.no_verts-1
+			For Local v:Int=0 To surf.no_verts-1
 		
 				Local vx#=surf.vert_coords[v*3]
 				Local vy#=surf.vert_coords[v*3+1]
@@ -1413,7 +1413,7 @@ Type TMesh Extends TEntity
 			
 			For Local surf:TSurface=EachIn surf_list
 		
-				For Local v=0 Until surf.no_verts
+				For Local v:Int=0 Until surf.no_verts
 				
 					Local x#=surf.vert_coords[v*3] ' surf.VertexX(v)
 					If x#<min_x# Then min_x#=x#
@@ -1461,14 +1461,14 @@ Type TMesh Extends TEntity
 	' this func is used in MeshListAdd to see whether entity should be manually depth sorted (if alpha=true then yes).
 	' alpha_enable true/false is also set for surfaces - this is used to sort alpha surfaces and enable/disable alpha blending 
 	' in TMesh.Update.
-	Method Alpha()
+	Method Alpha:int()
 	
 		' ***note*** func doesn't taken into account fact that surf brush blend modes override master brush blend mode
 		' when rendering. shouldn't be a problem, as will only incorrectly return true if master brush blend is 2 or 3,
 		' while surf blend is 1. won't crop up often, and if it does, will only result in blending being enabled when it
 		' shouldn't (may cause interference if surf tex is masked?).
 
-		Local alpha=False
+		Local alpha:Int=False
 
 		' check master brush (check alpha value, blend value, force vertex alpha flag)
 		If brush.alpha#<1.0 Or brush.blend=2 Or brush.blend=3 Or brush.fx&32
@@ -1530,7 +1530,7 @@ Type TMesh Extends TEntity
 	
 		Local name$=Self.EntityName$()
 	
-		Local fog=False
+		Local fog:Int=False
 		If glIsEnabled(GL_FOG)=GL_TRUE Then fog=True ' if fog enabled, we'll enable it again at end of each surf loop in case of fx flag disabling it
 	
 		glDisable(GL_ALPHA_TEST)
@@ -1550,13 +1550,13 @@ Type TMesh Extends TEntity
 		anim_surfs.Sort
 
 		Local anim_surf:TSurface
-		Local anim_surf_no=-1
+		Local anim_surf_no:Int=-1
 		
 		For Local surf:TSurface=EachIn surfs
 		
 			anim_surf_no=anim_surf_no+1
 	
-			Local vbo=False
+			Local vbo:Int=False
 			If surf.no_tris>=VBO_MIN_TRIS
 				If TGlobal.vbo_enabled Then vbo=True
 			Else
@@ -1598,7 +1598,7 @@ Type TMesh Extends TEntity
 				
 			EndIf
 			
-			Local red#,green#,blue#,alpha#,shine#,blend,fx
+			Local red#,green#,blue#,alpha#,shine#,blend:Int,fx:Int
 			Local ambient_red#,ambient_green#,ambient_blue#
 
 			' get main brush values
@@ -1741,18 +1741,18 @@ Type TMesh Extends TEntity
 
 			' textures
 				
-			Local tex_count=0
+			Local tex_count:Int=0
 			tex_count=brush.no_texs
 			'If surf.brush<>Null
 				If surf.brush.no_texs>tex_count Then tex_count=surf.brush.no_texs
 			'EndIf
 
-			For Local ix=0 To tex_count-1
+			For Local ix:Int=0 To tex_count-1
 	
 				If surf.brush.tex[ix]<>Null Or brush.tex[ix]<>Null
 
 					' Main brush texture takes precedent over surface brush texture
-					Local texture:TTexture,tex_flags,tex_blend,tex_coords,tex_u_scale#,tex_v_scale#,tex_u_pos#,tex_v_pos#,tex_ang#,tex_cube_mode,frame
+					Local texture:TTexture,tex_flags:Int,tex_blend:Int,tex_coords:Int,tex_u_scale#,tex_v_scale#,tex_u_pos#,tex_v_pos#,tex_ang#,tex_cube_mode:Int,frame:Int
 					If brush.tex[ix]<>Null
 						texture=brush.tex[ix]
 						tex_flags=brush.tex[ix].flags
@@ -1981,7 +1981,7 @@ Type TMesh Extends TEntity
 			glPopMatrix()
 			
 			' disable all texture layers
-			For Local ix=0 To tex_count-1
+			For Local ix:Int=0 To tex_count-1
 				If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 					glActiveTextureARB(GL_TEXTURE0+ix)
 					glClientActiveTextureARB(GL_TEXTURE0+ix)
