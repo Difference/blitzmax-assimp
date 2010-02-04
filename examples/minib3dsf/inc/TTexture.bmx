@@ -542,8 +542,34 @@ EndRem
 		EndIf
 	End Method
 	
-	' Internal - not recommended for general use
 	
+	Function FileFind%(file$ Var) 'SMALLFIXES, replaced function to alow Incbin and Zipstream (from http://blitzmax.com/Community/posts.php?topic=88901#1009408 ) 
+		Local TS:TStream = OpenFile(file$,True,False)
+		If Not TS Then
+			Repeat
+				file$=Right$(file$,(Len(file$)-Instr(file$,"\",1)))
+			Until Instr(file$,"\",1)=0
+			Repeat
+				file$=Right$(file$,(Len(file$)-Instr(file$,"/",1)))
+			Until Instr(file$,"/",1)=0
+			TS = OpenStream(file$,True,False)
+			If Not TS Then
+				DebugLog "ERROR: Cannot find texture: "+file$
+				Return False
+			Else
+			    CloseStream(TS)
+                            TS=Null
+			EndIf
+		Else
+			CloseStream TS
+			TS=Null	
+		EndIf
+		Return True
+	End Function
+	
+	
+	Rem
+	' Internal - not recommended for general use	
 	Function FileFind:Int(file$ Var)
 	
 		If FileType(file$)=0
@@ -562,6 +588,7 @@ EndRem
 		Return True
 		
 	End Function
+	EndRem
 	
 	Function FileAbs$(file$)
 	
@@ -633,7 +660,7 @@ EndRem
 		
 	End Function
 	
-	Function Pow2Size:int( n:Int )
+	Function Pow2Size:Int( n:Int )
 		Local t:Int=1
 		While t<n
 			t:*2
