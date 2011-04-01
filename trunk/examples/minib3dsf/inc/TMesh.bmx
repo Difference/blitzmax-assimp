@@ -943,6 +943,7 @@ Type TMesh Extends TEntity
 			surf.brush.shine#=bru.shine#
 			surf.brush.blend=bru.blend
 			surf.brush.fx=bru.fx
+			surf.brush.tex_frame = bru.tex_frame 'SMALLFIXES frame number not passed. from http://blitzmax.com/Community/posts.php?topic=94221#1080009
 			For Local i:Int=0 To 7
 				surf.brush.tex[i]=bru.tex[i]
 			Next
@@ -1461,7 +1462,7 @@ Type TMesh Extends TEntity
 	' this func is used in MeshListAdd to see whether entity should be manually depth sorted (if alpha=true then yes).
 	' alpha_enable true/false is also set for surfaces - this is used to sort alpha surfaces and enable/disable alpha blending 
 	' in TMesh.Update.
-	Method Alpha:int()
+	Method Alpha:Int()
 	
 		' ***note*** func doesn't taken into account fact that surf brush blend modes override master brush blend mode
 		' when rendering. shouldn't be a problem, as will only incorrectly return true if master brush blend is 2 or 3,

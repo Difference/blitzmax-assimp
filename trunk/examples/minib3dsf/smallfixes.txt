@@ -15,8 +15,16 @@ Line: 198
 If x=False Then Exit 'SMALLFIXES Collision fix from http://www.blitzmax.com/Community/posts.php?topic=87446
 
 TEntity.bmx
-Line: 1125
+Line: 610
+brush.tex_frame = bru.tex_frame 'SMALLFIXES frame number not passed. from http://blitzmax.com/Community/posts.php?topic=88252#1082201
+
+TEntity.bmx
+Line: 1126
 ListRemove(TCollisionPair.ent_lists[collision_type],Self) 'SMALLFIXES Collision fix from http://www.blitzbasic.com/Community/posts.php?topic=87551
+
+TEntity.bmx
+Line: 1174
+If TcollisionPair.ent_lists[type_no]<>Null 	'SMALLFIXES from http://blitzmax.com/Community/posts.php?topic=88252#1042738
 
 TGlobal.bmx
 Line: 13
@@ -31,28 +39,36 @@ Line: 50
 If Not THardwareInfo.TexBlendSupport 'SMALLFIXES use the ARB version that works the same
 
 TMesh.bmx
-Line: 1201
+Line: 945
+surf.brush.tex_frame = bru.tex_frame 'SMALLFIXES frame number not passed. from http://blitzmax.com/Community/posts.php?topic=94221#1080009
+
+TMesh.bmx
+Line: 1202
 'SMALLFIXES CreateSurface & BrushFX/EntityFX fix from http://www.blitzbasic.com/Community/posts.php?topic=88060
 
 TMesh.bmx
-Line: 1709
+Line: 1710
 If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
 TMesh.bmx
-Line: 1780
+Line: 1781
 If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
 TMesh.bmx
-Line: 1976
+Line: 1977
 '//SMALLFIXES NOTFIXED 'DebugStop IRRmesh+others sometimes crash here under parallels
 
 TMesh.bmx
-Line: 1984
+Line: 1985
 If THardwareInfo.VBOSupport 'SMALLFIXES this if statement is a hack to prevent crash when vbo is not supported by GFX
 
 TPick.bmx
 Line: 204
 'SMALLFIXES to avoid crashes, skip pivots with pickmode 2
+
+TSurface.bmx
+Line: 131
+brush.tex_frame = bru.tex_frame 'SMALLFIXES frame number not passed. from http://blitzmax.com/Community/posts.php?topic=94221#1080009
 
 TTexture.bmx
 Line: 38
