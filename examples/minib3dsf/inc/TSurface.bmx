@@ -129,6 +129,8 @@ Type TSurface
 		brush.shine#=bru.shine#
 		brush.blend=bru.blend
 		brush.fx=bru.fx
+		brush.tex_frame = bru.tex_frame 'SMALLFIXES frame number not passed. from http://blitzmax.com/Community/posts.php?topic=94221#1080009
+		
 		For Local i:Int=0 To 7
 			brush.tex[i]=bru.tex[i]
 		Next
@@ -401,7 +403,7 @@ Type TSurface
 
 	End Method
 	
-	Method TriangleVertex:int(tri_no:Int,corner:Int)
+	Method TriangleVertex:Int(tri_no:Int,corner:Int)
 	
 		Local vid:Int[3]
 	

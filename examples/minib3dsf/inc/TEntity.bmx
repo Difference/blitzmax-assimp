@@ -608,6 +608,7 @@ Type TEntity
 		brush.shine#=bru.shine#
 		brush.blend=bru.blend
 		brush.fx=bru.fx
+		brush.tex_frame = bru.tex_frame 'SMALLFIXES frame number not passed. from http://blitzmax.com/Community/posts.php?topic=88252#1082201
 		For Local i:Int=0 To 7
 			brush.tex[i]=bru.tex[i]
 		Next
@@ -1161,6 +1162,8 @@ Type TEntity
 			
 	End Method
 	
+	
+	
 	Method EntityCollided:TEntity(type_no:Int)
 
 		' if self is source entity and type_no is dest entity
@@ -1169,12 +1172,14 @@ Type TEntity
 		Next
 
 		' if self is dest entity and type_no is src entity
+		If TcollisionPair.ent_lists[type_no]<>Null 	'SMALLFIXES from http://blitzmax.com/Community/posts.php?topic=88252#1042738
 		For Local ent:TEntity=EachIn TCollisionPair.ent_lists[type_no]
+		
 			For Local i:Int=1 To ent.CountCollisions()
 				If CollisionEntity(i)=Self Then Return ent		
 			Next
 		Next
-
+		EndIf
 		Return Null
 
 	End Method
@@ -1483,7 +1488,7 @@ Type TEntity
 
 	End Method
 	
-	Function CountAllChildren:int(ent:TEntity,no_children:Int=0)
+	Function CountAllChildren:Int(ent:TEntity,no_children:Int=0)
 		
 		Local ent2:TEntity
 	
