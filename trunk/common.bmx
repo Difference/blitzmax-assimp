@@ -78,8 +78,8 @@ End Extern
 
 	Const MAXLEN:Int = 1024
 
-	Const AI_MAX_NUMBER_OF_COLOR_SETS:Int = 4
-	Const AI_MAX_NUMBER_OF_TEXTURECOORDS:Int = 4
+	Const AI_MAX_NUMBER_OF_COLOR_SETS:Int = 8
+	Const AI_MAX_NUMBER_OF_TEXTURECOORDS:Int = 8
 
 	Const aiPrimitiveType_POINT:Int       = $1
 	Const aiPrimitiveType_LINE:Int        = $2

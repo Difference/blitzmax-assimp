@@ -37,7 +37,7 @@ Function AssImpLoadMesh:tMesh(filename:String,parent:TEntity=Null)
 	aiProcess_FindDegenerates | ..
 	aiProcess_FindInvalidData | ..
 	aiProcess_GenUVCoords | ..
-	aiProcess_TransformUVCoords | ..
+	aiProcess_TransformUVCoords | ..	
 	aiProcess_FlipUVs | ..
 	aiProcess_PreTransformVertices
 		
@@ -173,11 +173,11 @@ Function AssImpLoadMesh:tMesh(filename:String,parent:TEntity=Null)
 	
 			Next
 		
-	
+			If m.pFaces
 			For Local i:Int = 0 To m.NumFaces - 1
 			
-			
-				'DebugLog  m.TriangleVertex(i,0) + " , "  + m.TriangleVertex(i,1) + " , "  + m.TriangleVertex(i,2)
+				'DebugStop
+				DebugLog  m.TriangleVertex(i,0) + " , "  + m.TriangleVertex(i,1) + " , "  + m.TriangleVertex(i,2)
 			
 			
 				' this check is only in because assimp seems to be returning out of range indexes on rare occtions
@@ -196,6 +196,11 @@ Function AssImpLoadMesh:tMesh(filename:String,parent:TEntity=Null)
 				
 				EndIf
 			Next
+			
+			Else
+			DebugLog "No m.pFaces"
+			DebugStop
+			EndIf
 	
 		Next
 		

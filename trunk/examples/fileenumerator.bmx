@@ -15,10 +15,13 @@ Function enumFiles(list:TList,dir:String,skipExt:TList)
 			Local fullPath:String=RealPath(dir+"/"+file)
 		
 			If FileType(fullPath)=FILETYPE_DIR
-				enumFiles(list,fullPath,skipExt)
+				'DebugLog file
+				'If(dir[0]) <> "."
+					enumFiles(list,fullPath,skipExt)
+				'EndIf
 			Else
-				'DebugLog ExtractExt(fullPath)
-				If aiIsExtensionSupported(fullPath)
+				DebugLog "fullpath: " + fullPath
+				If aiIsExtensionSupported(Lower(ExtractExt(fullPath)))
 				
 					
 					'DebugStop
