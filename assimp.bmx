@@ -14,7 +14,8 @@ ModuleInfo "Website and SVN at http://code.google.com/p/blitzmax-assimp/"
 
 
 ModuleInfo "CC_OPTS:-fexceptions"
-ModuleInfo "CC_OPTS: -DASSIMP_BUILD_BOOST_WORKAROUND"
+'ModuleInfo "CC_OPTS: -DASSIMP_BUILD_BOOST_WORKAROUND"
+
 
 
 Import "common.bmx"
@@ -700,22 +701,32 @@ Type aiScene
 				meshes[i].pTangents  = Byte Ptr pMesh[5]
 				meshes[i].pBitangents  = Byte Ptr pMesh[6]
 				
+				
+				Local pMeshPointerOffset:Int = 7				
+				
 				For Local n:Int = 0 To AI_MAX_NUMBER_OF_COLOR_SETS - 1
-					meshes[i].pColors[n]  = Byte Ptr pMesh[7 + n]
+					meshes[i].pColors[n]  = Byte Ptr pMesh[pMeshPointerOffset + n]
 				Next
 				
+				pMeshPointerOffset:+ AI_MAX_NUMBER_OF_COLOR_SETS
+				
+				
 				For Local n:Int = 0 To AI_MAX_NUMBER_OF_TEXTURECOORDS - 1
-					meshes[i].pTextureCoords[n]  = Byte Ptr pMesh[11 + n]
+					meshes[i].pTextureCoords[n]  = Byte Ptr pMesh[pMeshPointerOffset + n]
 				Next 
 				
+				pMeshPointerOffset:+ AI_MAX_NUMBER_OF_TEXTURECOORDS
+				
 				For Local n:Int = 0 To AI_MAX_NUMBER_OF_TEXTURECOORDS - 1
-					meshes[i].NumUVComponents[n]  = pMesh[15 + n]
+					meshes[i].NumUVComponents[n]  = pMesh[pMeshPointerOffset + n]
 				Next
 				
-				meshes[i].pFaces  = Int Ptr pMesh[19]
-				meshes[i].NumBones  = pMesh[20]
-				meshes[i].pBones  = Byte Ptr pMesh[21]
-				meshes[i].MaterialIndex  = pMesh[22]
+				pMeshPointerOffset:+ AI_MAX_NUMBER_OF_TEXTURECOORDS
+				
+				meshes[i].pFaces  = Int Ptr pMesh[pMeshPointerOffset]
+				meshes[i].NumBones  = pMesh[pMeshPointerOffset+1]
+				meshes[i].pBones  = Byte Ptr pMesh[pMeshPointerOffset+2]
+				meshes[i].MaterialIndex  = pMesh[pMeshPointerOffset+3]
 			
 
 			Next

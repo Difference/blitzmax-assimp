@@ -13,7 +13,7 @@ AppTitle = "Show all assimp samples"
 Graphics3D width,height ,depth,mode
 
 Local cam:TCamera=CreateCamera()
-PositionEntity cam,0,150,-145
+PositionEntity cam,0,150,-55
 
 CameraClsColor cam,200,200,255
 CameraRange cam,0.1,1000
@@ -26,14 +26,19 @@ RotateEntity light,45,0,0
 Local filelist:TList  = New TList
 Local skipExt:TList = New TList
 
-skipExt.addlast("xml") ' assimp crash?
-skipExt.addlast("ac") ' assimp crash?
-skipExt.addlast("irrmesh") ' minib3d parallels crash
-skipExt.addlast("md2") ' minib3d parallels crash
-skipExt.addlast("mdl") '<- J.I joe crashes assimp
-skipExt.addlast("nff") '<- dodecahedron.nff crashes assimp
+'skipExt.addlast("xml") ' assimp crash?
+'skipExt.addlast("ac") ' assimp crash?
+'skipExt.addlast("irrmesh") ' minib3d parallels crash
+'skipExt.addlast("md2") ' minib3d parallels crash
+'skipExt.addlast("mdl") '<- J.I joe crashes assimp
+'skipExt.addlast("nff") '<- dodecahedron.nff crashes assimp
+'skipExt.addlast("uc") '<- dodecahedron.nff crashes assimp
+'skipExt.addlast("3d") '<- dodecahedron.nff crashes assimp
+'DebugStop
+enumFiles(filelist,"/Applications/BlitzMax/mod/scheutz.mod/assimp.mod/assimp/test/models",skipExt)
 
-enumFiles(filelist,"../assimp/test/models",skipExt)
+'enumFiles(filelist,"../assimp/test/models",skipExt)
+
 
 Local filearray:Object[] = filelist.toarray()
 Local fileNUmber:Int = 0
@@ -48,6 +53,8 @@ Local currentFile:String
 Local mesh:tMesh = CreateCube()
 
 PointEntity cam,mesh
+
+hideentity mesh
 
 ' slideshow
 Local go:Int =1
@@ -75,7 +82,7 @@ While Not KeyDown(KEY_ESCAPE)
 
 		DebugLog String filearray[fileNUmber]
 
-		If aiIsExtensionSupported(String filearray[fileNUmber])
+		If aiIsExtensionSupported(Lower(ExtractExt(String filearray[fileNUmber])))
 
 			currentFile = String filearray[fileNUmber]
 			If mesh Then FreeEntity mesh
